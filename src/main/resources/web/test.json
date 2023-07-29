@@ -1,0 +1,2135 @@
+{
+  "player_data": {
+    "HurtByTimestamp": {
+      "absolute_path": "HurtByTimestamp",
+      "type": "INT",
+      "value": 302511
+    },
+    "bukkit": {
+      "absolute_path": "bukkit",
+      "type": "MAP",
+      "value": {
+        "newLevel": {
+          "absolute_path": "bukkit.newLevel",
+          "type": "INT",
+          "value": 0
+        },
+        "newExp": {
+          "absolute_path": "bukkit.newExp",
+          "type": "INT",
+          "value": 0
+        },
+        "newTotalExp": {
+          "absolute_path": "bukkit.newTotalExp",
+          "type": "INT",
+          "value": 0
+        },
+        "firstPlayed": {
+          "absolute_path": "bukkit.firstPlayed",
+          "type": "LONG",
+          "value": 1646333670174
+        },
+        "lastKnownName": {
+          "absolute_path": "bukkit.lastKnownName",
+          "type": "STR",
+          "value": "Conorsmine"
+        },
+        "keepLevel": {
+          "absolute_path": "bukkit.keepLevel",
+          "type": "BYTE",
+          "value": 0
+        },
+        "expToDrop": {
+          "absolute_path": "bukkit.expToDrop",
+          "type": "INT",
+          "value": 0
+        },
+        "lastPlayed": {
+          "absolute_path": "bukkit.lastPlayed",
+          "type": "LONG",
+          "value": 1688998765161
+        }
+      }
+    },
+    "SleepTimer": {
+      "absolute_path": "SleepTimer",
+      "type": "SHORT",
+      "value": 0
+    },
+    "Attributes": {
+      "absolute_path": "Attributes",
+      "type": "ARRAY",
+      "value": [
+        {
+          "absolute_path": "Attributes[0]",
+          "type": "MAP",
+          "value": {
+            "Base": {
+              "absolute_path": "Attributes[0].Base",
+              "type": "DOUBLE",
+              "value": 20.0
+            },
+            "Name": {
+              "absolute_path": "Attributes[0].Name",
+              "type": "STR",
+              "value": "generic.maxHealth"
+            }
+          }
+        },
+        {
+          "absolute_path": "Attributes[1]",
+          "type": "MAP",
+          "value": {
+            "Base": {
+              "absolute_path": "Attributes[1].Base",
+              "type": "DOUBLE",
+              "value": 0.0
+            },
+            "Name": {
+              "absolute_path": "Attributes[1].Name",
+              "type": "STR",
+              "value": "generic.knockbackResistance"
+            }
+          }
+        },
+        {
+          "absolute_path": "Attributes[2]",
+          "type": "MAP",
+          "value": {
+            "Base": {
+              "absolute_path": "Attributes[2].Base",
+              "type": "DOUBLE",
+              "value": 0.10000000149011612
+            },
+            "Name": {
+              "absolute_path": "Attributes[2].Name",
+              "type": "STR",
+              "value": "generic.movementSpeed"
+            }
+          }
+        },
+        {
+          "absolute_path": "Attributes[3]",
+          "type": "MAP",
+          "value": {
+            "Base": {
+              "absolute_path": "Attributes[3].Base",
+              "type": "DOUBLE",
+              "value": 0.0
+            },
+            "Name": {
+              "absolute_path": "Attributes[3].Name",
+              "type": "STR",
+              "value": "generic.armor"
+            }
+          }
+        },
+        {
+          "absolute_path": "Attributes[4]",
+          "type": "MAP",
+          "value": {
+            "Base": {
+              "absolute_path": "Attributes[4].Base",
+              "type": "DOUBLE",
+              "value": 0.0
+            },
+            "Name": {
+              "absolute_path": "Attributes[4].Name",
+              "type": "STR",
+              "value": "generic.armorToughness"
+            }
+          }
+        },
+        {
+          "absolute_path": "Attributes[5]",
+          "type": "MAP",
+          "value": {
+            "Base": {
+              "absolute_path": "Attributes[5].Base",
+              "type": "DOUBLE",
+              "value": 1.0
+            },
+            "Name": {
+              "absolute_path": "Attributes[5].Name",
+              "type": "STR",
+              "value": "generic.attackDamage"
+            }
+          }
+        },
+        {
+          "absolute_path": "Attributes[6]",
+          "type": "MAP",
+          "value": {
+            "Base": {
+              "absolute_path": "Attributes[6].Base",
+              "type": "DOUBLE",
+              "value": 4.0
+            },
+            "Name": {
+              "absolute_path": "Attributes[6].Name",
+              "type": "STR",
+              "value": "generic.attackSpeed"
+            }
+          }
+        },
+        {
+          "absolute_path": "Attributes[7]",
+          "type": "MAP",
+          "value": {
+            "Base": {
+              "absolute_path": "Attributes[7].Base",
+              "type": "DOUBLE",
+              "value": 0.0
+            },
+            "Name": {
+              "absolute_path": "Attributes[7].Name",
+              "type": "STR",
+              "value": "generic.luck"
+            }
+          }
+        }
+      ]
+    },
+    "Invulnerable": {
+      "absolute_path": "Invulnerable",
+      "type": "BYTE",
+      "value": 0
+    },
+    "FallFlying": {
+      "absolute_path": "FallFlying",
+      "type": "BYTE",
+      "value": 0
+    },
+    "PortalCooldown": {
+      "absolute_path": "PortalCooldown",
+      "type": "INT",
+      "value": 0
+    },
+    "AbsorptionAmount": {
+      "absolute_path": "AbsorptionAmount",
+      "type": "FLOAT",
+      "value": 0.0
+    },
+    "abilities": {
+      "absolute_path": "abilities",
+      "type": "MAP",
+      "value": {
+        "invulnerable": {
+          "absolute_path": "abilities.invulnerable",
+          "type": "BYTE",
+          "value": 1
+        },
+        "mayfly": {
+          "absolute_path": "abilities.mayfly",
+          "type": "BYTE",
+          "value": 1
+        },
+        "instabuild": {
+          "absolute_path": "abilities.instabuild",
+          "type": "BYTE",
+          "value": 1
+        },
+        "walkSpeed": {
+          "absolute_path": "abilities.walkSpeed",
+          "type": "FLOAT",
+          "value": 0.1
+        },
+        "mayBuild": {
+          "absolute_path": "abilities.mayBuild",
+          "type": "BYTE",
+          "value": 1
+        },
+        "flying": {
+          "absolute_path": "abilities.flying",
+          "type": "BYTE",
+          "value": 0
+        },
+        "flySpeed": {
+          "absolute_path": "abilities.flySpeed",
+          "type": "FLOAT",
+          "value": 0.05
+        }
+      }
+    },
+    "FallDistance": {
+      "absolute_path": "FallDistance",
+      "type": "FLOAT",
+      "value": 0.0
+    },
+    "recipeBook": {
+      "absolute_path": "recipeBook",
+      "type": "MAP",
+      "value": {
+        "recipes": {
+          "absolute_path": "recipeBook.recipes",
+          "type": "ARRAY",
+          "value": [
+            {
+              "absolute_path": "recipeBook.recipes[0]",
+              "type": "STR",
+              "value": "minecraft:yellow_wool"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[1]",
+              "type": "STR",
+              "value": "minecraft:wooden_sword"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[2]",
+              "type": "STR",
+              "value": "minecraft:wooden_shovel"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[3]",
+              "type": "STR",
+              "value": "minecraft:wooden_pressure_plate"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[4]",
+              "type": "STR",
+              "value": "minecraft:wooden_pickaxe"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[5]",
+              "type": "STR",
+              "value": "minecraft:wooden_hoe"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[6]",
+              "type": "STR",
+              "value": "minecraft:wooden_door"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[7]",
+              "type": "STR",
+              "value": "minecraft:wooden_button"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[8]",
+              "type": "STR",
+              "value": "minecraft:wooden_axe"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[9]",
+              "type": "STR",
+              "value": "minecraft:white_carpet"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[10]",
+              "type": "STR",
+              "value": "minecraft:white_bed"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[11]",
+              "type": "STR",
+              "value": "minecraft:white_banner"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[12]",
+              "type": "STR",
+              "value": "minecraft:trapdoor"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[13]",
+              "type": "STR",
+              "value": "minecraft:torch"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[14]",
+              "type": "STR",
+              "value": "minecraft:stonebrick"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[15]",
+              "type": "STR",
+              "value": "minecraft:stone_sword"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[16]",
+              "type": "STR",
+              "value": "minecraft:stone_stairs"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[17]",
+              "type": "STR",
+              "value": "minecraft:stone_slab"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[18]",
+              "type": "STR",
+              "value": "minecraft:stone_shovel"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[19]",
+              "type": "STR",
+              "value": "minecraft:stone_pressure_plate"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[20]",
+              "type": "STR",
+              "value": "minecraft:stone_pickaxe"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[21]",
+              "type": "STR",
+              "value": "minecraft:stone_hoe"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[22]",
+              "type": "STR",
+              "value": "minecraft:stone_button"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[23]",
+              "type": "STR",
+              "value": "minecraft:stone_brick_stairs"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[24]",
+              "type": "STR",
+              "value": "minecraft:stone_brick_slab"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[25]",
+              "type": "STR",
+              "value": "minecraft:stone_axe"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[26]",
+              "type": "STR",
+              "value": "minecraft:sticky_piston"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[27]",
+              "type": "STR",
+              "value": "minecraft:stick"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[28]",
+              "type": "STR",
+              "value": "minecraft:spruce_wooden_slab"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[29]",
+              "type": "STR",
+              "value": "minecraft:spruce_stairs"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[30]",
+              "type": "STR",
+              "value": "minecraft:spruce_fence_gate"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[31]",
+              "type": "STR",
+              "value": "minecraft:spruce_fence"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[32]",
+              "type": "STR",
+              "value": "minecraft:spruce_door"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[33]",
+              "type": "STR",
+              "value": "minecraft:spruce_boat"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[34]",
+              "type": "STR",
+              "value": "minecraft:smooth_sandstone"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[35]",
+              "type": "STR",
+              "value": "minecraft:sign"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[36]",
+              "type": "STR",
+              "value": "minecraft:sandstone_stairs"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[37]",
+              "type": "STR",
+              "value": "minecraft:sandstone_slab"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[38]",
+              "type": "STR",
+              "value": "minecraft:redstone_lamp"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[39]",
+              "type": "STR",
+              "value": "minecraft:redstone"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[40]",
+              "type": "STR",
+              "value": "minecraft:red_wool"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[41]",
+              "type": "STR",
+              "value": "minecraft:red_sandstone_stairs"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[42]",
+              "type": "STR",
+              "value": "minecraft:red_sandstone_slab"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[43]",
+              "type": "STR",
+              "value": "minecraft:red_carpet"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[44]",
+              "type": "STR",
+              "value": "minecraft:red_bed"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[45]",
+              "type": "STR",
+              "value": "minecraft:red_banner"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[46]",
+              "type": "STR",
+              "value": "minecraft:purpur_stairs"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[47]",
+              "type": "STR",
+              "value": "minecraft:purpur_slab"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[48]",
+              "type": "STR",
+              "value": "minecraft:purpur_pillar"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[49]",
+              "type": "STR",
+              "value": "minecraft:purple_wool"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[50]",
+              "type": "STR",
+              "value": "minecraft:purple_carpet"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[51]",
+              "type": "STR",
+              "value": "minecraft:purple_bed"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[52]",
+              "type": "STR",
+              "value": "minecraft:purple_banner"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[53]",
+              "type": "STR",
+              "value": "minecraft:polished_granite"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[54]",
+              "type": "STR",
+              "value": "minecraft:polished_diorite"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[55]",
+              "type": "STR",
+              "value": "minecraft:polished_andesite"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[56]",
+              "type": "STR",
+              "value": "minecraft:pink_wool"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[57]",
+              "type": "STR",
+              "value": "minecraft:painting"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[58]",
+              "type": "STR",
+              "value": "minecraft:orange_wool"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[59]",
+              "type": "STR",
+              "value": "minecraft:orange_carpet"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[60]",
+              "type": "STR",
+              "value": "minecraft:orange_bed"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[61]",
+              "type": "STR",
+              "value": "minecraft:orange_banner"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[62]",
+              "type": "STR",
+              "value": "minecraft:oak_wooden_slab"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[63]",
+              "type": "STR",
+              "value": "minecraft:oak_stairs"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[64]",
+              "type": "STR",
+              "value": "minecraft:magenta_wool"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[65]",
+              "type": "STR",
+              "value": "minecraft:magenta_dye_from_purple_and_pink"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[66]",
+              "type": "STR",
+              "value": "minecraft:magenta_dye_from_lapis_red_pink"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[67]",
+              "type": "STR",
+              "value": "minecraft:magenta_carpet"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[68]",
+              "type": "STR",
+              "value": "minecraft:magenta_bed"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[69]",
+              "type": "STR",
+              "value": "minecraft:magenta_banner"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[70]",
+              "type": "STR",
+              "value": "minecraft:lime_wool"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[71]",
+              "type": "STR",
+              "value": "minecraft:lime_carpet"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[72]",
+              "type": "STR",
+              "value": "minecraft:lime_bed"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[73]",
+              "type": "STR",
+              "value": "minecraft:lime_banner"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[74]",
+              "type": "STR",
+              "value": "minecraft:light_gray_wool"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[75]",
+              "type": "STR",
+              "value": "minecraft:light_gray_dye_from_gray_bonemeal"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[76]",
+              "type": "STR",
+              "value": "minecraft:light_blue_wool"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[77]",
+              "type": "STR",
+              "value": "minecraft:light_blue_carpet"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[78]",
+              "type": "STR",
+              "value": "minecraft:light_blue_bed"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[79]",
+              "type": "STR",
+              "value": "minecraft:light_blue_banner"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[80]",
+              "type": "STR",
+              "value": "minecraft:lever"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[81]",
+              "type": "STR",
+              "value": "minecraft:leather_leggings"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[82]",
+              "type": "STR",
+              "value": "minecraft:leather_helmet"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[83]",
+              "type": "STR",
+              "value": "minecraft:leather_chestplate"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[84]",
+              "type": "STR",
+              "value": "minecraft:leather_boots"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[85]",
+              "type": "STR",
+              "value": "minecraft:lead"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[86]",
+              "type": "STR",
+              "value": "minecraft:lapis_lazuli"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[87]",
+              "type": "STR",
+              "value": "minecraft:ladder"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[88]",
+              "type": "STR",
+              "value": "minecraft:jungle_planks"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[89]",
+              "type": "STR",
+              "value": "minecraft:jungle_boat"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[90]",
+              "type": "STR",
+              "value": "minecraft:jukebox"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[91]",
+              "type": "STR",
+              "value": "minecraft:item_frame"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[92]",
+              "type": "STR",
+              "value": "minecraft:iron_ingot_from_block"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[93]",
+              "type": "STR",
+              "value": "minecraft:green_wool"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[94]",
+              "type": "STR",
+              "value": "minecraft:gray_wool"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[95]",
+              "type": "STR",
+              "value": "minecraft:gold_ingot_from_block"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[96]",
+              "type": "STR",
+              "value": "minecraft:furnace"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[97]",
+              "type": "STR",
+              "value": "minecraft:flower_pot"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[98]",
+              "type": "STR",
+              "value": "minecraft:flint_and_steel"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[99]",
+              "type": "STR",
+              "value": "minecraft:fence_gate"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[100]",
+              "type": "STR",
+              "value": "minecraft:fence"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[101]",
+              "type": "STR",
+              "value": "minecraft:enchanting_table"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[102]",
+              "type": "STR",
+              "value": "minecraft:emerald"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[103]",
+              "type": "STR",
+              "value": "minecraft:dispenser"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[104]",
+              "type": "STR",
+              "value": "minecraft:diamond_sword"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[105]",
+              "type": "STR",
+              "value": "minecraft:diamond_shovel"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[106]",
+              "type": "STR",
+              "value": "minecraft:diamond_pickaxe"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[107]",
+              "type": "STR",
+              "value": "minecraft:diamond_leggings"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[108]",
+              "type": "STR",
+              "value": "minecraft:diamond_hoe"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[109]",
+              "type": "STR",
+              "value": "minecraft:diamond_helmet"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[110]",
+              "type": "STR",
+              "value": "minecraft:diamond_chestplate"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[111]",
+              "type": "STR",
+              "value": "minecraft:diamond_boots"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[112]",
+              "type": "STR",
+              "value": "minecraft:diamond_block"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[113]",
+              "type": "STR",
+              "value": "minecraft:diamond_axe"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[114]",
+              "type": "STR",
+              "value": "minecraft:diamond"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[115]",
+              "type": "STR",
+              "value": "minecraft:dark_oak_boat"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[116]",
+              "type": "STR",
+              "value": "minecraft:cyan_wool"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[117]",
+              "type": "STR",
+              "value": "minecraft:crafting_table"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[118]",
+              "type": "STR",
+              "value": "minecraft:cobblestone_wall"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[119]",
+              "type": "STR",
+              "value": "minecraft:cobblestone_slab"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[120]",
+              "type": "STR",
+              "value": "minecraft:clay"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[121]",
+              "type": "STR",
+              "value": "minecraft:chiseled_stonebrick"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[122]",
+              "type": "STR",
+              "value": "minecraft:chiseled_red_sandstone"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[123]",
+              "type": "STR",
+              "value": "minecraft:chest"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[124]",
+              "type": "STR",
+              "value": "minecraft:brown_wool"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[125]",
+              "type": "STR",
+              "value": "minecraft:brick_block"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[126]",
+              "type": "STR",
+              "value": "minecraft:boat"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[127]",
+              "type": "STR",
+              "value": "minecraft:blue_wool"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[128]",
+              "type": "STR",
+              "value": "minecraft:black_wool"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[129]",
+              "type": "STR",
+              "value": "minecraft:birch_boat"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[130]",
+              "type": "STR",
+              "value": "minecraft:anvil"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[131]",
+              "type": "STR",
+              "value": "minecraft:andesite"
+            },
+            {
+              "absolute_path": "recipeBook.recipes[132]",
+              "type": "STR",
+              "value": "minecraft:acacia_boat"
+            }
+          ]
+        },
+        "isFilteringCraftable": {
+          "absolute_path": "recipeBook.isFilteringCraftable",
+          "type": "BYTE",
+          "value": 0
+        },
+        "toBeDisplayed": {
+          "absolute_path": "recipeBook.toBeDisplayed",
+          "type": "ARRAY",
+          "value": [
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[0]",
+              "type": "STR",
+              "value": "minecraft:yellow_wool"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[1]",
+              "type": "STR",
+              "value": "minecraft:wooden_sword"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[2]",
+              "type": "STR",
+              "value": "minecraft:wooden_shovel"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[3]",
+              "type": "STR",
+              "value": "minecraft:wooden_pressure_plate"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[4]",
+              "type": "STR",
+              "value": "minecraft:wooden_pickaxe"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[5]",
+              "type": "STR",
+              "value": "minecraft:wooden_hoe"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[6]",
+              "type": "STR",
+              "value": "minecraft:wooden_door"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[7]",
+              "type": "STR",
+              "value": "minecraft:wooden_button"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[8]",
+              "type": "STR",
+              "value": "minecraft:wooden_axe"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[9]",
+              "type": "STR",
+              "value": "minecraft:white_carpet"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[10]",
+              "type": "STR",
+              "value": "minecraft:white_bed"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[11]",
+              "type": "STR",
+              "value": "minecraft:white_banner"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[12]",
+              "type": "STR",
+              "value": "minecraft:trapdoor"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[13]",
+              "type": "STR",
+              "value": "minecraft:torch"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[14]",
+              "type": "STR",
+              "value": "minecraft:stonebrick"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[15]",
+              "type": "STR",
+              "value": "minecraft:stone_sword"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[16]",
+              "type": "STR",
+              "value": "minecraft:stone_stairs"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[17]",
+              "type": "STR",
+              "value": "minecraft:stone_slab"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[18]",
+              "type": "STR",
+              "value": "minecraft:stone_shovel"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[19]",
+              "type": "STR",
+              "value": "minecraft:stone_pressure_plate"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[20]",
+              "type": "STR",
+              "value": "minecraft:stone_pickaxe"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[21]",
+              "type": "STR",
+              "value": "minecraft:stone_hoe"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[22]",
+              "type": "STR",
+              "value": "minecraft:stone_button"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[23]",
+              "type": "STR",
+              "value": "minecraft:stone_brick_stairs"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[24]",
+              "type": "STR",
+              "value": "minecraft:stone_brick_slab"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[25]",
+              "type": "STR",
+              "value": "minecraft:stone_axe"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[26]",
+              "type": "STR",
+              "value": "minecraft:sticky_piston"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[27]",
+              "type": "STR",
+              "value": "minecraft:stick"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[28]",
+              "type": "STR",
+              "value": "minecraft:spruce_wooden_slab"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[29]",
+              "type": "STR",
+              "value": "minecraft:spruce_stairs"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[30]",
+              "type": "STR",
+              "value": "minecraft:spruce_fence_gate"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[31]",
+              "type": "STR",
+              "value": "minecraft:spruce_fence"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[32]",
+              "type": "STR",
+              "value": "minecraft:spruce_door"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[33]",
+              "type": "STR",
+              "value": "minecraft:spruce_boat"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[34]",
+              "type": "STR",
+              "value": "minecraft:smooth_sandstone"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[35]",
+              "type": "STR",
+              "value": "minecraft:sign"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[36]",
+              "type": "STR",
+              "value": "minecraft:sandstone_stairs"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[37]",
+              "type": "STR",
+              "value": "minecraft:sandstone_slab"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[38]",
+              "type": "STR",
+              "value": "minecraft:redstone_lamp"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[39]",
+              "type": "STR",
+              "value": "minecraft:redstone"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[40]",
+              "type": "STR",
+              "value": "minecraft:red_wool"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[41]",
+              "type": "STR",
+              "value": "minecraft:red_sandstone_stairs"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[42]",
+              "type": "STR",
+              "value": "minecraft:red_sandstone_slab"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[43]",
+              "type": "STR",
+              "value": "minecraft:red_carpet"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[44]",
+              "type": "STR",
+              "value": "minecraft:red_bed"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[45]",
+              "type": "STR",
+              "value": "minecraft:red_banner"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[46]",
+              "type": "STR",
+              "value": "minecraft:purpur_stairs"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[47]",
+              "type": "STR",
+              "value": "minecraft:purpur_slab"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[48]",
+              "type": "STR",
+              "value": "minecraft:purpur_pillar"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[49]",
+              "type": "STR",
+              "value": "minecraft:purple_wool"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[50]",
+              "type": "STR",
+              "value": "minecraft:purple_carpet"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[51]",
+              "type": "STR",
+              "value": "minecraft:purple_bed"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[52]",
+              "type": "STR",
+              "value": "minecraft:purple_banner"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[53]",
+              "type": "STR",
+              "value": "minecraft:polished_granite"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[54]",
+              "type": "STR",
+              "value": "minecraft:polished_diorite"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[55]",
+              "type": "STR",
+              "value": "minecraft:polished_andesite"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[56]",
+              "type": "STR",
+              "value": "minecraft:pink_wool"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[57]",
+              "type": "STR",
+              "value": "minecraft:painting"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[58]",
+              "type": "STR",
+              "value": "minecraft:orange_wool"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[59]",
+              "type": "STR",
+              "value": "minecraft:orange_carpet"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[60]",
+              "type": "STR",
+              "value": "minecraft:orange_bed"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[61]",
+              "type": "STR",
+              "value": "minecraft:orange_banner"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[62]",
+              "type": "STR",
+              "value": "minecraft:oak_wooden_slab"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[63]",
+              "type": "STR",
+              "value": "minecraft:oak_stairs"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[64]",
+              "type": "STR",
+              "value": "minecraft:magenta_wool"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[65]",
+              "type": "STR",
+              "value": "minecraft:magenta_dye_from_purple_and_pink"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[66]",
+              "type": "STR",
+              "value": "minecraft:magenta_dye_from_lapis_red_pink"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[67]",
+              "type": "STR",
+              "value": "minecraft:magenta_carpet"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[68]",
+              "type": "STR",
+              "value": "minecraft:magenta_bed"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[69]",
+              "type": "STR",
+              "value": "minecraft:magenta_banner"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[70]",
+              "type": "STR",
+              "value": "minecraft:lime_wool"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[71]",
+              "type": "STR",
+              "value": "minecraft:lime_carpet"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[72]",
+              "type": "STR",
+              "value": "minecraft:lime_bed"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[73]",
+              "type": "STR",
+              "value": "minecraft:lime_banner"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[74]",
+              "type": "STR",
+              "value": "minecraft:light_gray_wool"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[75]",
+              "type": "STR",
+              "value": "minecraft:light_gray_dye_from_gray_bonemeal"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[76]",
+              "type": "STR",
+              "value": "minecraft:light_blue_wool"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[77]",
+              "type": "STR",
+              "value": "minecraft:light_blue_carpet"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[78]",
+              "type": "STR",
+              "value": "minecraft:light_blue_bed"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[79]",
+              "type": "STR",
+              "value": "minecraft:light_blue_banner"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[80]",
+              "type": "STR",
+              "value": "minecraft:lever"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[81]",
+              "type": "STR",
+              "value": "minecraft:leather_leggings"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[82]",
+              "type": "STR",
+              "value": "minecraft:leather_helmet"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[83]",
+              "type": "STR",
+              "value": "minecraft:leather_chestplate"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[84]",
+              "type": "STR",
+              "value": "minecraft:leather_boots"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[85]",
+              "type": "STR",
+              "value": "minecraft:lead"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[86]",
+              "type": "STR",
+              "value": "minecraft:lapis_lazuli"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[87]",
+              "type": "STR",
+              "value": "minecraft:ladder"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[88]",
+              "type": "STR",
+              "value": "minecraft:jungle_planks"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[89]",
+              "type": "STR",
+              "value": "minecraft:jungle_boat"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[90]",
+              "type": "STR",
+              "value": "minecraft:jukebox"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[91]",
+              "type": "STR",
+              "value": "minecraft:item_frame"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[92]",
+              "type": "STR",
+              "value": "minecraft:iron_ingot_from_block"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[93]",
+              "type": "STR",
+              "value": "minecraft:green_wool"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[94]",
+              "type": "STR",
+              "value": "minecraft:gray_wool"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[95]",
+              "type": "STR",
+              "value": "minecraft:gold_ingot_from_block"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[96]",
+              "type": "STR",
+              "value": "minecraft:furnace"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[97]",
+              "type": "STR",
+              "value": "minecraft:flower_pot"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[98]",
+              "type": "STR",
+              "value": "minecraft:flint_and_steel"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[99]",
+              "type": "STR",
+              "value": "minecraft:fence_gate"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[100]",
+              "type": "STR",
+              "value": "minecraft:fence"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[101]",
+              "type": "STR",
+              "value": "minecraft:enchanting_table"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[102]",
+              "type": "STR",
+              "value": "minecraft:emerald"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[103]",
+              "type": "STR",
+              "value": "minecraft:dispenser"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[104]",
+              "type": "STR",
+              "value": "minecraft:diamond_sword"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[105]",
+              "type": "STR",
+              "value": "minecraft:diamond_shovel"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[106]",
+              "type": "STR",
+              "value": "minecraft:diamond_pickaxe"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[107]",
+              "type": "STR",
+              "value": "minecraft:diamond_leggings"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[108]",
+              "type": "STR",
+              "value": "minecraft:diamond_hoe"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[109]",
+              "type": "STR",
+              "value": "minecraft:diamond_helmet"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[110]",
+              "type": "STR",
+              "value": "minecraft:diamond_chestplate"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[111]",
+              "type": "STR",
+              "value": "minecraft:diamond_boots"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[112]",
+              "type": "STR",
+              "value": "minecraft:diamond_block"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[113]",
+              "type": "STR",
+              "value": "minecraft:diamond_axe"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[114]",
+              "type": "STR",
+              "value": "minecraft:diamond"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[115]",
+              "type": "STR",
+              "value": "minecraft:dark_oak_boat"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[116]",
+              "type": "STR",
+              "value": "minecraft:cyan_wool"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[117]",
+              "type": "STR",
+              "value": "minecraft:crafting_table"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[118]",
+              "type": "STR",
+              "value": "minecraft:cobblestone_wall"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[119]",
+              "type": "STR",
+              "value": "minecraft:cobblestone_slab"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[120]",
+              "type": "STR",
+              "value": "minecraft:clay"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[121]",
+              "type": "STR",
+              "value": "minecraft:chiseled_stonebrick"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[122]",
+              "type": "STR",
+              "value": "minecraft:chiseled_red_sandstone"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[123]",
+              "type": "STR",
+              "value": "minecraft:chest"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[124]",
+              "type": "STR",
+              "value": "minecraft:brown_wool"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[125]",
+              "type": "STR",
+              "value": "minecraft:brick_block"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[126]",
+              "type": "STR",
+              "value": "minecraft:boat"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[127]",
+              "type": "STR",
+              "value": "minecraft:blue_wool"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[128]",
+              "type": "STR",
+              "value": "minecraft:black_wool"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[129]",
+              "type": "STR",
+              "value": "minecraft:birch_boat"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[130]",
+              "type": "STR",
+              "value": "minecraft:anvil"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[131]",
+              "type": "STR",
+              "value": "minecraft:andesite"
+            },
+            {
+              "absolute_path": "recipeBook.toBeDisplayed[132]",
+              "type": "STR",
+              "value": "minecraft:acacia_boat"
+            }
+          ]
+        },
+        "isGuiOpen": {
+          "absolute_path": "recipeBook.isGuiOpen",
+          "type": "BYTE",
+          "value": 0
+        }
+      }
+    },
+    "DeathTime": {
+      "absolute_path": "DeathTime",
+      "type": "SHORT",
+      "value": 0
+    },
+    "XpSeed": {
+      "absolute_path": "XpSeed",
+      "type": "INT",
+      "value": 1224225277
+    },
+    "WorldUUIDMost": {
+      "absolute_path": "WorldUUIDMost",
+      "type": "LONG",
+      "value": 180375314642715305
+    },
+    "Spigot.ticksLived": {
+      "absolute_path": "Spigot.ticksLived",
+      "type": "INT",
+      "value": 7218212
+    },
+    "XpTotal": {
+      "absolute_path": "XpTotal",
+      "type": "INT",
+      "value": 17
+    },
+    "playerGameType": {
+      "absolute_path": "playerGameType",
+      "type": "INT",
+      "value": 1
+    },
+    "seenCredits": {
+      "absolute_path": "seenCredits",
+      "type": "BYTE",
+      "value": 0
+    },
+    "enteredNetherPosition": {
+      "absolute_path": "enteredNetherPosition",
+      "type": "MAP",
+      "value": {
+        "x": {
+          "absolute_path": "enteredNetherPosition.x",
+          "type": "DOUBLE",
+          "value": 11.973447518374716
+        },
+        "y": {
+          "absolute_path": "enteredNetherPosition.y",
+          "type": "DOUBLE",
+          "value": 62.0
+        },
+        "z": {
+          "absolute_path": "enteredNetherPosition.z",
+          "type": "DOUBLE",
+          "value": 10.379268660893167
+        }
+      }
+    },
+    "Motion": {
+      "absolute_path": "Motion",
+      "type": "ARRAY",
+      "value": [
+        {
+          "absolute_path": "Motion[0]",
+          "type": "DOUBLE",
+          "value": 0.0
+        },
+        {
+          "absolute_path": "Motion[1]",
+          "type": "DOUBLE",
+          "value": -0.02
+        },
+        {
+          "absolute_path": "Motion[2]",
+          "type": "DOUBLE",
+          "value": 0.0
+        }
+      ]
+    },
+    "UUIDLeast": {
+      "absolute_path": "UUIDLeast",
+      "type": "LONG",
+      "value": -6857133040658327084
+    },
+    "Health": {
+      "absolute_path": "Health",
+      "type": "FLOAT",
+      "value": 20.0
+    },
+    "Bukkit.updateLevel": {
+      "absolute_path": "Bukkit.updateLevel",
+      "type": "INT",
+      "value": 2
+    },
+    "foodSaturationLevel": {
+      "absolute_path": "foodSaturationLevel",
+      "type": "FLOAT",
+      "value": 3.0
+    },
+    "Air": {
+      "absolute_path": "Air",
+      "type": "SHORT",
+      "value": 300
+    },
+    "OnGround": {
+      "absolute_path": "OnGround",
+      "type": "BYTE",
+      "value": 1
+    },
+    "Dimension": {
+      "absolute_path": "Dimension",
+      "type": "INT",
+      "value": 0
+    },
+    "Rotation": {
+      "absolute_path": "Rotation",
+      "type": "ARRAY",
+      "value": [
+        {
+          "absolute_path": "Rotation[0]",
+          "type": "FLOAT",
+          "value": -85.35003
+        },
+        {
+          "absolute_path": "Rotation[1]",
+          "type": "FLOAT",
+          "value": 24.000004
+        }
+      ]
+    },
+    "XpLevel": {
+      "absolute_path": "XpLevel",
+      "type": "INT",
+      "value": 2
+    },
+    "Score": {
+      "absolute_path": "Score",
+      "type": "INT",
+      "value": 22
+    },
+    "UUIDMost": {
+      "absolute_path": "UUIDMost",
+      "type": "LONG",
+      "value": 5570426942000481233
+    },
+    "Sleeping": {
+      "absolute_path": "Sleeping",
+      "type": "BYTE",
+      "value": 0
+    },
+    "Pos": {
+      "absolute_path": "Pos",
+      "type": "ARRAY",
+      "value": [
+        {
+          "absolute_path": "Pos[0]",
+          "type": "DOUBLE",
+          "value": 10.491428854955014
+        },
+        {
+          "absolute_path": "Pos[1]",
+          "type": "DOUBLE",
+          "value": 62.0
+        },
+        {
+          "absolute_path": "Pos[2]",
+          "type": "DOUBLE",
+          "value": 10.4288537117485
+        }
+      ]
+    },
+    "Fire": {
+      "absolute_path": "Fire",
+      "type": "SHORT",
+      "value": -20
+    },
+    "XpP": {
+      "absolute_path": "XpP",
+      "type": "FLOAT",
+      "value": 0.09090909
+    },
+    "EnderItems": {
+      "absolute_path": "EnderItems",
+      "type": "ARRAY",
+      "value": [
+        {
+          "absolute_path": "EnderItems[0]",
+          "type": "MAP",
+          "value": {
+            "Slot": {
+              "absolute_path": "EnderItems[0].Slot",
+              "type": "BYTE",
+              "value": 12
+            },
+            "id": {
+              "absolute_path": "EnderItems[0].id",
+              "type": "STR",
+              "value": "minecraft:clay_ball"
+            },
+            "Count": {
+              "absolute_path": "EnderItems[0].Count",
+              "type": "BYTE",
+              "value": 1
+            },
+            "Damage": {
+              "absolute_path": "EnderItems[0].Damage",
+              "type": "SHORT",
+              "value": 0
+            }
+          }
+        },
+        {
+          "absolute_path": "EnderItems[1]",
+          "type": "MAP",
+          "value": {
+            "Slot": {
+              "absolute_path": "EnderItems[1].Slot",
+              "type": "BYTE",
+              "value": 13
+            },
+            "id": {
+              "absolute_path": "EnderItems[1].id",
+              "type": "STR",
+              "value": "minecraft:wooden_pickaxe"
+            },
+            "Count": {
+              "absolute_path": "EnderItems[1].Count",
+              "type": "BYTE",
+              "value": 1
+            },
+            "Damage": {
+              "absolute_path": "EnderItems[1].Damage",
+              "type": "SHORT",
+              "value": 1
+            }
+          }
+        }
+      ]
+    },
+    "DataVersion": {
+      "absolute_path": "DataVersion",
+      "type": "INT",
+      "value": 1343
+    },
+    "foodLevel": {
+      "absolute_path": "foodLevel",
+      "type": "INT",
+      "value": 20
+    },
+    "foodExhaustionLevel": {
+      "absolute_path": "foodExhaustionLevel",
+      "type": "FLOAT",
+      "value": 2.1790013
+    },
+    "HurtTime": {
+      "absolute_path": "HurtTime",
+      "type": "SHORT",
+      "value": 0
+    },
+    "SelectedItemSlot": {
+      "absolute_path": "SelectedItemSlot",
+      "type": "INT",
+      "value": 4
+    },
+    "SpawnWorld": {
+      "absolute_path": "SpawnWorld",
+      "type": "STR",
+      "value": "world"
+    },
+    "WorldUUIDLeast": {
+      "absolute_path": "WorldUUIDLeast",
+      "type": "LONG",
+      "value": -5483029771699406563
+    },
+    "Inventory": {
+      "absolute_path": "Inventory",
+      "type": "ARRAY",
+      "value": [
+        {
+          "absolute_path": "Inventory[0]",
+          "type": "MAP",
+          "value": {
+            "Slot": {
+              "absolute_path": "Inventory[0].Slot",
+              "type": "BYTE",
+              "value": 0
+            },
+            "id": {
+              "absolute_path": "Inventory[0].id",
+              "type": "STR",
+              "value": "minecraft:diamond"
+            },
+            "Count": {
+              "absolute_path": "Inventory[0].Count",
+              "type": "BYTE",
+              "value": 64
+            },
+            "Damage": {
+              "absolute_path": "Inventory[0].Damage",
+              "type": "SHORT",
+              "value": 0
+            }
+          }
+        },
+        {
+          "absolute_path": "Inventory[1]",
+          "type": "MAP",
+          "value": {
+            "Slot": {
+              "absolute_path": "Inventory[1].Slot",
+              "type": "BYTE",
+              "value": 1
+            },
+            "id": {
+              "absolute_path": "Inventory[1].id",
+              "type": "STR",
+              "value": "minecraft:diamond"
+            },
+            "Count": {
+              "absolute_path": "Inventory[1].Count",
+              "type": "BYTE",
+              "value": 1
+            },
+            "Damage": {
+              "absolute_path": "Inventory[1].Damage",
+              "type": "SHORT",
+              "value": 0
+            }
+          }
+        },
+        {
+          "absolute_path": "Inventory[2]",
+          "type": "MAP",
+          "value": {
+            "Slot": {
+              "absolute_path": "Inventory[2].Slot",
+              "type": "BYTE",
+              "value": 2
+            },
+            "id": {
+              "absolute_path": "Inventory[2].id",
+              "type": "STR",
+              "value": "minecraft:wooden_pickaxe"
+            },
+            "Count": {
+              "absolute_path": "Inventory[2].Count",
+              "type": "BYTE",
+              "value": 1
+            },
+            "Damage": {
+              "absolute_path": "Inventory[2].Damage",
+              "type": "SHORT",
+              "value": 0
+            }
+          }
+        },
+        {
+          "absolute_path": "Inventory[3]",
+          "type": "MAP",
+          "value": {
+            "Slot": {
+              "absolute_path": "Inventory[3].Slot",
+              "type": "BYTE",
+              "value": 3
+            },
+            "id": {
+              "absolute_path": "Inventory[3].id",
+              "type": "STR",
+              "value": "minecraft:stone"
+            },
+            "Count": {
+              "absolute_path": "Inventory[3].Count",
+              "type": "BYTE",
+              "value": 1
+            },
+            "Damage": {
+              "absolute_path": "Inventory[3].Damage",
+              "type": "SHORT",
+              "value": 0
+            }
+          }
+        },
+        {
+          "absolute_path": "Inventory[4]",
+          "type": "MAP",
+          "value": {
+            "Slot": {
+              "absolute_path": "Inventory[4].Slot",
+              "type": "BYTE",
+              "value": 5
+            },
+            "id": {
+              "absolute_path": "Inventory[4].id",
+              "type": "STR",
+              "value": "minecraft:dye"
+            },
+            "Count": {
+              "absolute_path": "Inventory[4].Count",
+              "type": "BYTE",
+              "value": 1
+            },
+            "Damage": {
+              "absolute_path": "Inventory[4].Damage",
+              "type": "SHORT",
+              "value": 10
+            }
+          }
+        },
+        {
+          "absolute_path": "Inventory[5]",
+          "type": "MAP",
+          "value": {
+            "Slot": {
+              "absolute_path": "Inventory[5].Slot",
+              "type": "BYTE",
+              "value": 6
+            },
+            "id": {
+              "absolute_path": "Inventory[5].id",
+              "type": "STR",
+              "value": "minecraft:dye"
+            },
+            "Count": {
+              "absolute_path": "Inventory[5].Count",
+              "type": "BYTE",
+              "value": 100
+            },
+            "Damage": {
+              "absolute_path": "Inventory[5].Damage",
+              "type": "SHORT",
+              "value": 10
+            }
+          }
+        },
+        {
+          "absolute_path": "Inventory[6]",
+          "type": "MAP",
+          "value": {
+            "Slot": {
+              "absolute_path": "Inventory[6].Slot",
+              "type": "BYTE",
+              "value": 7
+            },
+            "id": {
+              "absolute_path": "Inventory[6].id",
+              "type": "STR",
+              "value": "minecraft:dye"
+            },
+            "Count": {
+              "absolute_path": "Inventory[6].Count",
+              "type": "BYTE",
+              "value": 1
+            },
+            "Damage": {
+              "absolute_path": "Inventory[6].Damage",
+              "type": "SHORT",
+              "value": 10
+            }
+          }
+        },
+        {
+          "absolute_path": "Inventory[7]",
+          "type": "MAP",
+          "value": {
+            "Slot": {
+              "absolute_path": "Inventory[7].Slot",
+              "type": "BYTE",
+              "value": -106
+            },
+            "id": {
+              "absolute_path": "Inventory[7].id",
+              "type": "STR",
+              "value": "minecraft:dye"
+            },
+            "Count": {
+              "absolute_path": "Inventory[7].Count",
+              "type": "BYTE",
+              "value": 1
+            },
+            "Damage": {
+              "absolute_path": "Inventory[7].Damage",
+              "type": "SHORT",
+              "value": 10
+            }
+          }
+        }
+      ]
+    },
+    "foodTickTimer": {
+      "absolute_path": "foodTickTimer",
+      "type": "INT",
+      "value": 0
+    },
+    "Paper.Origin": {
+      "absolute_path": "Paper.Origin",
+      "type": "ARRAY",
+      "value": [
+        {
+          "absolute_path": "Paper.Origin[0]",
+          "type": "DOUBLE",
+          "value": -76.05246786221115
+        },
+        {
+          "absolute_path": "Paper.Origin[1]",
+          "type": "DOUBLE",
+          "value": 77.0
+        },
+        {
+          "absolute_path": "Paper.Origin[2]",
+          "type": "DOUBLE",
+          "value": 49.40831825847319
+        }
+      ]
+    }
+  },
+  "meta_data": {
+    "name": "Conorsmine",
+    "version": "1.2",
+    "uuid": "4d4e21ca-5534-43d1-a0d6-91d485f759d4"
+  }
+}

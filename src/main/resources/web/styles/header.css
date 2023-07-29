@@ -1,0 +1,78 @@
+* {
+    margin: 0;
+}
+
+.header {
+    position: fixed;
+    grid-area: header;
+    display: flex;
+
+    background-color: #2B2B2B;
+    padding: 5px;
+    width: 100vw;
+
+    height: 35px;
+    line-height: normal;
+    z-index: 1;
+}
+
+.header_img {
+    aspect-ratio: 1;
+
+    padding-left: 5px;
+}
+
+.header_img > img {
+    max-width: 100%;
+}
+
+.header_title {
+    align-self: center;
+
+    padding-left: 10px;
+}
+
+.header_title > h1 {
+    font-family: minecraftFont;
+    font-size: 20px;
+    color: #458EA8;
+}
+
+#save_button {
+    display: flex;
+    position: absolute;
+    right: 2vw;
+    width: fit-content;
+    align-self: center;
+
+    background-color: #4ee053;
+    outline: 0;
+
+    border-radius: 4px;
+    max-height: 25px;
+
+}
+
+#save_button:hover > * {
+    /* https://isotropic.co/tool/hex-color-to-css-filter/ */
+    filter: invert(49%) sepia(82%) saturate(279%) hue-rotate(150deg) brightness(88%) contrast(92%);
+}
+
+#save_button > img {
+    height: 12.5px;
+    width: 12.5px;
+
+    padding: 6.25px;
+
+    /* https://isotropic.co/tool/hex-color-to-css-filter/ */
+    filter: invert(94%) sepia(6%) saturate(1100%) hue-rotate(341deg) brightness(109%) contrast(92%);
+}
+
+#save_button > div {
+    color: beige;
+    text-align: center;
+    align-self: center;
+
+    padding: 6.25px;
+    padding-left: 3px;
+}

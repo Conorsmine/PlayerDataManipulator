@@ -1,0 +1,29 @@
+#========-------------========#
+#          PDM v1.3           #
+#        by Conorsmine        #
+#========-------------========#
+
+# Configurations for the online webeditor and server
+web_server:
+  port: 8806
+
+# This list provides paths to the location of "inventories".
+# Both the regular inventory and the players ender chest are already pre-set.
+inventory_paths:
+  inv:
+    path: "Inventory"                                   # Regular inventory
+    size: 36
+
+  ec:
+    path: "EnderItems"                                  # Enderchest inventory
+    size: 27
+
+  baubles:
+    path: "ForgeCaps.baubles:container.Items"           # Bauble slots
+    size: 7
+
+
+
+# Some config about the parser, do not change this if you don't know what it does
+data_parser:
+  separator: "##"

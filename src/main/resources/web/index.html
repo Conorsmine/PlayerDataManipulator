@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>My test page</title>
+    <link type="text/css" href="styles/utils.css" rel="stylesheet" />
+    <link type="text/css" href="styles/header.css" rel="stylesheet" />
+    <link type="text/css" href="styles/editor.css" rel="stylesheet" />
+
+  </head>
+    <body onclick="togglePopup(event);">
+      <script src="src/saveButtonFunctionality.js"> </script>
+      <script src="src/commandCopyFunctionality.js"></script>
+
+      <div class="header" id="editor_header rounded_edges" style="--px:2px">
+        <div class="header_img"> <img src="assets/booklet_header.png" /> </div>
+        <div class="header_title"> <h1> Player Data Manipulator </h1> </div>
+
+        <div id="save_button" class="prevent-select">
+          <img src="assets/save.png" />
+          <div> Save </div>
+        </div>
+      </div>
+
+    <div id="editor-body">
+      <div id="copy_popup_container"> </div>
+
+      <div id="changes_popup" class="blur display_none">
+        <div id="show_cmd" class="rounded_edges" style="--px:20px">
+          <h2 id="cmd_header" class="prevent-select"> Changes saved! </h2>
+          <div id="info" class="prevent-select"> Execute the given command on your server to apply the changes. </div>
+          <div id="cmd" class="rounded_edges" style="--px:4px" onclick="copyToClipboard();"> <p id="cmd_text"> </p> </div>
+        </div>
+      </div>
+
+      <div id="sidebar">
+        <div class="lines" id="sidebar_lines">
+          <!-- I hate that this is here, but I'm too lazy to remove it and get the rest of the code to work -->
+          <div class="section" style="--y:0"> </div>
+        </div>
+      </div>
+      
+      <div id="editor">
+        <div class="lines" id="editor_lines"> </div>
+      </div>
+      
+      <div id="connect_lines"> </div>
+    </div>
+
+
+    <script src="src/UUIDparser.js"> </script>
+    <script src="src/sectionButtonInteract.js"></script>
+    <script src="src/inputFit.js"></script>
+    <script src="src/inputSave.js"></script>
+
+    <script src="src/parsers.js"></script>
+    <script src="src/renderers.js"></script>
+    <script src="src/domElements.js"></script>
+    <script src="src/index.js"></script>
+  </body>
+</html>
