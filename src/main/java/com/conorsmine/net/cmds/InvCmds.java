@@ -43,11 +43,11 @@ public class InvCmds extends BaseCommand {
     @Description("Opens a players inventory")
     @CommandPermission("pdm.inv.open")
     private void openInventory(final Player player, final @NotNull OfflinePlayer target, final PathWrapper inventoryPath, @Default("true") boolean openSafely) {
-        if (inventoryPath == null) { pl.sendMsg(player, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
+        if (inventoryPath == null) { PlayerDataManipulator.sendMsg(player, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
         if (target.isOnline()) ((Player) target).saveData();
 
         EditorInventory.Builder.createInventory(target, inventoryPath).openInventory(player);
-        pl.sendMsg(player, "§7Opening " + String.format(PluginMsgs.INV_FORMAT.getMsg(), target.getName(), inventoryPath.getSectionName()));
+        PlayerDataManipulator.sendMsg(player, "§7Opening " + String.format(PluginMsgs.INV_FORMAT.getMsg(), target.getName(), inventoryPath.getSectionName()));
     }
 
     @Subcommand("list")
@@ -55,7 +55,7 @@ public class InvCmds extends BaseCommand {
     @Description("Lists the contents of the players inv")
     @CommandPermission("pdm.inv.list")
     private void listInventory(final CommandSender sender, final @NotNull OfflinePlayer target, final PathWrapper inventoryPath) {
-        if (inventoryPath == null) { pl.sendMsg(sender, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
+        if (inventoryPath == null) { PlayerDataManipulator.sendMsg(sender, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
         if (target.isOnline()) ((Player) target).saveData();
 
         NBTInventoryUtils.getItemNBTsFromPathAsync(
@@ -69,7 +69,7 @@ public class InvCmds extends BaseCommand {
     @Description("Provides the nbt of the item")
     @CommandPermission("pdm.inv.info")
     private void printInfo(final CommandSender sender, final OfflinePlayer target, final PathWrapper inventoryPath, final int slot) {
-        if (inventoryPath == null) { pl.sendMsg(sender, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
+        if (inventoryPath == null) { PlayerDataManipulator.sendMsg(sender, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
 
         NBTInventoryUtils.getItemNBTsMapFromPathAsync(
                 NBTData.getOfflinePlayerData(target.getUniqueId()).getCompound(),
@@ -77,12 +77,12 @@ public class InvCmds extends BaseCommand {
         ).whenComplete((map, e) -> {
             final NBTCompound compound = map.get(slot);
             if (compound == null) {
-                pl.sendMsg(sender, String.format(PluginMsgs.ITEM_NOT_FOUND.getMsg(), slot));
+                PlayerDataManipulator.sendMsg(sender, String.format(PluginMsgs.ITEM_NOT_FOUND.getMsg(), slot));
                 return;
             }
 
             PlayerDataManipulator.sendHeader(sender, "Info");
-            pl.sendMsg(
+            PlayerDataManipulator.sendMsg(
                     sender,
                     "§7Basic info:",
                     String.format(
@@ -102,7 +102,7 @@ public class InvCmds extends BaseCommand {
     @Description("Clears the players inventory")
     @CommandPermission("pdm.inv.clear")
     private void clearInventory(final CommandSender sender, final @NotNull OfflinePlayer target, final PathWrapper inventoryPath) {
-        if (inventoryPath == null) { pl.sendMsg(sender, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
+        if (inventoryPath == null) { PlayerDataManipulator.sendMsg(sender, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
 
         final PlayerData playerData = NBTData.getOfflinePlayerData(target.getUniqueId());
         final MojangsonUtils.NBTResult result = new MojangsonUtils().setSeparator(ParserFile.getSeparator()).getCompoundFromPath(playerData.getCompound(), inventoryPath.getPath());
@@ -120,7 +120,7 @@ public class InvCmds extends BaseCommand {
         }
 
         reloadPlayerData(target, playerData);
-        pl.sendMsg(sender, "§7Cleared " + String.format(PluginMsgs.INV_FORMAT.getMsg(), target.getName(), inventoryPath.getSectionName()));
+        PlayerDataManipulator.sendMsg(sender, "§7Cleared " + String.format(PluginMsgs.INV_FORMAT.getMsg(), target.getName(), inventoryPath.getSectionName()));
     }
 
     @Subcommand("remove")
@@ -128,7 +128,7 @@ public class InvCmds extends BaseCommand {
     @Description("Removes the content of the players inventory at that slots")
     @CommandPermission("pdm.inv.remove")
     private void removeFromInventory(final CommandSender sender, final OfflinePlayer target, final PathWrapper inventoryPath, final int slot) {
-        if (inventoryPath == null) { pl.sendMsg(sender, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
+        if (inventoryPath == null) { PlayerDataManipulator.sendMsg(sender, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
 
         final PlayerData playerData = NBTData.getOfflinePlayerData(target.getUniqueId());
         NBTInventoryUtils.removeNBTAsync(
@@ -137,11 +137,11 @@ public class InvCmds extends BaseCommand {
                 (nbt) -> (nbt.getInteger(NBTItemTags.SLOT.getTagName()) == slot)
         ).whenComplete((nbt, e) -> {
             if (nbt == null) {
-                pl.sendMsg(sender, String.format(PluginMsgs.ITEM_NOT_FOUND.getMsg(), slot));
+                PlayerDataManipulator.sendMsg(sender, String.format(PluginMsgs.ITEM_NOT_FOUND.getMsg(), slot));
                 return;
             }
 
-            pl.sendMsg(sender,
+            PlayerDataManipulator.sendMsg(sender,
                     String.format(
                             "§7Removed §b%d§7x §9%s §7from §6%s§7's §b%s§7.",
                             nbt.getInteger(NBTItemTags.COUNT.getTagName()),
@@ -160,8 +160,8 @@ public class InvCmds extends BaseCommand {
     @CommandPermission("pdm.inv.add")
     private void addToInventory(final CommandSender sender, final OfflinePlayer target, final PathWrapper inventoryPath,
                                 final String itemId, @Default("0") final short data, @Default("1") final int count) {
-        if (inventoryPath == null) { pl.sendMsg(sender, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
-        if (itemId == null) { pl.sendMsg(sender, PluginMsgs.MISSING_ITEM_ID.getMsg()); return; }
+        if (inventoryPath == null) { PlayerDataManipulator.sendMsg(sender, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
+        if (itemId == null) { PlayerDataManipulator.sendMsg(sender, PluginMsgs.MISSING_ITEM_ID.getMsg()); return; }
         if (target.isOnline()) ((Player) target).saveData();
 
         final PlayerData playerData = NBTData.getOfflinePlayerData(target.getUniqueId());
@@ -176,7 +176,7 @@ public class InvCmds extends BaseCommand {
             case NBTTagList:
                 final NBTCompoundList invList = invNBT.getCompoundList(finalKey);
                 final int freeInvSlot = getFreeInvSlot(invList, inventoryPath);
-                if (freeInvSlot == -Integer.MAX_VALUE) { pl.sendMsg(sender, "§cCould not find a free inv slot."); return; }
+                if (freeInvSlot == -Integer.MAX_VALUE) { PlayerDataManipulator.sendMsg(sender, "§cCould not find a free inv slot."); return; }
 
                 final NBTListCompound nbtItem = invList.addCompound();
                 nbtItem.setString(NBTItemTags.ID.getTagName(), itemId);
@@ -187,7 +187,7 @@ public class InvCmds extends BaseCommand {
         }
 
         reloadPlayerData(target, playerData);
-        pl.sendMsg(sender, String.format("§7Added §9%s §7to §6%s§7's §b%s§7.", itemId, target.getName(), inventoryPath.getSectionName()));
+        PlayerDataManipulator.sendMsg(sender, String.format("§7Added §9%s §7to §6%s§7's §b%s§7.", itemId, target.getName(), inventoryPath.getSectionName()));
     }
 
     @Subcommand("addnbt")
@@ -195,8 +195,8 @@ public class InvCmds extends BaseCommand {
     @Description("Adds the item nbt to the players inventory")
     @CommandPermission("pdm.inv.addnbt")
     private void addNBTToInventory(final CommandSender sender, final OfflinePlayer target, final PathWrapper inventoryPath, final String nbt) {
-        if (inventoryPath == null) { pl.sendMsg(sender, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
-        if (nbt == null || StringUtils.isEmpty(nbt)) { pl.sendMsg(sender, "§cItem NBT cannot be null!"); return; }
+        if (inventoryPath == null) { PlayerDataManipulator.sendMsg(sender, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
+        if (nbt == null || StringUtils.isEmpty(nbt)) { PlayerDataManipulator.sendMsg(sender, "§cItem NBT cannot be null!"); return; }
 
         try {
             final NBTContainer nbtItem = new NBTContainer(nbt);
@@ -214,7 +214,7 @@ public class InvCmds extends BaseCommand {
                 case NBTTagList:
                     final NBTCompoundList invList = invNBT.getCompoundList(finalKey);
                     final int freeInvSlot = getFreeInvSlot(invList, inventoryPath);
-                    if (freeInvSlot == -Integer.MAX_VALUE) { pl.sendMsg(sender, "§cCould not find a free inv slot."); return; }
+                    if (freeInvSlot == -Integer.MAX_VALUE) { PlayerDataManipulator.sendMsg(sender, "§cCould not find a free inv slot."); return; }
 
                     final NBTCompound nbtItemCompound = invList.addCompound(nbtItem);
                     nbtItemCompound.setInteger(NBTItemTags.SLOT.getTagName(), freeInvSlot);
@@ -222,10 +222,10 @@ public class InvCmds extends BaseCommand {
             }
 
             reloadPlayerData(target, playerData);
-            pl.sendMsg(sender, String.format("§7Added to §6%s§7's §b%s§7:", target.getName(), inventoryPath.getSectionName()));
+            PlayerDataManipulator.sendMsg(sender, String.format("§7Added to §6%s§7's §b%s§7:", target.getName(), inventoryPath.getSectionName()));
             sendColoredNBT(sender, nbtItem);
         }
-        catch (Exception e) { pl.sendMsg(sender, "§7Unable to parse NBT. Something must be malformed."); }
+        catch (Exception e) { PlayerDataManipulator.sendMsg(sender, "§7Unable to parse NBT. Something must be malformed."); }
     }
 
     @Subcommand("addstore")
@@ -233,7 +233,7 @@ public class InvCmds extends BaseCommand {
     @Description("Adds the item from a stored to the players inventory")
     @CommandPermission("pdm.inv.addstore")
     private void addItemFromStore(final CommandSender sender, final OfflinePlayer target, final PathWrapper inventoryPath, final ItemStore itemStore) {
-        if (itemStore == null) { pl.sendMsg(sender, "§7Couldn't find store with that name."); return; }
+        if (itemStore == null) { PlayerDataManipulator.sendMsg(sender, "§7Couldn't find store with that name."); return; }
         addNBTToInventory(sender, target, inventoryPath, itemStore.getStoredNBT());
     }
 
@@ -242,24 +242,24 @@ public class InvCmds extends BaseCommand {
     @Description("Returns players which have the specified item")
     @CommandPermission("pdm.inv.search")
     private void searchInventories(final CommandSender sender, final String itemId, @Default("0") final short data) {
-        if (itemId == null) { pl.sendMsg(sender, PluginMsgs.MISSING_ITEM_ID.getMsg()); return; }
+        if (itemId == null) { PlayerDataManipulator.sendMsg(sender, PluginMsgs.MISSING_ITEM_ID.getMsg()); return; }
         if (currentExecutions.get() > 0) {
-            pl.sendMsg(sender, "§cAlready searching for an item, please wait until the search is complete to begin a new one.");
+            PlayerDataManipulator.sendMsg(sender, "§cAlready searching for an item, please wait until the search is complete to begin a new one.");
             return;
         }
 
-        pl.sendMsg(sender, "§7This might take a while...");
+        PlayerDataManipulator.sendMsg(sender, "§7This might take a while...");
 
         final Queue<OfflinePlayer> offlinePlayers = new ConcurrentLinkedQueue<>(Arrays.asList(pl.getServer().getOfflinePlayers()));
 
         foundPlayers.clear();
         runSearchQueryAsync(offlinePlayers, itemId, data)
                 .whenComplete((v, e) -> {
-                    pl.sendMsg(sender,
+                    PlayerDataManipulator.sendMsg(sender,
                             String.format("§7The following players contain §9%s §6%s§7:", itemId, (data < 0) ? "" : data));
 
                     foundPlayers.forEach((foundPlayer) -> {
-                        pl.sendMsg(sender,
+                        PlayerDataManipulator.sendMsg(sender,
                                 String.format("  §7>> §6%s §7in §b%s",
                                 foundPlayer.getPlayer().getName(),
                                 foundPlayer.getInventoryPath().getSectionName()));
@@ -272,20 +272,20 @@ public class InvCmds extends BaseCommand {
     @Description("Stores the items NBT in a file for later use")
     @CommandPermission("pdm.inv.store")
     private void storeItem(final CommandSender sender, final OfflinePlayer target, final PathWrapper inventoryPath, final int slot) {
-        if (inventoryPath == null) { pl.sendMsg(sender, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
+        if (inventoryPath == null) { PlayerDataManipulator.sendMsg(sender, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
 
         NBTInventoryUtils.getItemNBTsMapFromPathAsync(
                 NBTData.getOfflinePlayerData(target.getUniqueId()).getCompound(),
                 inventoryPath.getPath()
         ).whenComplete((map, e) -> {
             final NBTCompound compound = map.get(slot);
-            if (compound == null) { pl.sendMsg(sender, String.format(PluginMsgs.ITEM_NOT_FOUND.getMsg(), slot)); return; }
+            if (compound == null) { PlayerDataManipulator.sendMsg(sender, String.format(PluginMsgs.ITEM_NOT_FOUND.getMsg(), slot)); return; }
 
             final String fileName = NBTStoreFile.storeNBT(sender, target, compound);
-            if (fileName == null) { pl.sendMsg(sender, "§cCouldn't save players item nbt to file."); }
+            if (fileName == null) { PlayerDataManipulator.sendMsg(sender, "§cCouldn't save players item nbt to file."); }
             else {
                 sendColoredNBT(sender, compound);
-                pl.sendMsg(sender, String.format("§7Saved players item nbt to file §6%s§7.", fileName));
+                PlayerDataManipulator.sendMsg(sender, String.format("§7Saved players item nbt to file §6%s§7.", fileName));
             }
         });
     }
@@ -299,7 +299,7 @@ public class InvCmds extends BaseCommand {
     }
 
     private void sendColoredNBT(final CommandSender sender, final NBTCompound nbt) {
-        pl.sendMsg(
+        PlayerDataManipulator.sendMsg(
                 sender,
                 TextComponent.toLegacyText(new MojangsonUtils().getInteractiveMojangson(nbt, ""))
         );
@@ -307,9 +307,9 @@ public class InvCmds extends BaseCommand {
 
     private boolean isItem(final CommandSender sender, final NBTCompound nbt) {
         boolean isItem = true;
-        if (!nbt.hasKey(NBTItemTags.ID.getTagName())) { pl.sendMsg(sender, "§7NBT is missing §6ID §7tag!"); isItem = false; }
-        if (!nbt.hasKey(NBTItemTags.DAMAGE.getTagName())) { pl.sendMsg(sender, "§7NBT is missing §6DAMAGE §7tag!"); isItem = false; }
-        if (!nbt.hasKey(NBTItemTags.COUNT.getTagName())) { pl.sendMsg(sender, "§7NBT is missing §6COUNT §7tag!"); isItem = false; }
+        if (!nbt.hasKey(NBTItemTags.ID.getTagName())) { PlayerDataManipulator.sendMsg(sender, "§7NBT is missing §6ID §7tag!"); isItem = false; }
+        if (!nbt.hasKey(NBTItemTags.DAMAGE.getTagName())) { PlayerDataManipulator.sendMsg(sender, "§7NBT is missing §6DAMAGE §7tag!"); isItem = false; }
+        if (!nbt.hasKey(NBTItemTags.COUNT.getTagName())) { PlayerDataManipulator.sendMsg(sender, "§7NBT is missing §6COUNT §7tag!"); isItem = false; }
 
         return isItem;
     }

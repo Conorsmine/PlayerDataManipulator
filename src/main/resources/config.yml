@@ -19,7 +19,7 @@ inventory_paths:
     size: 27
 
   baubles:
-    path: "ForgeCaps.baubles:container.Items"           # Bauble slots
+    path: "ForgeCaps##baubles:container##Items"           # Bauble slots
     size: 7
 
 
