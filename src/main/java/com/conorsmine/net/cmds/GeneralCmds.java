@@ -14,6 +14,7 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.Map;
 
+@SuppressWarnings("unchecked")
 @CommandAlias("pdm")
 public class GeneralCmds extends BaseCommand {
 
@@ -36,7 +37,7 @@ public class GeneralCmds extends BaseCommand {
         for (Map.Entry<String, RegisteredCommand> entry : pl.getCommandManager().getRootCommand(getName()).getSubCommands().entries()) {
             if (entry.getValue().isPrivate()) continue;
 
-            pl.sendMsg(sender, String.format("  §7>> §9/%s %s", getName(), entry.getKey()));
+            PlayerDataManipulator.sendMsg(sender, String.format("  §7>> §9/%s %s", getName(), entry.getKey()));
         }
     }
 

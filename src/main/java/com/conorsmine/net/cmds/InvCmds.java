@@ -39,7 +39,7 @@ public class InvCmds extends BaseCommand {
     private PlayerDataManipulator pl;
 
     @Subcommand("open")
-    @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + " " + CmdCompletions.INVENTORY_PATHS + " false|true")
+    @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + CmdCompletions.INVENTORY_PATHS + " false|true")
     @Description("Opens a players inventory")
     @CommandPermission("pdm.inv.open")
     private void openInventory(final Player player, final @NotNull OfflinePlayer target, final PathWrapper inventoryPath, @Default("true") boolean openSafely) {
@@ -51,7 +51,7 @@ public class InvCmds extends BaseCommand {
     }
 
     @Subcommand("list")
-    @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + " " + CmdCompletions.INVENTORY_PATHS)
+    @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + CmdCompletions.INVENTORY_PATHS)
     @Description("Lists the contents of the players inv")
     @CommandPermission("pdm.inv.list")
     private void listInventory(final CommandSender sender, final @NotNull OfflinePlayer target, final PathWrapper inventoryPath) {
@@ -65,7 +65,7 @@ public class InvCmds extends BaseCommand {
     }
 
     @Subcommand("info")
-    @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + " " + CmdCompletions.INVENTORY_PATHS)
+    @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + CmdCompletions.INVENTORY_PATHS)
     @Description("Provides the nbt of the item")
     @CommandPermission("pdm.inv.info")
     private void printInfo(final CommandSender sender, final OfflinePlayer target, final PathWrapper inventoryPath, final int slot) {
@@ -98,7 +98,7 @@ public class InvCmds extends BaseCommand {
     }
 
     @Subcommand("clear")
-    @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + " " + CmdCompletions.INVENTORY_PATHS)
+    @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + CmdCompletions.INVENTORY_PATHS)
     @Description("Clears the players inventory")
     @CommandPermission("pdm.inv.clear")
     private void clearInventory(final CommandSender sender, final @NotNull OfflinePlayer target, final PathWrapper inventoryPath) {
@@ -124,7 +124,7 @@ public class InvCmds extends BaseCommand {
     }
 
     @Subcommand("remove")
-    @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + " " + CmdCompletions.INVENTORY_PATHS)
+    @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + CmdCompletions.INVENTORY_PATHS)
     @Description("Removes the content of the players inventory at that slots")
     @CommandPermission("pdm.inv.remove")
     private void removeFromInventory(final CommandSender sender, final OfflinePlayer target, final PathWrapper inventoryPath, final int slot) {
@@ -155,7 +155,7 @@ public class InvCmds extends BaseCommand {
     }
 
     @Subcommand("add")
-    @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + " " + CmdCompletions.INVENTORY_PATHS + " " + CmdCompletions.ITEM_IDS + " @range:255 @range:64")
+    @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + CmdCompletions.INVENTORY_PATHS + CmdCompletions.ITEM_IDS + "@range:255 @range:64")
     @Description("Adds the item to the players inventory")
     @CommandPermission("pdm.inv.add")
     private void addToInventory(final CommandSender sender, final OfflinePlayer target, final PathWrapper inventoryPath,
@@ -191,7 +191,7 @@ public class InvCmds extends BaseCommand {
     }
 
     @Subcommand("addnbt")
-    @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + " " + CmdCompletions.INVENTORY_PATHS)
+    @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + CmdCompletions.INVENTORY_PATHS)
     @Description("Adds the item nbt to the players inventory")
     @CommandPermission("pdm.inv.addnbt")
     private void addNBTToInventory(final CommandSender sender, final OfflinePlayer target, final PathWrapper inventoryPath, final String nbt) {
@@ -229,7 +229,7 @@ public class InvCmds extends BaseCommand {
     }
 
     @Subcommand("addstore")
-    @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + " " + CmdCompletions.INVENTORY_PATHS + " " + CmdCompletions.ITEM_STORES)
+    @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + CmdCompletions.INVENTORY_PATHS + CmdCompletions.ITEM_STORES)
     @Description("Adds the item from a stored to the players inventory")
     @CommandPermission("pdm.inv.addstore")
     private void addItemFromStore(final CommandSender sender, final OfflinePlayer target, final PathWrapper inventoryPath, final ItemStore itemStore) {
@@ -238,7 +238,7 @@ public class InvCmds extends BaseCommand {
     }
 
     @Subcommand("search")
-    @CommandCompletion(CmdCompletions.ITEM_IDS + " @range:255")
+    @CommandCompletion(CmdCompletions.ITEM_IDS + "@range:255")
     @Description("Returns players which have the specified item")
     @CommandPermission("pdm.inv.search")
     private void searchInventories(final CommandSender sender, final String itemId, @Default("0") final short data) {
@@ -258,17 +258,16 @@ public class InvCmds extends BaseCommand {
                     PlayerDataManipulator.sendMsg(sender,
                             String.format("§7The following players contain §9%s §6%s§7:", itemId, (data < 0) ? "" : data));
 
-                    foundPlayers.forEach((foundPlayer) -> {
-                        PlayerDataManipulator.sendMsg(sender,
-                                String.format("  §7>> §6%s §7in §b%s",
-                                foundPlayer.getPlayer().getName(),
-                                foundPlayer.getInventoryPath().getSectionName()));
-                    });
+                    foundPlayers.forEach((foundPlayer) ->
+                            PlayerDataManipulator.sendMsg(sender,
+                            String.format("  §7>> §6%s §7in §b%s",
+                            foundPlayer.getPlayer().getName(),
+                            foundPlayer.getInventoryPath().getSectionName())));
                 });
     }
 
     @Subcommand("store")
-    @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + " " + CmdCompletions.INVENTORY_PATHS)
+    @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + CmdCompletions.INVENTORY_PATHS)
     @Description("Stores the items NBT in a file for later use")
     @CommandPermission("pdm.inv.store")
     private void storeItem(final CommandSender sender, final OfflinePlayer target, final PathWrapper inventoryPath, final int slot) {
