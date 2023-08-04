@@ -3,6 +3,7 @@ package com.conorsmine.net.cmds;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import com.conorsmine.net.PlayerDataManipulator;
+import com.conorsmine.net.Properties;
 import com.conorsmine.net.files.ParserFile;
 import com.conorsmine.net.files.FileUtils;
 import com.conorsmine.net.files.LogFiles;
@@ -43,7 +44,7 @@ public class WebCmds extends BaseCommand {
                     try {
                         PlayerDataManipulator.sendMsg(sender, "§2Webeditor link:");
 
-                        final String link = String.format("http://%s:%d/editor?id=%s",
+                        final String link = String.format("http://%s:%d/editor?" + Properties.getProperty("url_id") + "=%s",
                                 InetAddress.getLocalHost().getHostAddress(),
                                 WebsiteFile.getPort(),
                                 uuid );

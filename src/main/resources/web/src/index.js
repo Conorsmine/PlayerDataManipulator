@@ -1,4 +1,4 @@
-const ID = new URL(window.location.href).searchParams.get("id");
+const ID = new URL(window.location.href).searchParams.get("${url_id}");
 
 const DataTypes = {
     ARRAY: "array.png",
