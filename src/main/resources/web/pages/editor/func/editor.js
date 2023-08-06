@@ -1,18 +1,20 @@
+const UUID_REGEX = "${uuid_regex.regexp}";
 const ID = new URL(window.location.href).searchParams.get("${url_id}");
+if (ID == null || !ID.match(UUID_REGEX)) console.log("LOAD ERROR PAGE");
 
 const DataTypes = {
-    ARRAY: "array.png",
-    MAP: "map.png",
+    ${datatype_ARRAY}: "array.png",
+    ${datatype_MAP}: "map.png",
 
-    BYTE: "byte.png",
-    SHORT: "short.png",
-    INT: "integer.png",
-    LONG: "long.png",
+    ${datatype_BYTE}: "byte.png",
+    ${datatype_SHORT}: "short.png",
+    ${datatype_INT}: "integer.png",
+    ${datatype_LONG}: "long.png",
 
-    FLOAT: "float.png",
-    DOUBLE: "double.png",
+    ${datatype_FLOAT}: "float.png",
+    ${datatype_DOUBLE}: "double.png",
 
-    STR: "string.png"
+    ${datatype_STR}: "string.png"
 }
 
 class Data {
@@ -24,6 +26,7 @@ class Data {
     this.dataType = dataType;
     this.indent = indent;
     this.isExpanded = isExpanded;
+    this.htmlElement;
   }
 }
 
@@ -62,6 +65,6 @@ const dataChanges = new Map();
 
 loadJSONFile(`playerData/${ID}.json`, (jsonData) => {
     json = jsonData;
-    showData = parseJSONToData(json["player_data"]);
+    showData = parseJSONToData(json["${parsed_player_data}"]);
     renderPageElements();
 });

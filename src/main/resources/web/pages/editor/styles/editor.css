@@ -1,0 +1,57 @@
+body {
+    background-color: #232627;
+}
+
+@font-face {
+    font-family: minecraftFont;
+    src: url('/assets/Minecraft.ttf') format('truetype');
+}
+
+#editor-body {
+    display: grid;
+    grid-template-areas: 
+        'header header'
+        'sidebar editor'
+    ;
+    grid-gap: 1px;
+    padding-top: 45px;
+}
+
+#editor_header {
+    grid-area: header;
+}
+
+#editor {
+    grid-area: editor;
+
+    background-color: #232627;
+    line-height: 100vh;
+}
+
+#connect_lines {
+    top: -100%;
+    position: relative;
+}
+
+.bar_line {
+    width: 2px;
+    height: calc((40px * (var(--height) - 1)) + 20px);
+    margin-left: calc((35px * var(--indent)) + 12px);
+
+    
+    margin-top: calc((40px * var(--y)) + 40px);
+    background: white;
+
+    position: absolute;
+}
+
+.connect_line {
+    height: 2px;
+    width: 20px;
+    margin-top: calc((40px * (var(--height))) + 20px);
+    margin-left: calc(35px * var(--indent));
+
+    background: white;
+
+    position: absolute;
+}

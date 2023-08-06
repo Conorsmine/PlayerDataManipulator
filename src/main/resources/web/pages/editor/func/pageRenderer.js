@@ -1,5 +1,3 @@
-const defaultEditorBody = document.getElementById("editor-body").innerHTML;
-
 function isMapOrArray(data) {
   return (DataTypes[data.dataType] == DataTypes.ARRAY || DataTypes[data.dataType] == DataTypes.MAP);
 }
@@ -17,34 +15,36 @@ function calcLenOfSubData(dataArr) {
   return len;
 }
 
+function showDataToDomElements(domElement, dataArr) {
+  const allSubDataElements = domElement.querySelectorAll("#sub_data");
 
-
-function showDataToDomElements(dataArr) {
   for (let i = 0; i < dataArr.length; i++) {
     const data = dataArr[i];
-
+    const subDataElement = allSubDataElements[allSubDataElements.length - 1];
     
     if (isMapOrArray(data)) {
       const entriesLen = Object.keys(data.value).length;
       const val = (DataTypes[data.dataType] == DataTypes.ARRAY) ? `[ ${entriesLen} Entries ]` : `{ ${entriesLen} Entries }`;
+    
+      subDataElement.insertAdjacentHTML("beforeend", createUnmodifieableElementFrom(new Data(data.key, val, data.path, data.dataType, data.indent, data.isExpanded)));
+      const sel = subDataElement.querySelectorAll("#sub_data");
+      data.htmlElement = sel[sel.length - 1];
 
-      createUnmodifieableElementFrom(new Data(data.key, val, data.path, data.dataType, data.indent, false));
-      
-      if (data.isExpanded == false || entriesLen == 0) continue;
-      showDataToDomElements(data.value);
+      if (entriesLen == 0) continue;
+      showDataToDomElements(subDataElement, data.value);
     }
 
     // Primitive
-    else {
-      const change = dataChanges.get(data.path);
-      if (change != undefined) data.value = change.value;
-      createPrimitiveElementToDom(data);
-    }
+    else { subDataElement.insertAdjacentHTML("beforeend", createPrimitiveElementToDom(data)); }
   }
 }
 
 
-  
+ 
+function clearLines() {
+  document.getElementById("connect_lines").innerHTML = '';
+}
+
 function renderLinesToDomElements(dataArr) {
     renderLengthData(dataArr, 0, 0);
 }
@@ -75,6 +75,10 @@ function renderLengthData(dataArr, indent, yOffset) {
 
 
 
+function clearSectionButtons() {
+  document.getElementById("sidebar_lines").innerHTML = '<div class="section" style="--y:0"> </div>';
+}
+
 function renderSectionButtons(dataArr) {
     recursiveRenderSectionButtons(dataArr, []);
 }
@@ -103,10 +107,8 @@ function recursiveRenderSectionButtons(dataArr, indexPathArr) {
 
 
 function renderPageElements() {
-  resetpageData();
-
-  createUUIDDomElement(json["meta_data"]["uuid"])
-  showDataToDomElements(showData);
+  createUUIDDomElement(json["${parsed_meta_data}"]["${parsed_meta_name}"], json["${parsed_meta_data}"]["${parsed_meta_uuid}"])
+  showDataToDomElements(document, showData);
   renderLinesToDomElements(showData);
   renderSectionButtons(showData);
 
@@ -117,6 +119,12 @@ function renderPageElements() {
   document.getElementById("cmd_text").innerHTML = `/pdm apply ${bytesToCmdCode(calcAllBytes(ID))}`;
 }
 
-function resetpageData() {
-  document.getElementById("editor-body").innerHTML = defaultEditorBody;
+function redrawElements() {
+  clearSectionButtons();
+  renderSectionButtons(showData);
+
+  clearLines();
+  renderLinesToDomElements(showData);
+
+  reloadFitInputs();
 }

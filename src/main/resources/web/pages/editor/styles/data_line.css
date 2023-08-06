@@ -1,0 +1,81 @@
+.indent {
+    padding-right: calc((35px * var(--indent)) + 36px);
+}
+
+.lines  {
+    grid-auto-rows: 20px;
+    grid-row-gap: 5px;
+}
+
+.section {
+    display: flex;
+    flex-direction: row;
+
+    margin-top: calc(40px * var(--y));
+    align-items: center;
+
+    padding-right: 5px;
+    padding-left: 5px;
+
+    height: 40px;
+}
+
+.section > img {
+    max-width: 100%;
+}
+
+#sub-data {
+    flex-direction: column;
+}
+
+.data_line {
+    display: flex;
+    flex-direction: row;
+
+    text-align: left;
+    line-height: normal;
+
+    vertical-align: middle;
+
+    font-family: 'Courier New', Courier, monospace;
+    
+    align-items: center;
+    min-width: 100vw;
+    height: 40px;
+}
+
+.data_prefix {
+    font-family: 'Courier New', Courier, monospace;
+    align-items: center;
+
+    color: white;
+
+    line-height: normal;
+}
+
+.data_image {
+    padding-left: 5px;
+    align-items: center;
+
+    display: flex;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.data_image > img {
+    max-width: 100%;
+}
+
+.data_text {
+    color: white;
+
+    padding-left: 5px;
+    align-items: center;
+    
+    display: flex;
+}
+
+.data_value {
+    padding-left: 5px;
+    color: beige;
+}

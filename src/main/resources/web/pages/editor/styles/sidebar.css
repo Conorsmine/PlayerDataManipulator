@@ -1,0 +1,9 @@
+#sidebar {
+    grid-area: sidebar;
+
+    background-color: #2B2B2B;
+    align-items: end;
+
+    width: 50px;
+    outline: 1px solid #666666;
+}

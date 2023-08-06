@@ -1,5 +1,3 @@
-let inputs;
-
 function reloadSaveInputs() {
     inputs = document.querySelectorAll('#dynamicText');
 

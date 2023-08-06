@@ -1,0 +1,24 @@
+input[type="text"],
+span {
+    border: 2px solid beige;
+    min-width: 2em;
+}
+
+input[type="text"] {
+    padding: 0.5em 1em;
+
+    color: beige;
+    background-color: #2B2A33;
+    border-radius: 2em;
+    outline: 0;
+}
+
+input[type="text"]:focus {
+    border-color: #458EA8;
+}
+
+span {
+    position: absolute;
+    left: -9999px;
+    display: inline-block;
+}

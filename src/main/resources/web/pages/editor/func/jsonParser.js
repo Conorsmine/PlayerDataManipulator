@@ -1,7 +1,7 @@
 function parseJSONToData(json) {
   return recursiveParse(json, [], 0);
 }
-
+  
 function recursiveParse(jsonObject, list, indent) {
   const keys = Object.keys(jsonObject);
   if (keys.length == 0) return;
@@ -16,7 +16,7 @@ function recursiveParse(jsonObject, list, indent) {
 
     // Map
     if (DataTypes[dataType] == DataTypes.MAP) {
-      list.push(new Data(key, recursiveParse(val, [], newIndent), path, dataType, indent, false));
+       list.push(new Data(key, recursiveParse(val, [], newIndent), path, dataType, indent, false));
     }
 
     // Array
