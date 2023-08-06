@@ -3,7 +3,6 @@ package com.conorsmine.net.cmds;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import com.conorsmine.net.PlayerDataManipulator;
-import com.conorsmine.net.Properties;
 import com.conorsmine.net.files.ParserFile;
 import com.conorsmine.net.files.FileUtils;
 import com.conorsmine.net.files.LogFiles;
@@ -25,6 +24,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.UUID;
 
+import static com.conorsmine.net.Properties.*;
+
 @CommandAlias("pdm")
 public class WebCmds extends BaseCommand {
 
@@ -44,9 +45,11 @@ public class WebCmds extends BaseCommand {
                     try {
                         PlayerDataManipulator.sendMsg(sender, "§2Webeditor link:");
 
-                        final String link = String.format("http://%s:%d/editor?" + Properties.getProperty("url_id") + "=%s",
+                        final String link = String.format("http://%s:%d/%s?%s=%s",
                                 InetAddress.getLocalHost().getHostAddress(),
                                 WebsiteFile.getPort(),
+                                URL_PATH,
+                                URL_ID,
                                 uuid );
                         final TextComponent linkComponent = new TextComponent(String.format("%s§6%s", PlayerDataManipulator.getPrefix(), link));
                         linkComponent.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, link));

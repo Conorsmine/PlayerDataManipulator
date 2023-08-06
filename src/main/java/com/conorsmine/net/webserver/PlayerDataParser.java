@@ -1,9 +1,10 @@
 package com.conorsmine.net.webserver;
 
+import com.conorsmine.net.MojangsonUtils;
 import com.conorsmine.net.PlayerDataManipulator;
+import com.conorsmine.net.Properties;
 import com.conorsmine.net.files.ParserFile;
 import com.conorsmine.net.files.WebsiteFile;
-import com.conorsmine.net.MojangsonUtils;
 import com.google.gson.GsonBuilder;
 import de.tr7zw.nbtapi.*;
 import de.tr7zw.nbtapi.data.NBTData;
@@ -12,11 +13,16 @@ import org.bukkit.OfflinePlayer;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static de.tr7zw.nbtapi.NBTType.*;
+import static com.conorsmine.net.Properties.*;
 
 @SuppressWarnings("unchecked")
 public class PlayerDataParser {
@@ -47,19 +53,19 @@ public class PlayerDataParser {
 
     private static JSONObject getFinalParsedJson(final OfflinePlayer player) {
         final JSONObject jsonObject = new JSONObject();
-        jsonObject.put(ParserTag.META_DATA.tag, createMetadata(player));
+        jsonObject.put(PARSED_META_DATA, createMetadata(player));
 
-        jsonObject.put(ParserTag.PLAYER_DATA.tag, parse(NBTData.getOfflinePlayerData(player.getUniqueId()).getCompound(), new JSONObject(), ""));
+        jsonObject.put(PARSED_PLAYER_DATA, parse(NBTData.getOfflinePlayerData(player.getUniqueId()).getCompound(), new JSONObject(), ""));
 
         return jsonObject;
     }
 
     private static JSONObject createMetadata(final OfflinePlayer player) {
         final JSONObject jsonObject = new JSONObject();
-        jsonObject.put(ParserTag.PLUGIN_VERSION.tag, PlayerDataManipulator.getINSTANCE().getDescription().getVersion());
+        jsonObject.put(PARSED_PLUGIN_VERSION, PlayerDataManipulator.getINSTANCE().getDescription().getVersion());
 
-        jsonObject.put(ParserTag.PLAYER_NAME.tag, player.getName());
-        jsonObject.put(ParserTag.PLAYER_UUID.tag, player.getUniqueId().toString());
+        jsonObject.put(PARSED_PLAYER_NAME, player.getName());
+        jsonObject.put(PARSED_PLAYER_UUID, player.getUniqueId().toString());
 
         return jsonObject;
     }
@@ -91,18 +97,18 @@ public class PlayerDataParser {
 
     private static JSONObject evaluateSimpleCompound(final NBTCompound compound, String key, String path) {
         final JSONObject jsonObject = new JSONObject();
-        jsonObject.put(ParserTag.TYPE.tag, DataType.getType(compound.getType(key)).name());
-        jsonObject.put(ParserTag.PATH.tag, path);
-        jsonObject.put(ParserTag.VALUE.tag, MojangsonUtils.getSimpleDataFromCompound(compound, key));
+        jsonObject.put(PARSED_TYPE, DataType.getType(compound.getType(key)).name());
+        jsonObject.put(PARSED_PATH, path);
+        jsonObject.put(PARSED_VALUE, MojangsonUtils.getSimpleDataFromCompound(compound, key));
 
         return jsonObject;
     }
 
     private static JSONObject evaluateCompoundTag(final NBTCompound compound, String key, String path) {
         final JSONObject jsonObject = new JSONObject();
-        jsonObject.put(ParserTag.TYPE.tag, DataType.MAP.name());
-        jsonObject.put(ParserTag.PATH.tag, path);
-        jsonObject.put(ParserTag.VALUE.tag, parse(compound, new JSONObject(), path));
+        jsonObject.put(PARSED_TYPE, DataType.MAP.name());
+        jsonObject.put(PARSED_PATH, path);
+        jsonObject.put(PARSED_VALUE, parse(compound, new JSONObject(), path));
 
         return jsonObject;
     }
@@ -117,16 +123,16 @@ public class PlayerDataParser {
 
         for (int i = 0; i < list.size(); i++) {
             final JSONObject valJson = new JSONObject();
-            valJson.put(ParserTag.TYPE.tag, type.name());
-            valJson.put(ParserTag.PATH.tag, String.format("%s[%d]", path, i));
-            valJson.put(ParserTag.VALUE.tag, list.get(i));
+            valJson.put(PARSED_TYPE, type.name());
+            valJson.put(PARSED_PATH, String.format("%s[%d]", path, i));
+            valJson.put(PARSED_VALUE, list.get(i));
 
             jsonArray.add(valJson);
         }
 
-        jsonObject.put(ParserTag.PATH.tag, path);
-        jsonObject.put(ParserTag.TYPE.tag, DataType.ARRAY.name());
-        jsonObject.put(ParserTag.VALUE.tag, jsonArray);
+        jsonObject.put(PARSED_TYPE, DataType.ARRAY.name());
+        jsonObject.put(PARSED_PATH, path);
+        jsonObject.put(PARSED_VALUE, jsonArray);
         return jsonObject;
     }
 
@@ -138,16 +144,16 @@ public class PlayerDataParser {
             final NBTListCompound compound = compoundList.get(i);
 
             final JSONObject json = new JSONObject();
-            json.put(ParserTag.TYPE.tag, DataType.getType(compoundList.getType()));
-            json.put(ParserTag.PATH.tag, String.format("%s[%d]", path, i));
-            json.put(ParserTag.VALUE.tag, parse(compound, new JSONObject(), String.format("%s[%d]", path, i)));
+            json.put(PARSED_TYPE, DataType.getType(compoundList.getType()));
+            json.put(PARSED_PATH, String.format("%s[%d]", path, i));
+            json.put(PARSED_VALUE, parse(compound, new JSONObject(), String.format("%s[%d]", path, i)));
 
             jsonArray.add(json);
         }
 
-        jsonObject.put(ParserTag.TYPE.tag, DataType.ARRAY.name());
-        jsonObject.put(ParserTag.PATH.tag, path);
-        jsonObject.put(ParserTag.VALUE.tag, jsonArray);
+        jsonObject.put(PARSED_TYPE, DataType.ARRAY.name());
+        jsonObject.put(PARSED_PATH, path);
+        jsonObject.put(PARSED_VALUE, jsonArray);
         return jsonObject;
     }
 
@@ -158,22 +164,22 @@ public class PlayerDataParser {
 
         final JSONObject jsonObject = new JSONObject();
         final JSONArray jsonArray = new JSONArray();
-        jsonObject.put(ParserTag.PATH.tag, path);
-        jsonObject.put(ParserTag.TYPE.tag, DataType.ARRAY.name());
+        jsonObject.put(PARSED_TYPE, DataType.ARRAY.name());
+        jsonObject.put(PARSED_PATH, path);
 
         final Object[] arr = convertToArr(compoundArray, key);
 
         for (int i = 0; i < arr.length; i++) {
             final JSONObject valJson = new JSONObject();
 
-            valJson.put(ParserTag.TYPE.tag, valType.name());
-            valJson.put(ParserTag.PATH.tag, String.format("%s[%d]", path, i));
-            valJson.put(ParserTag.VALUE.tag, arr[i]);
+            valJson.put(PARSED_TYPE, valType.name());
+            valJson.put(PARSED_PATH, String.format("%s[%d]", path, i));
+            valJson.put(PARSED_VALUE, arr[i]);
 
             jsonArray.add(valJson);
         }
 
-        jsonObject.put(ParserTag.VALUE.tag, jsonArray);
+        jsonObject.put(PARSED_VALUE, jsonArray);
         return jsonObject;
     }
 
@@ -217,36 +223,26 @@ public class PlayerDataParser {
 
 
 
-
-    private enum ParserTag {
-        META_DATA ("meta_data"),
-        PLAYER_DATA ("player_data"),
-
-        PLAYER_NAME ("name"),
-        PLAYER_UUID ("uuid"),
-        PLUGIN_VERSION ("version"),
-
-        TYPE ("type"),
-        PATH ("absolute_path"),
-        VALUE ("value");
-
-        final String tag;
-
-        ParserTag(String tag) {
-            this.tag = tag;
-        }
-    }
-
     private enum DataType {
-        ARRAY,
-        FLOAT,
-        DOUBLE,
-        BYTE,
-        INT,
-        LONG,
-        SHORT,
-        MAP,
-        STR;
+        ARRAY (DATATYPE_ARRAY),
+        FLOAT (DATATYPE_FLOAT),
+        DOUBLE (DATATYPE_DOUBLE),
+        BYTE (DATATYPE_BYTE),
+        INT (DATATYPE_INT),
+        LONG (DATATYPE_LONG),
+        SHORT (DATATYPE_SHORT),
+        MAP (DATATYPE_MAP),
+        STR (DATATYPE_STR);
+
+        private final Properties property;
+        DataType(Properties property) {
+            this.property = property;
+        }
+
+        @Override
+        public String toString() {
+            return this.property.toString();
+        }
 
         private final static Map<NBTType, DataType> map = new HashMap<NBTType, DataType>() {{
             put(NBTTagList, ARRAY);

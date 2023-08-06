@@ -1,6 +1,7 @@
 package com.conorsmine.net.webserver;
 
 import com.conorsmine.net.PlayerDataManipulator;
+import com.conorsmine.net.Properties;
 import com.conorsmine.net.files.WebsiteFile;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -13,27 +14,29 @@ import java.nio.file.Files;
 public class WebHTTPHandler implements HttpHandler {
 
     @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        String requestPath = exchange.getRequestURI().getPath();
-        int responseCode = 200;
-        byte[] responseBytes;
+    public void handle(HttpExchange exchange) {
+        try {
+            String requestPath = exchange.getRequestURI().getPath();
+            int responseCode = 200;
+            byte[] responseBytes;
 
-        if (requestPath.equals("/editor")) { requestPath = "/index.html"; }
-        if (requestPath.startsWith("/playerData/")) responseBytes = handlePlayerDataParseRequest(requestPath);
-        else if (requestPath.startsWith("/changes/")) responseBytes = handlePlayerDataChangePost(requestPath, exchange);
-        else responseBytes = WebsiteFile.getResourceAsBytes(requestPath);
+            if (requestPath.matches(String.format(".*/playerData/%s\\.json", Properties.UUID_REGEX))) responseBytes = handlePlayerDataParseRequest(requestPath);
+            else if (requestPath.startsWith("/changes/")) responseBytes = handlePlayerDataChangePost(requestPath, exchange);
+            else responseBytes = WebsiteFile.getResourceAsBytes(requestPath);
 
-        exchange.getResponseHeaders().add("Content-Type", determineFileType(requestPath).contentDefinition);
-        exchange.sendResponseHeaders(responseCode, responseBytes.length);
+            exchange.getResponseHeaders().add("Content-Type", determineFileType(requestPath).contentDefinition);
+            exchange.sendResponseHeaders(responseCode, responseBytes.length);
 
-        // Write the response content to the output stream
-        OutputStream outputStream = exchange.getResponseBody();
-        outputStream.write(responseBytes);
-        outputStream.close();
+            // Write the response content to the output stream
+            OutputStream outputStream = exchange.getResponseBody();
+            outputStream.write(responseBytes);
+            outputStream.close();
+        }
+        catch (Exception e) { e.printStackTrace(); }
     }
 
     private byte[] handlePlayerDataParseRequest(final String requestPath) {
-        return getPlayerDataResource(requestPath.replaceAll("/playerData/", ""));
+        return getPlayerDataResource(requestPath.replaceAll(".*/playerData/", ""));
     }
 
     private byte[] handlePlayerDataChangePost(final String requestPath, final HttpExchange exchange) throws IOException {
