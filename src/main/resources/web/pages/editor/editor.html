@@ -20,6 +20,7 @@
   </head>
     <body onclick="togglePopup(event);">
       <script src="func/saveButtonFunctionality.js"> </script>
+      <script src="func/copyToClipboard.js"> </script>
 
       <div class="header full_width" id="editor_header">
         <div class="header_img"> <img src="../../assets/booklet_header.png" /> </div>
@@ -38,7 +39,7 @@
         <div id="show_cmd" class="rounded_edges" style="--px:20px">
           <h2 id="cmd_header" class="prevent-select"> Changes saved! </h2>
           <div id="info" class="prevent-select"> Execute the given command on your server to apply the changes. </div>
-          <div id="cmd" class="rounded_edges" style="--px:4px" onclick="copyToClipboard();"> <p id="cmd_text"> </p> </div>
+          <textarea readonly id="cmd" class="rounded_edges" style="--px:4px" onclick="copyToClipboard();"> </textarea>
         </div>
       </div>
 
