@@ -23,14 +23,12 @@ function calcDigit(ch, radix) {
 function parseLong(str, begin, end, radix) {
     negative = false;
     i = begin;
-    limit = -0x7fffffffffffffff;
 
     if (i < end) {
         firstChar = str[i];
         if (firstChar < '0') {
             if (firstChar == '-') {
                 negative = true;
-                limit = 0x8000000000000000;
             }
             i++;
         }

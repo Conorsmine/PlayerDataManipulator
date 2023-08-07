@@ -9,7 +9,7 @@ import java.io.*;
 
 public class WebsiteFile {
 
-    public static final String PATH = "web", CSS_PATH = "styles", TEMP_CACHE = "temp_cache", TEMP_CHANGE_PREFIX = "change-";
+    public static final String PATH = "web", TEMP_CACHE = "temp_cache", TEMP_CHANGE_PREFIX = "change-";
 
     public static int getPort() {
         return PlayerDataManipulator.INSTANCE.getConfig().getInt(String.format("%s.%s", ConfigSections.PATH.path, ConfigSections.PORT.path));
@@ -17,6 +17,7 @@ public class WebsiteFile {
 
     public static File getTempCacheDir() {
         final File dir = new File(PlayerDataManipulator.getINSTANCE().getDataFolder(), TEMP_CACHE);
+        //noinspection ResultOfMethodCallIgnored
         dir.mkdirs();
 
         return dir;
@@ -24,6 +25,7 @@ public class WebsiteFile {
 
     public static File createTempParsedFile(final String fileID) throws IOException {
         final File file = new File(WebsiteFile.getTempCacheDir(), String.format("%s.json", fileID));
+        //noinspection ResultOfMethodCallIgnored
         file.createNewFile();
 
         return file;
@@ -31,6 +33,7 @@ public class WebsiteFile {
 
     public static File createTempChangeFile(final String fileID) throws IOException {
         final File file = new File(WebsiteFile.getTempCacheDir(), String.format("%s%s.json", TEMP_CHANGE_PREFIX, fileID));
+        //noinspection ResultOfMethodCallIgnored
         file.createNewFile();
 
         final FileWriter writer = new FileWriter(file);
@@ -39,6 +42,16 @@ public class WebsiteFile {
         writer.close();
 
         return file;
+    }
+
+    public static void clearTempCache() {
+        final File[] files = getTempCacheDir().listFiles();
+        if (files == null) return;
+
+        for (File file : files) {
+            //noinspection ResultOfMethodCallIgnored
+            file.delete();
+        }
     }
 
     public static void setJSONOfChangeFile(final String fileID, final JSONObject json) {
@@ -50,6 +63,7 @@ public class WebsiteFile {
     @Nullable
     public static File getChangeFileFromCommandCode(final String cmdCode) {
         final File[] files = getTempCacheDir().listFiles((dir, name) -> name.startsWith(TEMP_CHANGE_PREFIX));
+        if (files == null) return null;
 
         for (File file : files) {
             final String fileUUID = file.getName().replaceAll(TEMP_CHANGE_PREFIX, "").replaceAll(".json", "");

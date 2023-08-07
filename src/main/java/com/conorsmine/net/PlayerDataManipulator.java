@@ -68,15 +68,7 @@ public final class PlayerDataManipulator extends JavaPlugin{
     @Override
     public void onDisable() {
         webServer.stop();
-
-        // Cleanup temp cache
-        final File[] files = WebsiteFile.getTempCacheDir().listFiles();
-        if (files == null)return;
-
-        for (File file : files) {
-            //noinspection ResultOfMethodCallIgnored
-            file.delete();
-        }
+        WebsiteFile.clearTempCache();
     }
 
     public static PlayerDataManipulator getINSTANCE() {

@@ -1,7 +1,5 @@
 package com.conorsmine.net.webserver;
 
-import java.util.UUID;
-
 public class UUIDParser {
 
     static final byte[] DIGITS = {
@@ -50,14 +48,12 @@ public class UUIDParser {
     private static long parseLong(final String str, int begin, int end, int radix) {
         boolean negative = false;
         int i = begin;
-        long limit = -0x7fffffffffffffffL;
 
         if (i < end) {
             char firstChar = str.toCharArray()[i];
             if (firstChar < '0') {
                 if (firstChar == '-') {
                     negative = true;
-                    limit = 0x8000000000000000L;
                 }
                 i++;
             }
