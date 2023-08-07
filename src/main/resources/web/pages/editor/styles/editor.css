@@ -1,5 +1,20 @@
 body {
-    background-color: #232627;
+    --primary_text_color: beige;        /* Used in most places where there is a lot of text */
+    --secondary_text_color: white;      /* Used for example in the key names of data lines */
+    --special_text_color: #458EA8;      /* Used for example in the header or some of the hover events */
+    --text_accent_color: #2B2A33;        /* Used for example in the text field of the cmd popup or value inputs */
+
+    --border_color: #666666;
+    --editor_background_color: #232627;
+    --editor_accent_color: #2B2B2B;     /* Used for example in the header, sidebar or the popups */
+
+    --connect_lines_color: #333333;
+
+    --save_button_color: #4ee053;
+
+
+
+    background-color: var(--editor_background_color);
 }
 
 @font-face {
@@ -24,7 +39,7 @@ body {
 #editor {
     grid-area: editor;
 
-    background-color: #232627;
+    background-color: var(--editor_background_color);
     line-height: 100vh;
 }
 
@@ -36,11 +51,11 @@ body {
 .bar_line {
     width: 2px;
     height: calc((40px * (var(--height) - 1)) + 20px);
-    margin-left: calc((35px * var(--indent)) + 12px);
+    margin-left: calc((35px * var(--indent)) + 16px);
 
     
     margin-top: calc((40px * var(--y)) + 40px);
-    background: white;
+    background: var(--connect_lines_color);
 
     position: absolute;
 }
@@ -51,7 +66,7 @@ body {
     margin-top: calc((40px * (var(--height))) + 20px);
     margin-left: calc(35px * var(--indent));
 
-    background: white;
+    background: var(--connect_lines_color);
 
     position: absolute;
 }

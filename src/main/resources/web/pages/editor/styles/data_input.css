@@ -1,6 +1,6 @@
 input[type="text"],
 span {
-    border: 2px solid beige;
+    border: 2px solid var(--primary_text_color);
     min-width: 2em;
 }
 
@@ -8,13 +8,13 @@ input[type="text"] {
     padding: 0.5em 1em;
 
     color: beige;
-    background-color: #2B2A33;
+    background-color: var(--text_accent_color);
     border-radius: 2em;
     outline: 0;
 }
 
 input[type="text"]:focus {
-    border-color: #458EA8;
+    border-color: var(--special_text_color);
 }
 
 span {

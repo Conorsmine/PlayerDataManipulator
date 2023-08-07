@@ -3,7 +3,7 @@ function createUUIDDomElement(playerName, uuid) {
     <div id="uuid">
       <div class="data_line section">
         <div class="data_image prevent-select"> <img src="../../assets/data_types/${DataTypes["MAP"]}" /> </div>
-        <div class="data_key">  ${playerName}</div>
+        <div class="data_text">  ${playerName}</div>
         <div class="data_value"> [${uuid}]</div>
       </div>
 

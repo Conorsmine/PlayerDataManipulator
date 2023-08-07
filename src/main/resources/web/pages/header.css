@@ -7,14 +7,14 @@
     grid-area: header;
     display: flex;
 
-    background-color: #2B2B2B;
+    background-color: var(--editor_accent_color);
     padding: 5px;
 
     height: 35px;
     line-height: normal;
     z-index: 1;
 
-    outline: 1px solid #666666;
+    outline: 1px solid var(--border_color);
 }
 
 .header_img {
@@ -36,5 +36,5 @@
 .header_title > h1 {
     font-family: minecraftFont;
     font-size: 20px;
-    color: #458EA8;
+    color: var(--special_text_color);
 }

@@ -67,4 +67,6 @@ loadJSONFile(`playerData/${ID}.json`, (jsonData) => {
     json = jsonData;
     showData = parseJSONToData(json["${parsed_player_data}"]);
     renderPageElements();
+
+    document.getElementById("cmd").innerHTML = `/pdm apply ${bytesToCmdCode(calcAllBytes(ID))}`;
 });

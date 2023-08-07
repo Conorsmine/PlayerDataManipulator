@@ -115,8 +115,6 @@ function renderPageElements() {
   reloadFitInputs();
   reloadSectionButtons();
   reloadSaveInputs();
-
-  document.getElementById("cmd_text").innerHTML = `/pdm apply ${bytesToCmdCode(calcAllBytes(ID))}`;
 }
 
 function redrawElements() {
