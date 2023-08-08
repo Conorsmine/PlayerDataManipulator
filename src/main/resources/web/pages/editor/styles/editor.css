@@ -17,11 +17,6 @@ body {
     background-color: var(--editor_background_color);
 }
 
-@font-face {
-    font-family: minecraftFont;
-    src: url('/assets/Minecraft.ttf') format('truetype');
-}
-
 #editor-body {
     display: grid;
     grid-template-areas: 
