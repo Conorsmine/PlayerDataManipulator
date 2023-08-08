@@ -16,7 +16,8 @@ function recursiveParse(jsonObject, list, indent) {
 
     // Map
     if (DataTypes[dataType] == DataTypes.MAP) {
-       list.push(new Data(key, recursiveParse(val, [], newIndent), path, dataType, indent, false));
+       if (Object.keys(val).length == 0) list.push(new Data(key, new Map(), path, dataType, indent, false));
+       else list.push(new Data(key, recursiveParse(val, [], newIndent), path, dataType, indent, false));
     }
 
     // Array
