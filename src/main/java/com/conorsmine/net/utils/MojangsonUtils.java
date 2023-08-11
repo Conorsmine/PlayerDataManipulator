@@ -1,4 +1,4 @@
-package com.conorsmine.net;
+package com.conorsmine.net.utils;
 
 import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTCompoundList;
@@ -197,6 +197,7 @@ public class MojangsonUtils {
         if (path.isEmpty()) return new NBTResult(compound, path, getLastKey(path));
 
         // Returning a NBTResult, as the data could be in a NBTList instead
+        if (isArr(path)) return new NBTResult(compound, path, getLastKey(path));
         return new NBTResult(recursiveCompoundFromPath(compound, path), path, getLastKey(path));
     }
 
@@ -216,6 +217,27 @@ public class MojangsonUtils {
         else if (type == NBTType.NBTTagDouble) return compound.getDouble(key);
         else if (type == NBTType.NBTTagString) return  compound.getString(key);
         else new Exception(String.format("\"%s\" was not parsable!", nbtResult.getFinalKey())).printStackTrace();
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T getSimpleDataFromCompound(final Class<T> clazzCast, final NBTResult nbtResult) {
+        final String key = nbtResult.getFinalKey();
+        final NBTType type = nbtResult.getCompound().getType(key);
+        final NBTCompound compound = nbtResult.getCompound();
+
+        if (!SIMPLE_TYPES.contains(type))
+            new Exception(String.format("\"%s\" is NOT a simple NBTType!", nbtResult.getFinalKey())).printStackTrace();
+
+        if (Long.class.equals(clazzCast)) return ((T) compound.getLong(key));
+        else if (Integer.class.equals(clazzCast)) return ((T) compound.getInteger(key));
+        else if (Short.class.equals(clazzCast)) return ((T) compound.getShort(key));
+        else if (Byte.class.equals(clazzCast)) return ((T) compound.getByte(key));
+        else if (Float.class.equals(clazzCast)) return ((T) compound.getFloat(key));
+        else if (Double.class.equals(clazzCast)) return ((T) compound.getDouble(key));
+        else if (String.class.equals(clazzCast)) return ((T) compound.getString(key));
+        else new Exception(String.format("\"%s\" is NOT supported!", clazzCast.getName())).printStackTrace();
+
         return null;
     }
 
@@ -246,11 +268,10 @@ public class MojangsonUtils {
 
 
         if (key.matches(".+\\[\\d]$")) {
-            final NBTCompound newCompound = compound.getCompoundList(getArrayKeyValue(key))
-                    .get(getIndexOfArrayKey(key));
-            return recursiveCompoundFromPath(newCompound, newPath);
+            return recursiveCompoundFromPath(compound.getCompoundList(getArrayKeyValue(key))
+                    .get(getIndexOfArrayKey(key)), newPath);
         }
-        if (isFinalKey || isFullArray(key)) return compound;
+        if (isFinalKey || isFullArray(key)) return compound;        // Todo: is this right?
         if (!compound.getCompound(key).hasKey(newPath)) return null;
         return recursiveCompoundFromPath(compound.getCompound(key), newPath);
     }
@@ -370,9 +391,8 @@ public class MojangsonUtils {
     }
 
     // Items[0] -> true     id -> false
-    private boolean isArr(final String key) {
-        if (key.length() <= 3) return false;
-        return key.charAt(key.length() - 1) == ']';
+    public boolean isArr(final String key) {
+        return key.matches("\\w+\\[(\\d+|\\.\\.)]");
     }
 
     // Items[..] -> true    Items[0] -> false
@@ -381,12 +401,12 @@ public class MojangsonUtils {
     }
 
     // Items[0] -> Items
-    private String getArrayKeyValue(final String key) {
+    public String getArrayKeyValue(final String key) {
         return key.replaceAll("\\[\\d]$", "").replaceAll("\\[\\.{2}]$", "");
     }
 
     // Items[0] -> 0
-    private int getIndexOfArrayKey(final String key) {
+    public int getIndexOfArrayKey(final String key) {
         return Integer.parseInt(key.replaceAll(".+\\[|]$", ""));
     }
 
