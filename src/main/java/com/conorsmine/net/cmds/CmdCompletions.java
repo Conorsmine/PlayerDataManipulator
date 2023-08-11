@@ -6,8 +6,10 @@ import com.conorsmine.net.PlayerDataManipulator;
 import com.conorsmine.net.files.NBTStoreFile;
 import com.conorsmine.net.inventory.NBTItemTags;
 import de.tr7zw.nbtapi.NBTItem;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
@@ -20,6 +22,7 @@ public class CmdCompletions {
     public static final String INVENTORY_PATHS  = "@inventoryPaths ";
     public static final String ITEM_IDS         = "@itemIds ";
     public static final String ITEM_STORES      = "@itemStores ";
+    public static final String WORLDS           = "@all_worlds ";
 
     public static void registerCompletions() {
         final CommandCompletions<BukkitCommandCompletionContext> commandCompletions = PlayerDataManipulator.getINSTANCE().getCommandManager().getCommandCompletions();
@@ -49,6 +52,9 @@ public class CmdCompletions {
             return Arrays.stream(NBTStoreFile.storeFiles())
                     .map((f) -> f.getName().replaceAll("\\.txt$", ""))
                     .collect(Collectors.toSet());
+        }),
+        WORLDS(CmdCompletions.WORLDS.replaceAll(CLEAN_COMP, ""), c -> {
+            return Bukkit.getServer().getWorlds().stream().map(World::getName).collect(Collectors.toSet());
         });
 
         private final String completionName;
