@@ -63,7 +63,7 @@ let showData;
 let json;
 const dataChanges = new Map();
 
-loadJSONFile(`playerData/${ID}.json`, (jsonData) => {
+loadJSONFile(`${url_request_prefix}/${ID}.json`, (jsonData) => {
     json = jsonData;
     showData = parseJSONToData(json["${parsed_player_data}"]);
     renderPageElements();

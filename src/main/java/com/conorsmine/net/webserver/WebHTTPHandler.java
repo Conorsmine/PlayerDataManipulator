@@ -20,8 +20,10 @@ public class WebHTTPHandler implements HttpHandler {
             int responseCode = 200;
             byte[] responseBytes;
 
-            if (requestPath.matches(String.format(".*/playerData/%s\\.json", Properties.UUID_REGEX))) responseBytes = handlePlayerDataParseRequest(requestPath);
-            else if (requestPath.startsWith("/changes/")) responseBytes = handlePlayerDataChangePost(requestPath, exchange);
+            if (requestPath.matches(String.format(".*/%s/%s\\.json", Properties.URL_REQUEST_PREFIX, Properties.UUID_REGEX)))
+                responseBytes = handlePlayerDataParseRequest(requestPath);
+            else if (requestPath.startsWith(String.format("/%s/", Properties.URL_CHANGES_PREFIX)))
+                responseBytes = handlePlayerDataChangePost(requestPath, exchange);
             else responseBytes = WebsiteFile.getResourceAsBytes(requestPath);
 
             exchange.getResponseHeaders().add("Content-Type", determineFileType(requestPath).contentDefinition);
@@ -85,7 +87,7 @@ public class WebHTTPHandler implements HttpHandler {
             return type;
         }
 
-        PlayerDataManipulator.sendMsg(String.format("Website does not support contenttype: \"%s\"", end), String.format(">> %s", resource));
+        PlayerDataManipulator.staticSendMsg(String.format("Website does not support contenttype: \"%s\"", end), String.format(">> %s", resource));
         return ContentTypes.HTML;
     }
 

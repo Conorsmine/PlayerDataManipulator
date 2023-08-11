@@ -8,6 +8,8 @@ public enum Properties {
 
     UUID_REGEX ("uuid_regex.regexp"),
 
+    URL_REQUEST_PREFIX ("url_request_prefix"),
+    URL_CHANGES_PREFIX ("url_changes_prefix"),
     URL_PATH ("url_path"),
     URL_ID ("url_id"),
 
@@ -36,7 +38,7 @@ public enum Properties {
         final java.util.Properties properties = new java.util.Properties();
         try { properties.load(Properties.class.getResourceAsStream("/replacements.properties")); }
         catch (Exception e) {
-            PlayerDataManipulator.sendMsg("§cCouldn't load the properties file! Some features might be affected by this!");
+            PlayerDataManipulator.staticSendMsg("§cCouldn't load the properties file! Some features might be affected by this!");
             e.printStackTrace();
         }
 
