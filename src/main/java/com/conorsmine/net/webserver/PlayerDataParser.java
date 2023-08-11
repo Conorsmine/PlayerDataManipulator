@@ -1,9 +1,9 @@
 package com.conorsmine.net.webserver;
 
-import com.conorsmine.net.MojangsonUtils;
+import com.conorsmine.net.utils.MojangsonUtils;
 import com.conorsmine.net.PlayerDataManipulator;
 import com.conorsmine.net.Properties;
-import com.conorsmine.net.files.ParserFile;
+import com.conorsmine.net.files.ConfigFile;
 import com.conorsmine.net.files.WebsiteFile;
 import com.google.gson.GsonBuilder;
 import de.tr7zw.nbtapi.*;
@@ -73,7 +73,7 @@ public class PlayerDataParser {
     private static JSONObject parse(final NBTCompound nbt, final JSONObject json, final String path) {
         for (String key : nbt.getKeys()) {
             final NBTType type = nbt.getType(key);
-            final String newPath = (StringUtils.isBlank(path)) ? key : String.format("%s%s%s", path, ParserFile.getSeparator(), key);
+            final String newPath = (StringUtils.isBlank(path)) ? key : String.format("%s%s%s", path, ConfigFile.staticGetSeparator(), key);
             final NBTType listType = nbt.getListType(key);
 
             if (type == NBTTagCompound)
@@ -97,9 +97,11 @@ public class PlayerDataParser {
 
     private static JSONObject evaluateSimpleCompound(final NBTCompound compound, String key, String path) {
         final JSONObject jsonObject = new JSONObject();
+        final Object simpleDataFromCompound = MojangsonUtils.getSimpleDataFromCompound(compound, key);
+
         jsonObject.put(PARSED_TYPE, DataType.getType(compound.getType(key)).name());
         jsonObject.put(PARSED_PATH, path);
-        jsonObject.put(PARSED_VALUE, MojangsonUtils.getSimpleDataFromCompound(compound, key));
+        jsonObject.put(PARSED_VALUE, (simpleDataFromCompound == null) ? null : simpleDataFromCompound.toString());
 
         return jsonObject;
     }
@@ -125,7 +127,7 @@ public class PlayerDataParser {
             final JSONObject valJson = new JSONObject();
             valJson.put(PARSED_TYPE, type.name());
             valJson.put(PARSED_PATH, String.format("%s[%d]", path, i));
-            valJson.put(PARSED_VALUE, list.get(i));
+            valJson.put(PARSED_VALUE, list.get(i).toString());
 
             jsonArray.add(valJson);
         }
