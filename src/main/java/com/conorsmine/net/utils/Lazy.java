@@ -16,6 +16,10 @@ public class Lazy<T> {
         return val;
     }
 
+    public void reset() {
+        val = null;
+    }
+
     public void setVal(T val) {
         this.val = val;
     }

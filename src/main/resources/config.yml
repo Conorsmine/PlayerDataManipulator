@@ -3,6 +3,12 @@
 #        by Conorsmine        #
 #========-------------========#
 
+# Do not change this if you don't know what it does
+separator: "##"
+
+# Dictates how many threads will be used to search for items in players inventory
+search_workers: 5
+
 # Configurations for the online webeditor and server
 web_server:
   port: 8806
@@ -21,9 +27,3 @@ inventory_paths:
   baubles:
     path: "ForgeCaps##baubles:container##Items"           # Bauble slots
     size: 7
-
-
-
-# Some config about the parser, do not change this if you don't know what it does
-data_parser:
-  separator: "##"
