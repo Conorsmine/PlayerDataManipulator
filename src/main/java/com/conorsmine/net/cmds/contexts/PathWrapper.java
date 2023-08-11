@@ -1,4 +1,4 @@
-package com.conorsmine.net.inventory;
+package com.conorsmine.net.cmds.contexts;
 
 import co.aikar.commands.BukkitCommandExecutionContext;
 import co.aikar.commands.contexts.ContextResolver;

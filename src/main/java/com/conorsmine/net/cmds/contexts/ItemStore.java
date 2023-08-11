@@ -1,7 +1,8 @@
-package com.conorsmine.net.files;
+package com.conorsmine.net.cmds.contexts;
 
 import co.aikar.commands.BukkitCommandExecutionContext;
 import co.aikar.commands.contexts.ContextResolver;
+import com.conorsmine.net.files.NBTStoreFile;
 
 import java.io.*;
 
@@ -16,9 +17,6 @@ public class ItemStore {
     public String getStoredNBT() {
         return storedNBT;
     }
-
-
-
 
 
 

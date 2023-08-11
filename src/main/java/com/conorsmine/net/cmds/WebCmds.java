@@ -3,11 +3,11 @@ package com.conorsmine.net.cmds;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import com.conorsmine.net.PlayerDataManipulator;
-import com.conorsmine.net.files.ParserFile;
+import com.conorsmine.net.files.ConfigFile;
 import com.conorsmine.net.files.FileUtils;
 import com.conorsmine.net.files.LogFiles;
 import com.conorsmine.net.files.WebsiteFile;
-import com.conorsmine.net.MojangsonUtils;
+import com.conorsmine.net.utils.MojangsonUtils;
 import com.conorsmine.net.webserver.PlayerDataParser;
 import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.data.NBTData;
@@ -27,7 +27,7 @@ import java.util.UUID;
 import static com.conorsmine.net.Properties.*;
 
 @CommandAlias("pdm")
-public class WebCmds extends BaseCommand {
+public final class WebCmds extends BaseCommand {
 
     @Dependency("plugin")
     private PlayerDataManipulator pl;
@@ -37,17 +37,17 @@ public class WebCmds extends BaseCommand {
     @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS)
     @CommandPermission("pdm.web.editor")
     private void webEditorCmd(final CommandSender sender, final OfflinePlayer target) {
-        PlayerDataManipulator.sendMsg(sender, "§7Preparing web editor...");
+        pl.sendMsg(sender, "§7Preparing web editor...");
         if (target.isOnline()) ((Player) target).saveData();
 
         PlayerDataParser.parsePlayerData(target)
                 .whenComplete((uuid, e) -> {
                     try {
-                        PlayerDataManipulator.sendMsg(sender, "§2Webeditor link:");
+                        pl.sendMsg(sender, "§2Webeditor link:");
 
                         final String link = String.format("http://%s:%d/%s?%s=%s",
                                 InetAddress.getLocalHost().getHostAddress(),
-                                WebsiteFile.getPort(),
+                                WebsiteFile.staticGetPort(),
                                 URL_PATH,
                                 URL_ID,
                                 uuid );
@@ -63,7 +63,7 @@ public class WebCmds extends BaseCommand {
     @Description("Applies the changes done via the web editor")
     @CommandPermission("pdm.web.apply")
     private void applyChangesCmd(final CommandSender sender, @Single final String cmdCode) {
-        if (cmdCode == null || cmdCode.isEmpty()) { PlayerDataManipulator.sendMsg(sender, "§cYou must provide a cmd code to execute this command!"); return; }
+        if (cmdCode == null || cmdCode.isEmpty()) { pl.sendMsg(sender, "§cYou must provide a cmd code to execute this command!"); return; }
 
         final File fileFromCode = WebsiteFile.getChangeFileFromCommandCode(cmdCode);
         if (fileFromCode == null) {
@@ -79,8 +79,8 @@ public class WebCmds extends BaseCommand {
         applyChanges(sender, changes, playerUUID);
     }
 
-    private static void sendErrorReportInteract(final CommandSender sender, final String cmdCode) {
-        PlayerDataManipulator.sendMsg(
+    private void sendErrorReportInteract(final CommandSender sender, final String cmdCode) {
+        pl.sendMsg(
                 sender,
                 String.format("§cNo changes were found for cmd code \"%s\".", cmdCode),
                 "§7Make sure the cmd code is the same as the one provided by the §9web editor§7.",
@@ -96,17 +96,17 @@ public class WebCmds extends BaseCommand {
             sender.spigot().sendMessage(reportButton);
         }
 
-        PlayerDataManipulator.sendMsg(
+        pl.sendMsg(
                 sender,
                 String.format("§7After executing the command, a report file will be created in the \"§9%s§7\" folder.", LogFiles.DIR_NAME),
                 "§7Send this file to Conorsmine aka. SCP-999"
         );
     }
 
-    private static void applyChanges(final CommandSender sender, final JSONArray changes, final UUID targetUUID) {
+    private void applyChanges(final CommandSender sender, final JSONArray changes, final UUID targetUUID) {
         final PlayerData playerData = NBTData.getOfflinePlayerData(targetUUID);
         if (playerData == null) {
-            PlayerDataManipulator.sendMsg(sender, String.format("§cNo player was found with the uuid: \"%s\".", targetUUID));
+            pl.sendMsg(sender, String.format("§cNo player was found with the uuid: \"%s\".", targetUUID));
             return;
         }
 
@@ -117,13 +117,13 @@ public class WebCmds extends BaseCommand {
             final String path = (String) change.get("path");
             final Object value = change.get("value");
 
-            final MojangsonUtils.NBTResult result = new MojangsonUtils().setSeparator(ParserFile.getSeparator()).getCompoundFromPath(compound, path);
+            final MojangsonUtils.NBTResult result = new MojangsonUtils().setSeparator(ConfigFile.staticGetSeparator()).getCompoundFromPath(compound, path);
 
             final NBTCompound nbtCompound = result.getCompound();
             final Object prevValue = MojangsonUtils.getSimpleDataFromCompound(nbtCompound, result.getFinalKey());
             MojangsonUtils.setSimpleDataFromKey(nbtCompound, result.getFinalKey(), value);
 
-            PlayerDataManipulator.sendMsg(sender, String.format("§6~ §9%s§7: From §1%s §7-> §9%s", path, prevValue, value));
+            pl.sendMsg(sender, String.format("§6~ §9%s§7: From §1%s §7-> §9%s", path, prevValue, value));
         }
 
         playerData.saveChanges();

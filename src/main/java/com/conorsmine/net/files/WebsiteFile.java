@@ -1,17 +1,47 @@
 package com.conorsmine.net.files;
 
 import com.conorsmine.net.PlayerDataManipulator;
+import com.conorsmine.net.utils.Lazy;
+import com.conorsmine.net.utils.LazyConfig;
 import com.conorsmine.net.webserver.UUIDParser;
+import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONObject;
 
 import java.io.*;
 
-public class WebsiteFile {
+public class WebsiteFile implements ReloadableFile {
 
-    public static final String PATH = "web", TEMP_CACHE = "temp_cache", TEMP_CHANGE_PREFIX = "change-";
+    public static final String CONF_PATH = "web_server", HTML_PATH = "web", TEMP_CACHE = "temp_cache", TEMP_CHANGE_PREFIX = "change-";
 
-    public static int getPort() {
+    private final JavaPlugin pl;
+    private final LazyConfig<Integer> port;
+
+    public WebsiteFile(JavaPlugin pl) {
+        this.pl = pl;
+
+        this.port = new LazyConfig<>(
+                () -> pl.getConfig().getInt(String.format("%s.port", CONF_PATH)), 8806,
+                (val) -> (val == 0), (val) -> "§7\"§6%d§7\" is §enot §7a valid port for the web-editor. Please select something else."
+        );
+    }
+
+    @Override
+    public void reload(@NotNull CommandSender sender) {
+        this.port.reset();
+    }
+
+    public int getPort() {
+        return this.port.get();
+    }
+
+
+
+
+    @Deprecated
+    public static int staticGetPort() {
         return PlayerDataManipulator.INSTANCE.getConfig().getInt(String.format("%s.%s", ConfigSections.PATH.path, ConfigSections.PORT.path));
     }
 
@@ -89,7 +119,7 @@ public class WebsiteFile {
         if (path == null || path.isEmpty()) return null;
         if (path.charAt(0) == '/') path = path.substring(1);
 
-        return WebsiteFile.class.getResourceAsStream(String.format("/%s/%s", PATH, path));
+        return WebsiteFile.class.getResourceAsStream(String.format("/%s/%s", HTML_PATH, path));
     }
 
     public static byte[] getResourceAsBytes(final String path) throws IOException {
@@ -115,7 +145,7 @@ public class WebsiteFile {
     private static File getFileFromID(final String fileID, final String filePrefix) {
         final File[] files = getTempCacheDir().listFiles((dir, name) -> name.startsWith(String.format("%s%s", filePrefix, fileID)));
         if (files == null || files.length == 0) return null;
-        else if (files.length > 1) PlayerDataManipulator.sendMsg("Unexpected many results for parsed file ID: \"" + fileID + "\".");
+        else if (files.length > 1) PlayerDataManipulator.staticSendMsg("Unexpected many results for parsed file ID: \"" + fileID + "\".");
 
         return files[0];
     }

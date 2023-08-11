@@ -1,8 +1,9 @@
 package com.conorsmine.net.inventory;
 
-import com.conorsmine.net.files.ParserFile;
+import com.conorsmine.net.cmds.contexts.PathWrapper;
+import com.conorsmine.net.files.ConfigFile;
 import com.conorsmine.net.messages.PluginMsgs;
-import com.conorsmine.net.MojangsonUtils;
+import com.conorsmine.net.utils.MojangsonUtils;
 import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTCompoundList;
 import de.tr7zw.nbtapi.NBTItem;
@@ -108,7 +109,7 @@ public class EditorInventory {
 
         final PlayerData playerData = NBTData.getOfflinePlayerData(player.getUniqueId());
         final NBTCompound compound = playerData.getCompound();
-        final MojangsonUtils.NBTResult result = new MojangsonUtils().setSeparator(ParserFile.getSeparator()).getCompoundFromPathSneakyThrow(compound, inventoryPath.getPath());
+        final MojangsonUtils.NBTResult result = new MojangsonUtils().setSeparator(ConfigFile.staticGetSeparator()).getCompoundFromPathSneakyThrow(compound, inventoryPath.getPath());
         if (result == null) return;
 
         final NBTCompoundList inventory = compound.getCompoundList(result.getFinalKey());
