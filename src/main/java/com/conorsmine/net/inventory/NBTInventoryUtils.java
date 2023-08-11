@@ -1,8 +1,8 @@
 package com.conorsmine.net.inventory;
 
 import com.conorsmine.net.PlayerDataManipulator;
-import com.conorsmine.net.files.ParserFile;
-import com.conorsmine.net.MojangsonUtils;
+import com.conorsmine.net.utils.MojangsonUtils;
+import com.conorsmine.net.files.ConfigFile;
 import com.google.common.base.Functions;
 import de.tr7zw.nbtapi.*;
 import org.bukkit.inventory.ItemStack;
@@ -23,7 +23,7 @@ public class NBTInventoryUtils {
     private static final JavaPlugin pl = PlayerDataManipulator.getINSTANCE();
 
     public static List<NBTCompound> getItemNBTsFromPath(final NBTCompound compound, final String path) {
-        final MojangsonUtils.NBTResult result = new MojangsonUtils().setSeparator(ParserFile.getSeparator()).getCompoundFromPathSneakyThrow(compound, path);
+        final MojangsonUtils.NBTResult result = new MojangsonUtils().setSeparator(ConfigFile.staticGetSeparator()).getCompoundFromPathSneakyThrow(compound, path);
         if (result == null) return new LinkedList<>();
 
         final NBTCompound nbtCompound = result.getCompound();
@@ -94,7 +94,7 @@ public class NBTInventoryUtils {
 
     @Nullable
     public static NBTCompound removeNBT(final NBTCompound compound, final String path, final Predicate<NBTCompound> removePredicate) {
-        final MojangsonUtils.NBTResult result = new MojangsonUtils().setSeparator(ParserFile.getSeparator()).getCompoundFromPathSneakyThrow(compound, path);
+        final MojangsonUtils.NBTResult result = new MojangsonUtils().setSeparator(ConfigFile.staticGetSeparator()).getCompoundFromPathSneakyThrow(compound, path);
         if (result == null) return null;
 
         final NBTCompound nbtCompound = result.getCompound();
