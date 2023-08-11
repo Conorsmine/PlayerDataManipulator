@@ -33,9 +33,11 @@ function updateCmdDom() {
 
 function sendChangesToServer() {
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", `/changes/${ID}.json`, true);
+    xhr.open("POST", `/${url_changes_prefix}/${ID}.json`, true);
 
-    xhr.send(JSON.stringify({meta_data: {uuid:`${json["meta_data"]["uuid"]}`}, changes: dataChangesToJson()}));
+    const metaDataPath = '${parsed_meta_data}';
+    const metaUUIDPath = '${parsed_meta_uuid}';
+    xhr.send(JSON.stringify({meta_data: {uuid:`${json[metaDataPath][metaUUIDPath]}`}, changes: dataChangesToJson()}));
 }
 
 function dataChangesToJson() {
