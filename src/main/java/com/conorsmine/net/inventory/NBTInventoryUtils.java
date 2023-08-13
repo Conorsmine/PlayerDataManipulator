@@ -1,8 +1,9 @@
 package com.conorsmine.net.inventory;
 
 import com.conorsmine.net.PlayerDataManipulator;
-import com.conorsmine.net.utils.MojangsonUtils;
+import com.conorsmine.net.mojangson.MojangsonUtils;
 import com.conorsmine.net.files.ConfigFile;
+import com.conorsmine.net.mojangson.path.NBTPath;
 import com.google.common.base.Functions;
 import de.tr7zw.nbtapi.*;
 import org.bukkit.inventory.ItemStack;
@@ -22,12 +23,12 @@ public class NBTInventoryUtils {
 
     private static final JavaPlugin pl = PlayerDataManipulator.getINSTANCE();
 
-    public static List<NBTCompound> getItemNBTsFromPath(final NBTCompound compound, final String path) {
-        final MojangsonUtils.NBTResult result = new MojangsonUtils().setSeparator(ConfigFile.staticGetSeparator()).getCompoundFromPathSneakyThrow(compound, path);
+    public static List<NBTCompound> getItemNBTsFromPath(final NBTCompound compound, final NBTPath path) {
+        final MojangsonUtils.NBTResult result = PlayerDataManipulator.INSTANCE.MOJANGSON.getCompoundFromPathSneakyThrow(compound, path);
         if (result == null) return new LinkedList<>();
 
         final NBTCompound nbtCompound = result.getCompound();
-        final String finalKey = result.getFinalKey();
+        final String finalKey = result.getFinalKey().getKeyValue();
 
         if (nbtCompound == null) return new LinkedList<>();
         switch (nbtCompound.getType(finalKey)) {
@@ -45,26 +46,26 @@ public class NBTInventoryUtils {
         return new LinkedList<>();
     }
 
-    public static CompletableFuture<List<NBTCompound>> getItemNBTsFromPathAsync(final NBTCompound compound, final String path) {
+    public static CompletableFuture<List<NBTCompound>> getItemNBTsFromPathAsync(final NBTCompound compound, final NBTPath path) {
         final CompletableFuture<List<NBTCompound>> future = new CompletableFuture<>();
 
         pl.getServer().getScheduler().runTaskAsynchronously(pl, () -> future.complete(getItemNBTsFromPath(compound, path)));
         return future;
     }
 
-    public static Map<Integer, NBTCompound> getItemNBTsMapFromPath(final NBTCompound compound, final String path) {
+    public static Map<Integer, NBTCompound> getItemNBTsMapFromPath(final NBTCompound compound, final NBTPath path) {
         return getItemNBTsFromPath(compound, path).stream()
                 .collect(Collectors.toMap(NBTInventoryUtils::getSlotFromItemNBT, Functions.identity()));
     }
 
-    public static CompletableFuture<Map<Integer, NBTCompound>> getItemNBTsMapFromPathAsync(final NBTCompound compound, final String path) {
+    public static CompletableFuture<Map<Integer, NBTCompound>> getItemNBTsMapFromPathAsync(final NBTCompound compound, final NBTPath path) {
         final CompletableFuture<Map<Integer, NBTCompound>> future = new CompletableFuture<>();
 
         pl.getServer().getScheduler().runTaskAsynchronously(pl, () -> future.complete(getItemNBTsMapFromPath(compound, path)));
         return future;
     }
 
-    public static List<ItemStack> getItemFromPath(final NBTCompound compound, final String path) {
+    public static List<ItemStack> getItemFromPath(final NBTCompound compound, final NBTPath path) {
         final List<NBTCompound> itemNBTsFromPath = getItemNBTsFromPath(compound, path);
         final List<ItemStack> itemList = new LinkedList<>();
 
@@ -73,19 +74,19 @@ public class NBTInventoryUtils {
         return itemList;
     }
 
-    public static CompletableFuture<List<ItemStack>> getItemFromPathAsync(final NBTCompound compound, final String path) {
+    public static CompletableFuture<List<ItemStack>> getItemFromPathAsync(final NBTCompound compound, final NBTPath path) {
         final CompletableFuture<List<ItemStack>> future = new CompletableFuture<>();
 
         pl.getServer().getScheduler().runTaskAsynchronously(pl, () -> future.complete(getItemFromPath(compound, path)));
         return future;
     }
 
-    public static Map<Integer, ItemStack> getItemMapFromPath(final NBTCompound compound, final String path) {
+    public static Map<Integer, ItemStack> getItemMapFromPath(final NBTCompound compound, final NBTPath path) {
         return getItemNBTsFromPath(compound, path).stream()
                 .collect(Collectors.toMap(NBTInventoryUtils::getSlotFromItemNBT, NBTItem::convertNBTtoItem));
     }
 
-    public static CompletableFuture<Map<Integer, ItemStack>> getItemMapFromPathAsync(final NBTCompound compound, final String path) {
+    public static CompletableFuture<Map<Integer, ItemStack>> getItemMapFromPathAsync(final NBTCompound compound, final NBTPath path) {
         final CompletableFuture<Map<Integer, ItemStack>> future = new CompletableFuture<>();
 
         pl.getServer().getScheduler().runTaskAsynchronously(pl, () -> future.complete(getItemMapFromPath(compound, path)) );
@@ -93,12 +94,12 @@ public class NBTInventoryUtils {
     }
 
     @Nullable
-    public static NBTCompound removeNBT(final NBTCompound compound, final String path, final Predicate<NBTCompound> removePredicate) {
-        final MojangsonUtils.NBTResult result = new MojangsonUtils().setSeparator(ConfigFile.staticGetSeparator()).getCompoundFromPathSneakyThrow(compound, path);
+    public static NBTCompound removeNBT(final NBTCompound compound, final NBTPath path, final Predicate<NBTCompound> removePredicate) {
+        final MojangsonUtils.NBTResult result = PlayerDataManipulator.INSTANCE.MOJANGSON.getCompoundFromPathSneakyThrow(compound, path);
         if (result == null) return null;
 
         final NBTCompound nbtCompound = result.getCompound();
-        final String finalKey = result.getFinalKey();
+        final String finalKey = result.getFinalKey().getKeyValue();
 
         if (nbtCompound == null) return null;
         switch (nbtCompound.getType(finalKey)) {
@@ -126,7 +127,7 @@ public class NBTInventoryUtils {
         return null;
     }
 
-    public static CompletableFuture<@Nullable NBTCompound> removeNBTAsync(final NBTCompound compound, final String path, final Predicate<NBTCompound> remove) {
+    public static CompletableFuture<@Nullable NBTCompound> removeNBTAsync(final NBTCompound compound, final NBTPath path, final Predicate<NBTCompound> remove) {
         final CompletableFuture<NBTCompound> future = new CompletableFuture<>();
 
         pl.getServer().getScheduler().runTaskAsynchronously(pl, () -> future.complete(removeNBT(compound, path, remove)) );

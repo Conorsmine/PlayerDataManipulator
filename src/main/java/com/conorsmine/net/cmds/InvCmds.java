@@ -12,7 +12,8 @@ import com.conorsmine.net.inventory.EditorInventory;
 import com.conorsmine.net.inventory.NBTInventoryUtils;
 import com.conorsmine.net.inventory.NBTItemTags;
 import com.conorsmine.net.cmds.contexts.PathWrapper;
-import com.conorsmine.net.utils.MojangsonUtils;
+import com.conorsmine.net.mojangson.MojangsonUtils;
+import com.conorsmine.net.mojangson.path.NBTPathBuilder;
 import de.tr7zw.nbtapi.*;
 import de.tr7zw.nbtapi.data.NBTData;
 import de.tr7zw.nbtapi.data.PlayerData;
@@ -42,7 +43,7 @@ public final class InvCmds extends BaseCommand {
     @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + CmdCompletions.INVENTORY_PATHS + " false|true")
     @Description("Opens a players inventory")
     @CommandPermission("pdm.inv.open")
-    private void openInventory(final Player player, final @NotNull OfflinePlayer target, final PathWrapper inventoryPath, @Default("true") boolean openSafely) {
+    private void openInventory(final Player player, final @NotNull OfflinePlayer target, final PathWrapper inventoryPath) {
         if (inventoryPath == null) { pl.sendMsg(player, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
         if (target.isOnline()) ((Player) target).saveData();
 
@@ -60,7 +61,7 @@ public final class InvCmds extends BaseCommand {
 
         NBTInventoryUtils.getItemNBTsFromPathAsync(
                 NBTData.getOfflinePlayerData(target.getUniqueId()).getCompound(),
-                inventoryPath.getPath()
+                new NBTPathBuilder(pl.MOJANGSON).parseString(inventoryPath.getPath()).create()
         ).whenComplete((itemNBTsFromPath, e) -> MsgFormatter.sendFormattedListMsg(sender, itemNBTsFromPath));
     }
 
@@ -73,7 +74,7 @@ public final class InvCmds extends BaseCommand {
 
         NBTInventoryUtils.getItemNBTsMapFromPathAsync(
                 NBTData.getOfflinePlayerData(target.getUniqueId()).getCompound(),
-                inventoryPath.getPath()
+                new NBTPathBuilder(pl.MOJANGSON).parseString(inventoryPath.getPath()).create()
         ).whenComplete((map, e) -> {
             final NBTCompound compound = map.get(slot);
             if (compound == null) {
@@ -105,9 +106,9 @@ public final class InvCmds extends BaseCommand {
         if (inventoryPath == null) { pl.sendMsg(sender, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
 
         final PlayerData playerData = NBTData.getOfflinePlayerData(target.getUniqueId());
-        final MojangsonUtils.NBTResult result = new MojangsonUtils().setSeparator(ConfigFile.staticGetSeparator()).getCompoundFromPath(playerData.getCompound(), inventoryPath.getPath());
+        final MojangsonUtils.NBTResult result = pl.MOJANGSON.getCompoundFromPath(playerData.getCompound(), new NBTPathBuilder(pl.MOJANGSON).parseString(inventoryPath.getPath()).create());
         final NBTCompound compound = result.getCompound();
-        final String finalKey = result.getFinalKey();
+        final String finalKey = result.getFinalKey().getKeyValue();
 
         switch (compound.getType(finalKey)) {
             case NBTTagCompound:
@@ -133,7 +134,7 @@ public final class InvCmds extends BaseCommand {
         final PlayerData playerData = NBTData.getOfflinePlayerData(target.getUniqueId());
         NBTInventoryUtils.removeNBTAsync(
                 playerData.getCompound(),
-                inventoryPath.getPath(),
+                new NBTPathBuilder(pl.MOJANGSON).parseString(inventoryPath.getPath()).create(),
                 (nbt) -> (nbt.getInteger(NBTItemTags.SLOT.getTagName()) == slot)
         ).whenComplete((nbt, e) -> {
             if (nbt == null) {
@@ -165,9 +166,9 @@ public final class InvCmds extends BaseCommand {
         if (target.isOnline()) ((Player) target).saveData();
 
         final PlayerData playerData = NBTData.getOfflinePlayerData(target.getUniqueId());
-        final MojangsonUtils.NBTResult result = new MojangsonUtils().setSeparator(ConfigFile.staticGetSeparator()).getCompoundFromPath(playerData.getCompound(), inventoryPath.getPath());
+        final MojangsonUtils.NBTResult result = pl.MOJANGSON.getCompoundFromPath(playerData.getCompound(), new NBTPathBuilder(pl.MOJANGSON).parseString(inventoryPath.getPath()).create());
         final NBTCompound invNBT = result.getCompound();
-        final String finalKey = result.getFinalKey();
+        final String finalKey = result.getFinalKey().getKeyValue();
 
         switch (invNBT.getType(finalKey)) {
             case NBTTagCompound:
@@ -203,9 +204,9 @@ public final class InvCmds extends BaseCommand {
             if (!isItem(sender, nbtItem)) return;
 
             final PlayerData playerData = NBTData.getOfflinePlayerData(target.getUniqueId());
-            final MojangsonUtils.NBTResult result = new MojangsonUtils().setSeparator(ConfigFile.staticGetSeparator()).getCompoundFromPath(playerData.getCompound(), inventoryPath.getPath());
+            final MojangsonUtils.NBTResult result = pl.MOJANGSON.getCompoundFromPath(playerData.getCompound(), new NBTPathBuilder(pl.MOJANGSON).parseString(inventoryPath.getPath()).create());
             final NBTCompound invNBT = result.getCompound();
-            final String finalKey = result.getFinalKey();
+            final String finalKey = result.getFinalKey().getKeyValue();
 
             switch (invNBT.getType(finalKey)) {
                 case NBTTagCompound:
@@ -275,7 +276,7 @@ public final class InvCmds extends BaseCommand {
 
         NBTInventoryUtils.getItemNBTsMapFromPathAsync(
                 NBTData.getOfflinePlayerData(target.getUniqueId()).getCompound(),
-                inventoryPath.getPath()
+                new NBTPathBuilder(pl.MOJANGSON).parseString(inventoryPath.getPath()).create()
         ).whenComplete((map, e) -> {
             final NBTCompound compound = map.get(slot);
             if (compound == null) { pl.sendMsg(sender, String.format(PluginMsgs.ITEM_NOT_FOUND.getMsg(), slot)); return; }
@@ -300,7 +301,7 @@ public final class InvCmds extends BaseCommand {
     private void sendColoredNBT(final CommandSender sender, final NBTCompound nbt) {
         pl.sendMsg(
                 sender,
-                TextComponent.toLegacyText(new MojangsonUtils().getInteractiveMojangson(nbt, ""))
+                TextComponent.toLegacyText(pl.MOJANGSON.getInteractiveMojangson(nbt, new NBTPathBuilder(pl.MOJANGSON).create()))
         );
     }
 
@@ -350,7 +351,7 @@ public final class InvCmds extends BaseCommand {
             for (PathWrapper path : PathWrapper.inventoryPaths.values()) {
                 final List<NBTCompound> inventoryNBT = NBTInventoryUtils.getItemNBTsFromPath(
                         playerData.getCompound(),
-                        path.getPath()
+                        new NBTPathBuilder(pl.MOJANGSON).parseString(path.getPath()).create()
                 );
 
                 for (NBTCompound nbtItem : inventoryNBT) {

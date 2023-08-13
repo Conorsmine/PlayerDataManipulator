@@ -64,6 +64,6 @@ public class NBTStoreFile {
     private static void createFileErr(CommandSender sender, final OfflinePlayer player) {
         if (sender == null) sender = Bukkit.getConsoleSender();
 
-        PlayerDataManipulator.getINSTANCE().sendMsg(sender, String.format("§cCould not save §6%s§c's nbt data to file.", player.getName()));
+        PlayerDataManipulator.getINSTANCE().staticSendMsg(sender, String.format("§cCould not save §6%s§c's nbt data to file.", player.getName()));
     }
 }

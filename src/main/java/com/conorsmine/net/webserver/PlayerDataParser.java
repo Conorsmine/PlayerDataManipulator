@@ -1,14 +1,18 @@
 package com.conorsmine.net.webserver;
 
-import com.conorsmine.net.utils.MojangsonUtils;
+import com.conorsmine.net.mojangson.MojangsonUtils;
 import com.conorsmine.net.PlayerDataManipulator;
 import com.conorsmine.net.Properties;
 import com.conorsmine.net.files.ConfigFile;
 import com.conorsmine.net.files.WebsiteFile;
+import com.conorsmine.net.mojangson.StringUtils;
+import com.conorsmine.net.mojangson.path.NBTArrayKey;
+import com.conorsmine.net.mojangson.path.NBTKey;
+import com.conorsmine.net.mojangson.path.NBTPath;
+import com.conorsmine.net.mojangson.path.NBTPathBuilder;
 import com.google.gson.GsonBuilder;
 import de.tr7zw.nbtapi.*;
 import de.tr7zw.nbtapi.data.NBTData;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.OfflinePlayer;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -27,7 +31,13 @@ import static com.conorsmine.net.Properties.*;
 @SuppressWarnings("unchecked")
 public class PlayerDataParser {
 
-    public static CompletableFuture<UUID> parsePlayerData(final OfflinePlayer player) {
+    private final PlayerDataManipulator pl;
+
+    public PlayerDataParser(PlayerDataManipulator pl) {
+        this.pl = pl;
+    }
+
+    public CompletableFuture<UUID> parsePlayerData(final OfflinePlayer player) {
         final CompletableFuture<UUID> future = new CompletableFuture<>();
 
         final PlayerDataManipulator plugin = PlayerDataManipulator.getINSTANCE();
@@ -51,16 +61,16 @@ public class PlayerDataParser {
         return future;
     }
 
-    private static JSONObject getFinalParsedJson(final OfflinePlayer player) {
+    private JSONObject getFinalParsedJson(final OfflinePlayer player) {
         final JSONObject jsonObject = new JSONObject();
         jsonObject.put(PARSED_META_DATA, createMetadata(player));
 
-        jsonObject.put(PARSED_PLAYER_DATA, parse(NBTData.getOfflinePlayerData(player.getUniqueId()).getCompound(), new JSONObject(), ""));
+        jsonObject.put(PARSED_PLAYER_DATA, parse(NBTData.getOfflinePlayerData(player.getUniqueId()).getCompound(), new JSONObject(), NBTPathBuilder.getEmptyNBTPath(pl.MOJANGSON)));
 
         return jsonObject;
     }
 
-    private static JSONObject createMetadata(final OfflinePlayer player) {
+    private JSONObject createMetadata(final OfflinePlayer player) {
         final JSONObject jsonObject = new JSONObject();
         jsonObject.put(PARSED_PLUGIN_VERSION, PlayerDataManipulator.getINSTANCE().getDescription().getVersion());
 
@@ -70,43 +80,45 @@ public class PlayerDataParser {
         return jsonObject;
     }
 
-    private static JSONObject parse(final NBTCompound nbt, final JSONObject json, final String path) {
+    private JSONObject parse(final NBTCompound nbt, final JSONObject json, final NBTPath path) {
         for (String key : nbt.getKeys()) {
+            final NBTKey nbtKey = NBTKey.parseStringToKey(pl.MOJANGSON, key);
+            final NBTPath newPath = new NBTPathBuilder(pl.MOJANGSON).addNBTPath(path).addNBTKey(nbtKey).create();
+
             final NBTType type = nbt.getType(key);
-            final String newPath = (StringUtils.isBlank(path)) ? key : String.format("%s%s%s", path, ConfigFile.staticGetSeparator(), key);
             final NBTType listType = nbt.getListType(key);
 
             if (type == NBTTagCompound)
-                json.put(key, evaluateCompoundTag(nbt.getCompound(key), key, newPath));
+                json.put(key, evaluateCompoundTag(nbt.getCompound(key), nbtKey, newPath));
 
             else if (listType == NBTTagCompound)
-                json.put(key, evaluateCompoundList(nbt.getCompoundList(key), key, newPath));
+                json.put(key, evaluateCompoundList(nbt.getCompoundList(key), nbtKey, newPath));
 
             else if (listType != null)
-                json.put(key, evaluateSimpleList(nbt, key, newPath));
+                json.put(key, evaluateSimpleList(nbt, nbtKey, newPath));
 
             else if (type == NBTTagIntArray || type == NBTTagByteArray)
-                json.put(key, evaluateCompoundArray(nbt, key, newPath));
+                json.put(key, evaluateCompoundArray(nbt, nbtKey, newPath));
 
             else
-                json.put(key, evaluateSimpleCompound(nbt, key, newPath));
+                json.put(key, evaluateSimpleCompound(nbt, nbtKey, newPath));
         }
 
         return json;
     }
 
-    private static JSONObject evaluateSimpleCompound(final NBTCompound compound, String key, String path) {
+    private JSONObject evaluateSimpleCompound(final NBTCompound compound, NBTKey key, NBTPath path) {
         final JSONObject jsonObject = new JSONObject();
         final Object simpleDataFromCompound = MojangsonUtils.getSimpleDataFromCompound(compound, key);
 
-        jsonObject.put(PARSED_TYPE, DataType.getType(compound.getType(key)).name());
+        jsonObject.put(PARSED_TYPE, DataType.getType(compound.getType(key.getKeyValue())).name());
         jsonObject.put(PARSED_PATH, path);
         jsonObject.put(PARSED_VALUE, (simpleDataFromCompound == null) ? null : simpleDataFromCompound.toString());
 
         return jsonObject;
     }
 
-    private static JSONObject evaluateCompoundTag(final NBTCompound compound, String key, String path) {
+    private JSONObject evaluateCompoundTag(final NBTCompound compound, NBTKey key, NBTPath path) {
         final JSONObject jsonObject = new JSONObject();
         jsonObject.put(PARSED_TYPE, DataType.MAP.name());
         jsonObject.put(PARSED_PATH, path);
@@ -115,13 +127,13 @@ public class PlayerDataParser {
         return jsonObject;
     }
 
-    private static JSONObject evaluateSimpleList(final NBTCompound compound, String key, String path) {
+    private JSONObject evaluateSimpleList(final NBTCompound compound, NBTKey key, NBTPath path) {
         final JSONObject jsonObject = new JSONObject();
         final JSONArray jsonArray = new JSONArray();
 
-        final NBTType listType = compound.getListType(key);
+        final NBTType listType = compound.getListType(key.getKeyValue());
         final DataType type = DataType.getType(listType);
-        final NBTList<?> list = NBTReflectionUtil.getList(compound, key, listType, getClassFromType(listType));
+        final NBTList<?> list = NBTReflectionUtil.getList(compound, key.getKeyValue(), listType, getClassFromType(listType));
 
         for (int i = 0; i < list.size(); i++) {
             final JSONObject valJson = new JSONObject();
@@ -138,17 +150,18 @@ public class PlayerDataParser {
         return jsonObject;
     }
 
-    private static JSONObject evaluateCompoundList(final NBTCompoundList compoundList, String key, String path) {
+    private JSONObject evaluateCompoundList(final NBTCompoundList compoundList, NBTKey key, NBTPath path) {
         final JSONObject jsonObject = new JSONObject();
         final JSONArray jsonArray = new JSONArray();
 
         for (int i = 0; i < compoundList.size(); i++) {
             final NBTListCompound compound = compoundList.get(i);
+            final NBTPath newNBTPath = new NBTPathBuilder(pl.MOJANGSON).addNBTPath(path).addNBTKey(NBTArrayKey.parseToArrayKey(pl.MOJANGSON, i)).create();
 
             final JSONObject json = new JSONObject();
             json.put(PARSED_TYPE, DataType.getType(compoundList.getType()));
-            json.put(PARSED_PATH, String.format("%s[%d]", path, i));
-            json.put(PARSED_VALUE, parse(compound, new JSONObject(), String.format("%s[%d]", path, i)));
+            json.put(PARSED_PATH, newNBTPath);
+            json.put(PARSED_VALUE, parse(compound, new JSONObject(), newNBTPath));
 
             jsonArray.add(json);
         }
@@ -159,8 +172,8 @@ public class PlayerDataParser {
         return jsonObject;
     }
 
-    private static JSONObject evaluateCompoundArray(final NBTCompound compoundArray, String key, String path) {
-        final boolean isInt = (compoundArray.getType(key) == NBTTagIntArray);
+    private JSONObject evaluateCompoundArray(final NBTCompound compoundArray, NBTKey key, NBTPath path) {
+        final boolean isInt = (compoundArray.getType(key.getKeyValue()) == NBTTagIntArray);
 
         final DataType valType = (isInt) ? DataType.INT : DataType.BYTE;
 
@@ -185,24 +198,24 @@ public class PlayerDataParser {
         return jsonObject;
     }
 
-    private static Object[] convertToArr(final NBTCompound nbt, String key) {
-        final boolean isInt = (nbt.getType(key) == NBTTagIntArray);
+    private Object[] convertToArr(final NBTCompound nbt, NBTKey key) {
+        final boolean isInt = (nbt.getType(key.getKeyValue()) == NBTTagIntArray);
 
         if (isInt) {
-            final int[] intArray = nbt.getIntArray(key);
+            final int[] intArray = nbt.getIntArray(key.getKeyValue());
             final Object[] arr = new Object[intArray.length];
             for (int i = 0; i < intArray.length; i++) { arr[i] = intArray[i]; }
             return arr;
         }
         else {
-            final byte[] bytes = nbt.getByteArray(key);
+            final byte[] bytes = nbt.getByteArray(key.getKeyValue());
             final Object[] arr = new Object[bytes.length];
             for (int i = 0; i < bytes.length; i++) { arr[i] = bytes[i]; }
             return arr;
         }
     }
 
-    private static Class<?> getClassFromType(final NBTType type) {
+    private Class<?> getClassFromType(final NBTType type) {
         switch (type) {
             case NBTTagInt:
                 return Integer.class;

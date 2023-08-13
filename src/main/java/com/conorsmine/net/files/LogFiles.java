@@ -21,7 +21,7 @@ public class LogFiles {
 
         changesLogFile = new File(dirFile, CHANGES_PATH);
         try { changesLogFile.createNewFile(); }
-        catch (IOException e) { PlayerDataManipulator.sendMsg(String.format("§cUNABLE TO CREATE \"%s\" file!", CHANGES_PATH)); }
+        catch (IOException e) { PlayerDataManipulator.staticSendMsg(String.format("§cUNABLE TO CREATE \"%s\" file!", CHANGES_PATH)); }
     }
 
     public static void createErrorFile(String fileName, final JSONObject logData) {
@@ -29,7 +29,7 @@ public class LogFiles {
 
         final File errorLog = new File(dirFile, fileName);
         try { errorLog.createNewFile(); }
-        catch (IOException e) { PlayerDataManipulator.sendMsg(String.format("§cUNABLE TO CREATE \"%s\" file!", fileName)); }
+        catch (IOException e) { PlayerDataManipulator.staticSendMsg(String.format("§cUNABLE TO CREATE \"%s\" file!", fileName)); }
 
         try {
             final Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -39,6 +39,6 @@ public class LogFiles {
             writer.flush();
             writer.close();
         }
-        catch (IOException e) { PlayerDataManipulator.sendMsg(String.format("§cUNABLE TO WRITE TO \"%s\" file!", fileName)); }
+        catch (IOException e) { PlayerDataManipulator.staticSendMsg(String.format("§cUNABLE TO WRITE TO \"%s\" file!", fileName)); }
     }
 }

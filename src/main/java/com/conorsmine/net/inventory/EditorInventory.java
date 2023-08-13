@@ -1,9 +1,11 @@
 package com.conorsmine.net.inventory;
 
+import com.conorsmine.net.PlayerDataManipulator;
 import com.conorsmine.net.cmds.contexts.PathWrapper;
 import com.conorsmine.net.files.ConfigFile;
 import com.conorsmine.net.messages.PluginMsgs;
-import com.conorsmine.net.utils.MojangsonUtils;
+import com.conorsmine.net.mojangson.MojangsonUtils;
+import com.conorsmine.net.mojangson.path.NBTPathBuilder;
 import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTCompoundList;
 import de.tr7zw.nbtapi.NBTItem;
@@ -56,7 +58,7 @@ public class EditorInventory {
 
         this.itemNBTMap = NBTInventoryUtils.getItemNBTsMapFromPath(
                 NBTData.getOfflinePlayerData(player.getUniqueId()).getCompound(),
-                inventoryPath.getPath()
+                new NBTPathBuilder(PlayerDataManipulator.getINSTANCE().MOJANGSON).parseString(inventoryPath.getPath()).create()
         );
     }
 
@@ -109,10 +111,10 @@ public class EditorInventory {
 
         final PlayerData playerData = NBTData.getOfflinePlayerData(player.getUniqueId());
         final NBTCompound compound = playerData.getCompound();
-        final MojangsonUtils.NBTResult result = new MojangsonUtils().setSeparator(ConfigFile.staticGetSeparator()).getCompoundFromPathSneakyThrow(compound, inventoryPath.getPath());
+        final MojangsonUtils.NBTResult result = PlayerDataManipulator.INSTANCE.MOJANGSON.getCompoundFromPathSneakyThrow(compound, new NBTPathBuilder(PlayerDataManipulator.getINSTANCE().MOJANGSON).parseString(inventoryPath.getPath()).create());
         if (result == null) return;
 
-        final NBTCompoundList inventory = compound.getCompoundList(result.getFinalKey());
+        final NBTCompoundList inventory = compound.getCompoundList(result.getFinalKey().getKeyValue());
         // Todo: Make compatible with NBTCompound & NBTCompoundList
 
         inventory.clear();
@@ -173,7 +175,7 @@ public class EditorInventory {
         public static EditorInventory createInventory(final OfflinePlayer offlinePlayer, final PathWrapper inventoryPath) {
             final List<NBTCompound> itemNBTList = NBTInventoryUtils.getItemNBTsFromPath(
                     NBTData.getOfflinePlayerData(offlinePlayer.getUniqueId()).getCompound(),
-                    inventoryPath.getPath()
+                    new NBTPathBuilder(PlayerDataManipulator.getINSTANCE().MOJANGSON).parseString(inventoryPath.getPath()).create()
             );
 
             return new EditorInventory(

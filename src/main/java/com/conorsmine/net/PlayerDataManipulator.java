@@ -8,7 +8,10 @@ import com.conorsmine.net.cmds.contexts.ItemStore;
 import com.conorsmine.net.files.WebsiteFile;
 import com.conorsmine.net.inventory.InventoryListener;
 import com.conorsmine.net.cmds.contexts.PathWrapper;
-import com.conorsmine.net.utils.MojangsonUtils;
+import com.conorsmine.net.mojangson.MojangsonUtils;
+import com.conorsmine.net.mojangson.MojangsonUtilsBuilder;
+import com.conorsmine.net.mojangson.path.NBTPath;
+import com.conorsmine.net.mojangson.path.NBTPathBuilder;
 import com.conorsmine.net.webserver.WebServer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -21,7 +24,7 @@ public final class PlayerDataManipulator extends JavaPlugin {
 
     private BukkitCommandManager commandManager;
     public final ConfigFile CONF = new ConfigFile(this);
-    public final MojangsonUtils MOJANGSON = new MojangsonUtils();
+    public final MojangsonUtils MOJANGSON = new MojangsonUtilsBuilder(CONF.getSeparator()).create();
 
     public static PlayerDataManipulator INSTANCE;
     public static WebServer webServer;
@@ -65,8 +68,6 @@ public final class PlayerDataManipulator extends JavaPlugin {
 
     public void reloadPlugin(@NotNull final CommandSender sender) {
         CONF.reload(sender);
-
-        MOJANGSON.setSeparator(CONF.getSeparator());
     }
 
     @Deprecated

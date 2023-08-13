@@ -27,9 +27,9 @@ public class WebServer {
             server.createContext("/", new WebHTTPHandler());
             server.start();
 
-            PlayerDataManipulator.sendMsg(String.format("Server started successfully on port %d.", PORT));
+            PlayerDataManipulator.staticSendMsg(String.format("Server started successfully on port %d.", PORT));
         }
-        catch (BindException _e) { PlayerDataManipulator.sendMsg(String.format("Port: %d is already in use, please define another in the config.yml file.", PORT)); }
+        catch (BindException _e) { PlayerDataManipulator.staticSendMsg(String.format("Port: %d is already in use, please define another in the config.yml file.", PORT)); }
         catch (IOException e) { e.printStackTrace(); }
     }
 

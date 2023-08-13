@@ -12,6 +12,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -118,21 +119,7 @@ public final class PlayerCmds extends BaseCommand {
     @CommandPermission("pdm.player.where")
     private void whereShowHiddenCmd(final Player sender, final String targetName, final String worldUUID, final double x, final double y, final double z, final float pitch, final float yaw) {
         final World world = pl.getServer().getWorld(UUID.fromString(worldUUID));
-        world.spawn(new Location(world, x, y, z, yaw, pitch), EntityType.ARMOR_STAND.getEntityClass(), (e) -> {
-            final ArmorStand entity = ((ArmorStand) e);
-
-            entity.setCustomName(targetName);
-            entity.setCustomNameVisible(true);
-
-            entity.setGlowing(true);
-            entity.setVisible(true);
-            entity.setPortalCooldown(Integer.MAX_VALUE);
-            entity.setGravity(false);
-
-            entity.setInvulnerable(true);
-
-            new Marker(pl, entity);
-        });
+        Marker.spawnMarker(pl, new Location(world, x, y, z, yaw, pitch), targetName);
 
         pl.sendMsg(sender, "§7Spawned a marker at their position.");
     }
@@ -166,7 +153,7 @@ public final class PlayerCmds extends BaseCommand {
         private final ArmorStand marker;
         private final long creationTime = Instant.now().getEpochSecond();
 
-        public Marker(final @NotNull JavaPlugin pl, final @NotNull ArmorStand marker) {
+        private Marker(final @NotNull JavaPlugin pl, final @NotNull ArmorStand marker) {
             this.marker = marker;
             MARKER_QUEUE.add(this);
 
@@ -188,6 +175,25 @@ public final class PlayerCmds extends BaseCommand {
 
         public static void removeAllMarkers() {
             MARKER_QUEUE.forEach((m) -> m.marker.remove());
+        }
+
+        public static ArmorStand spawnMarker(@NotNull JavaPlugin pl, @NotNull final Location loc, final String targetName) {
+            final ArmorStand marker = (ArmorStand) loc.getWorld().spawn(loc, EntityType.ARMOR_STAND.getEntityClass(), (e) -> {
+                final ArmorStand entity = ((ArmorStand) e);
+
+                entity.setCustomName(targetName);
+                entity.setCustomNameVisible(true);
+
+                entity.setGlowing(true);
+                entity.setVisible(true);
+                entity.setPortalCooldown(Integer.MAX_VALUE);
+                entity.setGravity(false);
+
+                entity.setInvulnerable(true);
+            });
+
+            new Marker(pl, marker);
+            return marker;
         }
     }
 }

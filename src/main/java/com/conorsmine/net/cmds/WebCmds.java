@@ -7,7 +7,9 @@ import com.conorsmine.net.files.ConfigFile;
 import com.conorsmine.net.files.FileUtils;
 import com.conorsmine.net.files.LogFiles;
 import com.conorsmine.net.files.WebsiteFile;
-import com.conorsmine.net.utils.MojangsonUtils;
+import com.conorsmine.net.mojangson.MojangsonUtils;
+import com.conorsmine.net.mojangson.path.NBTKey;
+import com.conorsmine.net.mojangson.path.NBTPathBuilder;
 import com.conorsmine.net.webserver.PlayerDataParser;
 import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.data.NBTData;
@@ -40,7 +42,7 @@ public final class WebCmds extends BaseCommand {
         pl.sendMsg(sender, "§7Preparing web editor...");
         if (target.isOnline()) ((Player) target).saveData();
 
-        PlayerDataParser.parsePlayerData(target)
+        new PlayerDataParser(pl).parsePlayerData(target)
                 .whenComplete((uuid, e) -> {
                     try {
                         pl.sendMsg(sender, "§2Webeditor link:");
@@ -117,17 +119,16 @@ public final class WebCmds extends BaseCommand {
             final String path = (String) change.get("path");
             final Object value = change.get("value");
 
-            final MojangsonUtils.NBTResult result = new MojangsonUtils().setSeparator(ConfigFile.staticGetSeparator()).getCompoundFromPath(compound, path);
+            final MojangsonUtils.NBTResult result = pl.MOJANGSON.getCompoundFromPath(compound, new NBTPathBuilder(pl.MOJANGSON).parseString(path).create());
 
-            final NBTCompound nbtCompound = result.getCompound();
-            final Object prevValue = MojangsonUtils.getSimpleDataFromCompound(nbtCompound, result.getFinalKey());
-            MojangsonUtils.setSimpleDataFromKey(nbtCompound, result.getFinalKey(), value);
+            final Object prevValue = MojangsonUtils.getSimpleDataFromCompound(result.getCompound(), result.getFinalKey());
+            MojangsonUtils.setSimpleDataFromKey(result.getCompound(), result.getFinalKey(), value);
 
             pl.sendMsg(sender, String.format("§6~ §9%s§7: From §1%s §7-> §9%s", path, prevValue, value));
         }
 
         playerData.saveChanges();
-        final OfflinePlayer offlinePlayer = PlayerDataManipulator.getINSTANCE().getServer().getOfflinePlayer(targetUUID);
+        final OfflinePlayer offlinePlayer = pl.getServer().getOfflinePlayer(targetUUID);
         if (offlinePlayer.isOnline()) {
             ((Player) offlinePlayer).loadData();
             ((Player) offlinePlayer).saveData();

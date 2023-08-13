@@ -75,10 +75,10 @@ public class MsgFormatter {
     }
 
     private static void sendConsoleFormattedMsg(final CommandSender sender, final List<NBTCompound> itemNBTs) {
-        PlayerDataManipulator.getINSTANCE().sendMsg(sender, "§9Items §6Data §bSlot");
+        PlayerDataManipulator.getINSTANCE().staticSendMsg(sender, "§9Items §6Data §bSlot");
 
         for (NBTCompound nbt : itemNBTs) {
-            PlayerDataManipulator.getINSTANCE().sendMsg(sender, String.format(
+            PlayerDataManipulator.getINSTANCE().staticSendMsg(sender, String.format(
                     "§7  >> §9%s §6%s §b%s",
                     nbt.getString(NBTItemTags.ID.getTagName()),
                     nbt.getShort(NBTItemTags.DAMAGE.getTagName()),
@@ -101,7 +101,7 @@ public class MsgFormatter {
             final String spacesToDamageData = MsgFormatter.getEmptyStringFromWidth(longestNameWidth - MsgFormatter.getWidth(itemId, true));
             final String spacesToSlot = MsgFormatter.getEmptyStringFromWidth(longestDamageWidth - MsgFormatter.getWidth(itemDamage, true));
 
-            PlayerDataManipulator.getINSTANCE().sendMsg(sender, String.format(
+            PlayerDataManipulator.getINSTANCE().staticSendMsg(sender, String.format(
                     "§7  >> §9%s%s§6%s%s§b%s",
                     itemId,         spacesToDamageData,
                     itemDamage,     spacesToSlot,
@@ -115,7 +115,7 @@ public class MsgFormatter {
         final String toDataSpaces = MsgFormatter.getEmptyStringFromWidth(longestName - MsgFormatter.getWidth("Item", false));
         final String toSlotSpaces = MsgFormatter.getEmptyStringFromWidth(longestDamage - MsgFormatter.getWidth("Data", false));
 
-        PlayerDataManipulator.getINSTANCE().sendMsg(sender, String.format("%s§9Items%s§6Data%s§bSlot", toItemSpaces, toDataSpaces, toSlotSpaces));
+        PlayerDataManipulator.getINSTANCE().staticSendMsg(sender, String.format("%s§9Items%s§6Data%s§bSlot", toItemSpaces, toDataSpaces, toSlotSpaces));
     }
 
     private static int getLongestItemDataWidth(final List<NBTCompound> itemNBTs, final Function<NBTCompound, String> nbtDataFunction) {
