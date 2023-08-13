@@ -8,6 +8,7 @@ Furthermore, *PDM* tries to provide other useful features, such as an almost uni
 Please view the Wiki for more information.  
 
 ## Todo before release
+- [ ] Add reload command
 - [ ] Add `changes` logging
 - [ ] Add version support
 - [ ] Refactor code!
