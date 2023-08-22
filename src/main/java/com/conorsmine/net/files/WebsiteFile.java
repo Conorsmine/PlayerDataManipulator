@@ -13,7 +13,7 @@ import java.io.*;
 
 public class WebsiteFile implements ReloadableFile {
 
-    public static final String CONF_PATH = "web_server", HTML_PATH = "web", TEMP_CACHE = "temp_cache", TEMP_CHANGE_PREFIX = "change-";
+    public static final String HTML_PATH = "web", TEMP_CACHE = "temp_cache", TEMP_CHANGE_PREFIX = "change-";
 
     private final PlayerDataManipulator pl;
     private final LazyConfig<Integer> port;
@@ -22,7 +22,7 @@ public class WebsiteFile implements ReloadableFile {
         this.pl = pl;
 
         this.port = new LazyConfig<>(
-                () -> pl.getConfig().getInt(String.format("%s.%s", CONF_PATH, Properties.CONFIG_WEBSITE_PORT)), 8806,
+                () -> pl.getConfig().getInt(String.format("%s.%s", Properties.CONFIG_WEBSITE_SECTION, Properties.CONFIG_WEBSITE_PORT)), 8806,
                 (val) -> (val == 0), (val) -> "§7\"§6%d§7\" is §enot §7a valid port for the web-editor. Please select something else."
         );
     }
