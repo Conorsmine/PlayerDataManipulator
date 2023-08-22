@@ -3,33 +3,35 @@ package com.conorsmine.net.files;
 import com.conorsmine.net.PlayerDataManipulator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class LogFiles {
+public class LogFiles implements ReloadableFile {
 
     public static final String DIR_NAME = "logs", CHANGES_PATH = "changes_logs.json";
 
-    private static final File dirFile;
-    private static final File changesLogFile;
-    static {
-        dirFile = new File(PlayerDataManipulator.getINSTANCE().getDataFolder(), DIR_NAME);
-        dirFile.mkdirs();
+    private File dirFile;
+    private File changesLogFile;
 
-        changesLogFile = new File(dirFile, CHANGES_PATH);
-        try { changesLogFile.createNewFile(); }
-        catch (IOException e) { PlayerDataManipulator.staticSendMsg(String.format("§cUNABLE TO CREATE \"%s\" file!", CHANGES_PATH)); }
+    private final PlayerDataManipulator pl;
+
+    public LogFiles(PlayerDataManipulator pl) {
+        this.pl = pl;
+
+        reload(pl.getServer().getConsoleSender());
     }
 
-    public static void createErrorFile(String fileName, final JSONObject logData) {
+    public void createErrorFile(final CommandSender sender, String fileName, final JSONObject logData) {
         if (!fileName.endsWith(".json")) fileName += ".json";
 
         final File errorLog = new File(dirFile, fileName);
         try { errorLog.createNewFile(); }
-        catch (IOException e) { PlayerDataManipulator.staticSendMsg(String.format("§cUNABLE TO CREATE \"%s\" file!", fileName)); }
+        catch (IOException e) { pl.sendMsg(sender, String.format("§cUNABLE TO CREATE \"%s\" file!", fileName)); }
 
         try {
             final Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -39,6 +41,16 @@ public class LogFiles {
             writer.flush();
             writer.close();
         }
-        catch (IOException e) { PlayerDataManipulator.staticSendMsg(String.format("§cUNABLE TO WRITE TO \"%s\" file!", fileName)); }
+        catch (IOException e) { pl.sendMsg(sender, String.format("§cUNABLE TO WRITE TO \"%s\" file!", fileName)); }
+    }
+
+    @Override
+    public void reload(@NotNull CommandSender sender) {
+        dirFile = new File(pl.getDataFolder(), DIR_NAME);
+        dirFile.mkdirs();
+
+        changesLogFile = new File(dirFile, CHANGES_PATH);
+        try { changesLogFile.createNewFile(); }
+        catch (IOException e) { pl.sendMsg(sender, String.format("§cUNABLE TO CREATE \"%s\" file!", CHANGES_PATH)); }
     }
 }

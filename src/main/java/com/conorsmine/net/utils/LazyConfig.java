@@ -32,7 +32,9 @@ public class LazyConfig<T> extends Lazy<T> {
 
     @Override
     public T get() {
-        final T val = super.get();
+        final T val;
+        try { val = super.get(); }
+        catch (Exception e) { return this.defaultValue; }
         if (checker.test(val)) { printErrorMsg(val); return this.defaultValue; }
 
         return val;

@@ -2,8 +2,11 @@ package com.conorsmine.net.utils;
 
 import com.conorsmine.net.mojangson.MojangsonUtils;
 import com.conorsmine.net.mojangson.MojangsonUtilsBuilder;
-import com.conorsmine.net.mojangson.path.NBTArrayKey;
-import com.conorsmine.net.mojangson.path.NBTKey;
+import com.conorsmine.net.mojangson.NBTQueryResult;
+import com.conorsmine.net.mojangson.data.NBTCompoundData;
+import com.conorsmine.net.mojangson.data.NBTDataType;
+import com.conorsmine.net.mojangson.data.NBTPrimitiveData;
+import com.conorsmine.net.mojangson.path.NBTPath;
 import com.conorsmine.net.mojangson.path.NBTPathBuilder;
 import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.data.NBTData;
@@ -14,6 +17,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -30,19 +34,20 @@ public class PlayerLocationUtils {
                 PlayerLocPaths.getPositionZ(playerData),
                 PlayerLocPaths.getYaw(playerData),
                 PlayerLocPaths.getPitch(playerData)
-                );
+        );
     }
 
     public static void teleportPlayer(@NotNull final OfflinePlayer player, @NotNull final Location tpLoc) {
         if (player.isOnline()) { ((Player) player).teleport(tpLoc); }
 
         final PlayerData playerData = NBTData.getOfflinePlayerData(player.getUniqueId());
-        PlayerLocPaths.setPositionX(playerData, tpLoc.getX());
-        PlayerLocPaths.setPositionY(playerData, tpLoc.getY());
-        PlayerLocPaths.setPositionZ(playerData, tpLoc.getZ());
-        PlayerLocPaths.setPitch(playerData, tpLoc.getPitch());
-        PlayerLocPaths.setYaw(playerData, tpLoc.getYaw());
-        PlayerLocPaths.setWorld(playerData, tpLoc.getWorld());
+        final NBTCompound nbtCompound = playerData.getCompound();
+        PlayerLocPaths.setPositionX(nbtCompound, tpLoc.getX());
+        PlayerLocPaths.setPositionY(nbtCompound, tpLoc.getY());
+        PlayerLocPaths.setPositionZ(nbtCompound, tpLoc.getZ());
+        PlayerLocPaths.setPitch(nbtCompound, tpLoc.getPitch());
+        PlayerLocPaths.setYaw(nbtCompound, tpLoc.getYaw());
+        PlayerLocPaths.setWorld(nbtCompound, tpLoc.getWorld());
 
         playerData.saveChanges();
     }
@@ -63,87 +68,102 @@ public class PlayerLocationUtils {
         WORLD_UUID_MOST     ("WorldUUIDMost"),
         WORLD_UUID_LEAST    ("WorldUUIDLeast");
 
-        private final static MojangsonUtils mojangson = new MojangsonUtilsBuilder(".").create();
+        private final static MojangsonUtils mojangson = new MojangsonUtilsBuilder("##").create();
         private final String path;
 
         PlayerLocPaths(String path) {
             this.path = path;
         }
 
+        public String getPath() {
+            return path;
+        }
+
         static Double getPositionX(final NBTCompound nbt) {
-            return getDataFromArrayCompound(mojangson, Double.class, mojangson.getCompoundFromPath(nbt, new NBTPathBuilder(mojangson).parseString(POS_X.path).create()));
+            final NBTQueryResult queryResult = mojangson.getDataFromPath(new NBTCompoundData(nbt), new NBTPathBuilder(mojangson).parseString(POS_X.path).create());
+            if (queryResult.getData().getType() != NBTDataType.PRIMITIVE) return 0d;
+            
+            return ((Double) ((NBTPrimitiveData) queryResult.getData()).getData());
         }
 
         static Double getPositionY(final NBTCompound nbt) {
-            return getDataFromArrayCompound(mojangson, Double.class, mojangson.getCompoundFromPath(nbt, new NBTPathBuilder(mojangson).parseString(POS_Y.path).create()));
+            final NBTQueryResult queryResult = mojangson.getDataFromPath(new NBTCompoundData(nbt), new NBTPathBuilder(mojangson).parseString(POS_Y.path).create());
+            if (queryResult.getData().getType() != NBTDataType.PRIMITIVE) return 0d;
+            
+            return ((Double) ((NBTPrimitiveData) queryResult.getData()).getData());
         }
 
         static Double getPositionZ(final NBTCompound nbt) {
-            return getDataFromArrayCompound(mojangson, Double.class, mojangson.getCompoundFromPath(nbt, new NBTPathBuilder(mojangson).parseString(POS_Z.path).create()));
+            final NBTQueryResult queryResult = mojangson.getDataFromPath(new NBTCompoundData(nbt), new NBTPathBuilder(mojangson).parseString(POS_Z.path).create());
+            if (queryResult.getData().getType() != NBTDataType.PRIMITIVE) return 0d;
+            
+            return ((Double) ((NBTPrimitiveData) queryResult.getData()).getData());
         }
 
         static Float getPitch(final NBTCompound nbt) {
-            return getDataFromArrayCompound(mojangson, Float.class, mojangson.getCompoundFromPath(nbt, new NBTPathBuilder(mojangson).parseString(ROT_PITCH.path).create()));
+            final NBTQueryResult queryResult = mojangson.getDataFromPath(new NBTCompoundData(nbt), new NBTPathBuilder(mojangson).parseString(ROT_PITCH.path).create());
+            if (queryResult.getData().getType() != NBTDataType.PRIMITIVE) return 0f;
+
+            return ((Float) ((NBTPrimitiveData) queryResult.getData()).getData());
         }
 
         static Float getYaw(final NBTCompound nbt) {
-            return getDataFromArrayCompound(mojangson, Float.class, mojangson.getCompoundFromPath(nbt, new NBTPathBuilder(mojangson).parseString(ROT_YAW.path).create()));
+            final NBTQueryResult queryResult = mojangson.getDataFromPath(new NBTCompoundData(nbt), new NBTPathBuilder(mojangson).parseString(ROT_YAW.path).create());
+            if (queryResult.getData().getType() != NBTDataType.PRIMITIVE) return 0f;
+
+            return ((Float) ((NBTPrimitiveData) queryResult.getData()).getData());
         }
 
+        @Nullable
         static World getWorld(final NBTCompound nbt) {
-            final Long uuidMost = mojangson.getSimpleDataFromCompound(Long.class, mojangson.getCompoundFromPath(nbt, new NBTPathBuilder(mojangson).parseString(WORLD_UUID_MOST.path).create()));
-            final Long uuidLeast = mojangson.getSimpleDataFromCompound(Long.class, mojangson.getCompoundFromPath(nbt, new NBTPathBuilder(mojangson).parseString(WORLD_UUID_LEAST.path).create()));
-
-            return Bukkit.getServer().getWorld(new UUID(uuidMost, uuidLeast));
+            final NBTQueryResult queryResultMost = mojangson.getDataFromPath(new NBTCompoundData(nbt), new NBTPathBuilder(mojangson).parseString(WORLD_UUID_MOST.path).create());
+            final NBTQueryResult queryResultLeast = mojangson.getDataFromPath(new NBTCompoundData(nbt), new NBTPathBuilder(mojangson).parseString(WORLD_UUID_LEAST.path).create());
+            if (queryResultMost.getData().getType() != NBTDataType.PRIMITIVE || 
+                    queryResultLeast.getData().getType() != NBTDataType.PRIMITIVE) return null;
+            
+            
+            try { return Bukkit.getServer().getWorld(new UUID(((Long) queryResultMost.getData().getData()), ((Long) queryResultLeast.getData().getData()))); }
+            catch (Exception e) {
+                throw new RuntimeException(
+                        String.format("There was an error retrieving the world from the player!%n\"%s\"%nWorld_ID: %s  Player_ID: %s  UUIDMost: %s  UUIDLeast: %s",
+                                e.getClass().getName(), WORLD_DIM_ID.path, PLAYER_DIM_ID.path, WORLD_UUID_MOST.path, WORLD_UUID_LEAST.path)
+                );
+            }
         }
 
 
 
-        static void setPositionX(final PlayerData playerData, final double x) {
-            setDataToArrayCompound(mojangson, Double.class, mojangson.getCompoundFromPath(playerData.getCompound(), new NBTPathBuilder(mojangson).parseString(POS_X.path).create()), x);
+        static void setPositionX(final NBTCompound nbt, final double x) {
+            final NBTPath keys = new NBTPathBuilder(mojangson).parseString(POS_X.path).create();
+            mojangson.setDataToPath(new NBTCompoundData(nbt), keys, x, double.class);
         }
 
-        static void setPositionY(final PlayerData playerData, final double y) {
-            setDataToArrayCompound(mojangson, Double.class, mojangson.getCompoundFromPath(playerData.getCompound(), new NBTPathBuilder(mojangson).parseString(POS_Y.path).create()), y);
+        static void setPositionY(final NBTCompound nbt, final double y) {
+            final NBTPath keys = new NBTPathBuilder(mojangson).parseString(POS_Y.path).create();
+            mojangson.setDataToPath(new NBTCompoundData(nbt), keys, y, double.class);
         }
 
-        static void setPositionZ(final PlayerData playerData, final double z) {
-            setDataToArrayCompound(mojangson, Double.class, mojangson.getCompoundFromPath(playerData.getCompound(), new NBTPathBuilder(mojangson).parseString(POS_Z.path).create()), z);
+        static void setPositionZ(final NBTCompound nbt, final double z) {
+            final NBTPath keys = new NBTPathBuilder(mojangson).parseString(POS_Z.path).create();
+            mojangson.setDataToPath(new NBTCompoundData(nbt), keys, z, double.class);
         }
 
-        static void setYaw(final PlayerData playerData, final float yaw) {
-            setDataToArrayCompound(mojangson, Float.class, mojangson.getCompoundFromPath(playerData.getCompound(), new NBTPathBuilder(mojangson).parseString(ROT_YAW.path).create()), yaw);
+        static void setYaw(final NBTCompound nbt, final float yaw) {
+            final NBTPath keys = new NBTPathBuilder(mojangson).parseString(ROT_YAW.path).create();
+            mojangson.setDataToPath(new NBTCompoundData(nbt), keys, yaw, float.class);
         }
 
-        static void setPitch(final PlayerData playerData, final float pitch) {
-            setDataToArrayCompound(mojangson, Float.class, mojangson.getCompoundFromPath(playerData.getCompound(), new NBTPathBuilder(mojangson).parseString(ROT_PITCH.path).create()), pitch);
+        static void setPitch(final NBTCompound nbt, final float pitch) {
+            final NBTPath keys = new NBTPathBuilder(mojangson).parseString(ROT_PITCH.path).create();
+            mojangson.setDataToPath(new NBTCompoundData(nbt), keys, pitch, float.class);
         }
 
-        static void setWorld(final PlayerData playerData, final World world) {
-            playerData.getCompound().setLong(WORLD_UUID_MOST.path, world.getUID().getMostSignificantBits());
-            playerData.getCompound().setLong(WORLD_UUID_LEAST.path, world.getUID().getLeastSignificantBits());
-            playerData.getCompound().setLong(PLAYER_DIM_ID.path, NBTData.getWorldData(world).getCompound().getLong(WORLD_DIM_ID.path));
-        }
+        static void setWorld(final NBTCompound nbt, final World world) {
+            NBTPath keys = new NBTPathBuilder(mojangson).parseString(WORLD_UUID_MOST.path).create();
+            mojangson.setDataToPath(new NBTCompoundData(nbt), keys, world.getUID().getMostSignificantBits(), Long.class);
 
-
-
-
-
-
-
-        @SuppressWarnings("unchecked")
-        private static <T> T getDataFromArrayCompound(final MojangsonUtils mojangson, final Class<T> clazzCast, final MojangsonUtils.NBTResult result) {
-            final NBTArrayKey arrKey = (NBTArrayKey) result.getFinalKey();
-
-            if (clazzCast.equals(Double.class)) return (T) result.getCompound().getDoubleList(arrKey.getKeyValue()).get(arrKey.getIndex());
-            else return (T) result.getCompound().getFloatList(arrKey.getKeyValue()).get(arrKey.getIndex());
-        }
-
-        private static <T> void setDataToArrayCompound(final MojangsonUtils mojangson, final Class<?> clazzCast, final MojangsonUtils.NBTResult result, T val) {
-            final NBTArrayKey arrKey = (NBTArrayKey) result.getFinalKey();
-
-            if (clazzCast.equals(Double.class)) result.getCompound().getDoubleList(arrKey.getKeyValue()).set(arrKey.getIndex(), (Double) val);
-            else result.getCompound().getFloatList(arrKey.getKeyValue()).set(arrKey.getIndex(), (Float) val);
+            keys = new NBTPathBuilder(mojangson).parseString(WORLD_UUID_LEAST.path).create();
+            mojangson.setDataToPath(new NBTCompoundData(nbt), keys, world.getUID().getLeastSignificantBits(), Long.class);
         }
     }
 }

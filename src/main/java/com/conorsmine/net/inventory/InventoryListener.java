@@ -11,6 +11,12 @@ import org.bukkit.event.inventory.InventoryType;
 
 public class InventoryListener implements Listener {
 
+    private final PlayerDataManipulator pl;
+
+    public InventoryListener(PlayerDataManipulator pl) {
+        this.pl = pl;
+    }
+
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getSlot() == -999) return;
@@ -33,9 +39,9 @@ public class InventoryListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClose(InventoryCloseEvent event) {
-        PlayerDataManipulator.getINSTANCE().getServer().getScheduler().runTask(
-                PlayerDataManipulator.getINSTANCE(),
-                () -> EditorInventory.playerCloseEditor((Player) event.getPlayer(), event.getInventory())
+        pl.getServer().getScheduler().runTask(
+                pl,
+                () -> EditorInventory.playerCloseEditor((Player) event.getPlayer(), event.getInventory(), pl.MOJANGSON)
         );
     }
 

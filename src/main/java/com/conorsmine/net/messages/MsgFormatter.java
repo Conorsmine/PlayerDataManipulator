@@ -69,16 +69,16 @@ public class MsgFormatter {
         return msg.replaceAll("§§[0-9|a-f|k-o|r]", "");
     }
     
-    public static void sendFormattedListMsg(final CommandSender sender, final List<NBTCompound> itemNBTs) {
-        if (sender instanceof Player) sendPlayerFormattedMsg(sender, itemNBTs);
-        else sendConsoleFormattedMsg(sender, itemNBTs);
+    public static void sendFormattedListMsg(final PlayerDataManipulator pl, final CommandSender sender, final List<NBTCompound> itemNBTs) {
+        if (sender instanceof Player) sendPlayerFormattedMsg(pl, sender, itemNBTs);
+        else sendConsoleFormattedMsg(pl, sender, itemNBTs);
     }
 
-    private static void sendConsoleFormattedMsg(final CommandSender sender, final List<NBTCompound> itemNBTs) {
-        PlayerDataManipulator.getINSTANCE().staticSendMsg(sender, "§9Items §6Data §bSlot");
+    private static void sendConsoleFormattedMsg(final PlayerDataManipulator pl, final CommandSender sender, final List<NBTCompound> itemNBTs) {
+        pl.sendMsg(sender, "§9Items §6Data §bSlot");
 
         for (NBTCompound nbt : itemNBTs) {
-            PlayerDataManipulator.getINSTANCE().staticSendMsg(sender, String.format(
+            pl.sendMsg(sender, String.format(
                     "§7  >> §9%s §6%s §b%s",
                     nbt.getString(NBTItemTags.ID.getTagName()),
                     nbt.getShort(NBTItemTags.DAMAGE.getTagName()),
@@ -87,12 +87,12 @@ public class MsgFormatter {
         }
     }
 
-    private static void sendPlayerFormattedMsg(final CommandSender sender, final List<NBTCompound> itemNBTs) {
+    private static void sendPlayerFormattedMsg(final PlayerDataManipulator pl, final CommandSender sender, final List<NBTCompound> itemNBTs) {
         final int longestNameWidth = getLongestItemDataWidth(itemNBTs, (nbt) -> nbt.getString(NBTItemTags.ID.getTagName())) + 8;
         final int longestDamageWidth = getLongestItemDataWidth(itemNBTs, (nbt) -> nbt.getShort(NBTItemTags.DAMAGE.getTagName()).toString()) + 24;
 
 
-        sendPlayerHeader(sender, longestNameWidth, longestDamageWidth);
+        pl.sendMsg(sender, sendPlayerHeader(sender, longestNameWidth, longestDamageWidth));
         for (NBTCompound nbt : itemNBTs) {
             final String itemId = nbt.getString(NBTItemTags.ID.getTagName());
             final String itemDamage = nbt.getShort(NBTItemTags.DAMAGE.getTagName()).toString();
@@ -101,7 +101,7 @@ public class MsgFormatter {
             final String spacesToDamageData = MsgFormatter.getEmptyStringFromWidth(longestNameWidth - MsgFormatter.getWidth(itemId, true));
             final String spacesToSlot = MsgFormatter.getEmptyStringFromWidth(longestDamageWidth - MsgFormatter.getWidth(itemDamage, true));
 
-            PlayerDataManipulator.getINSTANCE().staticSendMsg(sender, String.format(
+            pl.sendMsg(sender, String.format(
                     "§7  >> §9%s%s§6%s%s§b%s",
                     itemId,         spacesToDamageData,
                     itemDamage,     spacesToSlot,
@@ -110,12 +110,12 @@ public class MsgFormatter {
         }
     }
 
-    private static void sendPlayerHeader(final CommandSender sender, int longestName, int longestDamage) {
+    private static String sendPlayerHeader(final CommandSender sender, int longestName, int longestDamage) {
         final String toItemSpaces = MsgFormatter.getEmptyStringFromWidth(MsgFormatter.getWidth("  >> ", false));
         final String toDataSpaces = MsgFormatter.getEmptyStringFromWidth(longestName - MsgFormatter.getWidth("Item", false));
         final String toSlotSpaces = MsgFormatter.getEmptyStringFromWidth(longestDamage - MsgFormatter.getWidth("Data", false));
 
-        PlayerDataManipulator.getINSTANCE().staticSendMsg(sender, String.format("%s§9Items%s§6Data%s§bSlot", toItemSpaces, toDataSpaces, toSlotSpaces));
+        return String.format("%s§9Items%s§6Data%s§bSlot", toItemSpaces, toDataSpaces, toSlotSpaces);
     }
 
     private static int getLongestItemDataWidth(final List<NBTCompound> itemNBTs, final Function<NBTCompound, String> nbtDataFunction) {

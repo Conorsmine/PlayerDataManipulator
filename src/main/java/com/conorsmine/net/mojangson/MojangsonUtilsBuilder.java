@@ -17,7 +17,7 @@ public class MojangsonUtilsBuilder {
     private final Map<Changes, Consumer<MojangsonUtils>> changesMap = new HashMap<>();
 
     public MojangsonUtilsBuilder(@NotNull final String separator) {
-        changesMap.put(Changes.SEP, (utils) -> utils.separator = separator);
+        changesMap.put(Changes.SEP, (utils) -> utils.separator = StringUtils.toNonRegex(separator));
     }
 
     /**
@@ -25,16 +25,17 @@ public class MojangsonUtilsBuilder {
      * @param color {@link ChatColor} to be set for the values of primitive NBT.
      */
     public MojangsonUtilsBuilder setValCol(@NotNull final ChatColor color) {
-        changesMap.put(Changes.SEP, (utils) -> utils.valCol = color);
+        changesMap.put(Changes.VAL_COL, (utils) -> utils.valCol = color);
         return this;
     }
 
     /**
+     * <br> Example: "0.2f"; The 'f' is the data type of the primitive NBT.
      * <br> default {@link ChatColor#GREEN}
      * @param color {@link ChatColor} to be set for the data type of primitive NBT.
      */
     public MojangsonUtilsBuilder setValTypeCol(@NotNull final ChatColor color) {
-        changesMap.put(Changes.SEP, (utils) -> utils.valTypeCol = color);
+        changesMap.put(Changes.VAL_TYPE_COL, (utils) -> utils.valTypeCol = color);
         return this;
     }
 
@@ -43,7 +44,7 @@ public class MojangsonUtilsBuilder {
      * @param color {@link ChatColor} to be set for the keys of the NBT.
      */
     public MojangsonUtilsBuilder setTagCol(@NotNull final ChatColor color) {
-        changesMap.put(Changes.SEP, (utils) -> utils.tagCol = color);
+        changesMap.put(Changes.TAG_COL, (utils) -> utils.tagCol = color);
         return this;
     }
 
@@ -51,8 +52,8 @@ public class MojangsonUtilsBuilder {
      * <br> default {@link ChatColor#AQUA}
      * @param color {@link ChatColor} to be set for the brackets around {@link de.tr7zw.nbtapi.NBTCompound}.
      */
-    public MojangsonUtilsBuilder setObjCol(@NotNull final ChatColor color) {
-        changesMap.put(Changes.SEP, (utils) -> utils.objCol = color);
+    public MojangsonUtilsBuilder setCompCol(@NotNull final ChatColor color) {
+        changesMap.put(Changes.OBJ_COL, (utils) -> utils.objCol = color);
         return this;
     }
 
@@ -61,7 +62,7 @@ public class MojangsonUtilsBuilder {
      * @param color {@link ChatColor} to be set for the brackets around {@link de.tr7zw.nbtapi.NBTList}.
      */
     public MojangsonUtilsBuilder setArrCol(@NotNull final ChatColor color) {
-        changesMap.put(Changes.SEP, (utils) -> utils.arrCol = color);
+        changesMap.put(Changes.ARR_COL, (utils) -> utils.arrCol = color);
         return this;
     }
 
@@ -70,7 +71,7 @@ public class MojangsonUtilsBuilder {
      * @param color {@link ChatColor} to be set for {@link #addSpecialPaths(NBTPath...)}.
      */
     public MojangsonUtilsBuilder setSpecCol(@NotNull final ChatColor color) {
-        changesMap.put(Changes.SEP, (utils) -> utils.specCol = color);
+        changesMap.put(Changes.SPEC_COL, (utils) -> utils.specCol = color);
         return this;
     }
 
@@ -78,7 +79,7 @@ public class MojangsonUtilsBuilder {
      * @param specialPaths {@link com.conorsmine.net.mojangson.path.NBTPath} which will be highlighted.
      */
     public MojangsonUtilsBuilder addSpecialPaths(final NBTPath... specialPaths) {
-        changesMap.put(Changes.SEP, (utils) -> utils.specialColorPaths.addAll(Arrays.asList(specialPaths)));
+        changesMap.put(Changes.SPEC_PATHS, (utils) -> utils.specialColorPaths.addAll(Arrays.asList(specialPaths)));
         return this;
     }
 
@@ -88,7 +89,7 @@ public class MojangsonUtilsBuilder {
      * <br> default {@link Boolean#TRUE}
      */
     public MojangsonUtilsBuilder setHoverable(final boolean bool) {
-        changesMap.put(Changes.SEP, (utils) -> utils.hoverable = bool);
+        changesMap.put(Changes.HOV, (utils) -> utils.hoverable = bool);
         return this;
     }
 
@@ -98,7 +99,7 @@ public class MojangsonUtilsBuilder {
      * <br> default {@link Boolean#FALSE}
      */
     public MojangsonUtilsBuilder setClickable(final boolean bool) {
-        changesMap.put(Changes.SEP, (utils) -> utils.clickable = bool);
+        changesMap.put(Changes.CLICK, (utils) -> utils.clickable = bool);
         return this;
     }
 
@@ -149,10 +150,13 @@ public class MojangsonUtilsBuilder {
     private enum Changes {
         SEP,
         VAL_COL,
+        VAL_TYPE_COL,
         TAG_COL,
         OBJ_COL,
         ARR_COL,
         SPEC_COL,
+
+        SPEC_PATHS,
         HOV,
         CLICK,
         CLICKABLES,

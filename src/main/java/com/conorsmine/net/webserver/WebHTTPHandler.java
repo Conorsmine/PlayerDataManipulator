@@ -13,6 +13,12 @@ import java.nio.file.Files;
 
 public class WebHTTPHandler implements HttpHandler {
 
+    private final PlayerDataManipulator pl;
+
+    public WebHTTPHandler(PlayerDataManipulator pl) {
+        this.pl = pl;
+    }
+
     @Override
     public void handle(HttpExchange exchange) {
         try {
@@ -50,7 +56,7 @@ public class WebHTTPHandler implements HttpHandler {
 
         try {
             final JSONObject json = (JSONObject) new JSONParser().parse(builder.toString());
-            WebsiteFile.setJSONOfChangeFile(requestPath.replaceAll(".+/", ""), json);
+            pl.WEBSITE_CONF.setJSONOfChangeFile(requestPath.replaceAll(".+/", ""), json);
         } catch (Exception e) { e.printStackTrace(); }
 
 
@@ -58,7 +64,7 @@ public class WebHTTPHandler implements HttpHandler {
     }
 
     private byte[] getPlayerDataResource(final String fileID) {
-        final File jsonFileFromID = WebsiteFile.getParsedFileFromID(fileID);
+        final File jsonFileFromID = pl.WEBSITE_CONF.getParsedFileFromID(fileID);
         if (jsonFileFromID == null) return new byte[0];
 
         try { return Files.readAllBytes(jsonFileFromID.toPath()); }
@@ -79,7 +85,7 @@ public class WebHTTPHandler implements HttpHandler {
 
 
 
-    private static ContentTypes determineFileType(final String resource) {
+    private ContentTypes determineFileType(final String resource) {
         final String end = resource.replaceFirst("^.+\\.", "");
 
         for (ContentTypes type : ContentTypes.values()) {
@@ -87,7 +93,7 @@ public class WebHTTPHandler implements HttpHandler {
             return type;
         }
 
-        PlayerDataManipulator.staticSendMsg(String.format("Website does not support contenttype: \"%s\"", end), String.format(">> %s", resource));
+        pl.sendMsg(String.format("Website does not support contenttype: \"%s\"", end), String.format(">> %s", resource));
         return ContentTypes.HTML;
     }
 
