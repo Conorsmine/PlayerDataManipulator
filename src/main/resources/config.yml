@@ -4,26 +4,31 @@
 #========-------------========#
 
 # Do not change this if you don't know what it does
-separator: "##"
+${conf_sep}: "##"
 
 # Dictates how many threads will be used to search for items in players inventory
-search_workers: 5
+${conf_workers}: 5
 
 # Configurations for the online webeditor and server
-web_server:
-  port: 8806
+${conf_web_editor}:
+  ${conf_port}: 8806
 
 # This list provides paths to the location of "inventories".
 # Both the regular inventory and the players ender chest are already pre-set.
-inventory_paths:
+# Example of how to set up a new inventory path:
+# <Name of the path>
+#   ${conf_inv_paths_path}: <Path to inv>
+#   ${conf_inv_paths_size}: <Size of the inv>   This value doesn't have to be "exact", though try to provide a standard value
+
+${conf_all_inv_paths}:
   inv:
-    path: "Inventory"                                   # Regular inventory
-    size: 36
+    ${conf_inv_paths_path}: "Inventory"                                   # Regular inventory
+    ${conf_inv_paths_size}: 36
 
   ec:
-    path: "EnderItems"                                  # Enderchest inventory
-    size: 27
+    ${conf_inv_paths_path}: "EnderItems"                                  # Enderchest inventory
+    ${conf_inv_paths_size}: 27
 
   baubles:
-    path: "ForgeCaps##baubles:container##Items"           # Bauble slots
-    size: 7
+    ${conf_inv_paths_path}: "ForgeCaps##baubles:container##Items"           # Bauble slots
+    ${conf_inv_paths_size}: 7
