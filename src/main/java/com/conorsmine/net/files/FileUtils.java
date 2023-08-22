@@ -2,23 +2,19 @@ package com.conorsmine.net.files;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
-import java.util.Iterator;
 
 public class FileUtils {
 
     public static Object parseFileToJson(final File file) {
         final JSONParser parser = new JSONParser();
 
-        try (Reader reader = new FileReader(file)) {
-
-           return parser.parse(reader);
-        } catch (IOException | ParseException e) { e.printStackTrace(); }
+        try (Reader reader = new FileReader(file)) { return parser.parse(reader); }
+        catch (IOException | ParseException e) { e.printStackTrace(); }
 
         return new JSONObject();
     }
@@ -33,7 +29,7 @@ public class FileUtils {
             writer.write(gson.toJson(json));
 
             writer.flush();
-            writer.close();
-        } catch (IOException e) { e.printStackTrace(); }
+        }
+        catch (IOException e) { e.printStackTrace(); }
     }
 }

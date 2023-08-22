@@ -2,23 +2,24 @@ package com.conorsmine.net.cmds;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
+import com.conorsmine.net.InventoryPath;
+import com.conorsmine.net.ItemStore;
 import com.conorsmine.net.PlayerDataManipulator;
-import com.conorsmine.net.files.ConfigFile;
-import com.conorsmine.net.cmds.contexts.ItemStore;
-import com.conorsmine.net.files.NBTStoreFile;
+import com.conorsmine.net.inventory.EditorInventory;
+import com.conorsmine.net.inventory.NBTItemTags;
 import com.conorsmine.net.messages.MsgFormatter;
 import com.conorsmine.net.messages.PluginMsgs;
-import com.conorsmine.net.inventory.EditorInventory;
-import com.conorsmine.net.inventory.NBTInventoryUtils;
-import com.conorsmine.net.inventory.NBTItemTags;
-import com.conorsmine.net.cmds.contexts.PathWrapper;
-import com.conorsmine.net.mojangson.MojangsonUtils;
-import com.conorsmine.net.mojangson.path.NBTPathBuilder;
-import de.tr7zw.nbtapi.*;
+import com.conorsmine.net.mojangson.NBTQueryResult;
+import com.conorsmine.net.mojangson.StringUtils;
+import com.conorsmine.net.mojangson.data.ICompoundData;
+import com.conorsmine.net.mojangson.data.NBTCompoundData;
+import com.conorsmine.net.mojangson.data.NBTCompoundListData;
+import de.tr7zw.nbtapi.NBTCompound;
+import de.tr7zw.nbtapi.NBTCompoundList;
+import de.tr7zw.nbtapi.NBTContainer;
 import de.tr7zw.nbtapi.data.NBTData;
 import de.tr7zw.nbtapi.data.PlayerData;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -32,22 +33,28 @@ import java.util.concurrent.atomic.AtomicInteger;
 @CommandAlias("pdm")
 public final class InvCmds extends BaseCommand {
 
-    private static final int EXECUTIONS_MAX = ConfigFile.staticGetMaxExecutions();
     private final AtomicInteger currentExecutions = new AtomicInteger(0);
     private final List<SearchResult> foundPlayers = Collections.synchronizedList(new LinkedList<>());
 
-    @Dependency("plugin")
-    private PlayerDataManipulator pl;
+    private final PlayerDataManipulator pl;
+    private final int EXECUTIONS_MAX;
+
+    public InvCmds(PlayerDataManipulator pl) {
+        this.pl = pl;
+        this.EXECUTIONS_MAX = pl.CONF.getMaxSearchExecutors();
+    }
+
+
 
     @Subcommand("open")
     @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + CmdCompletions.INVENTORY_PATHS + " false|true")
     @Description("Opens a players inventory")
     @CommandPermission("pdm.inv.open")
-    private void openInventory(final Player player, final @NotNull OfflinePlayer target, final PathWrapper inventoryPath) {
+    private void openInventory(final Player player, final @NotNull OfflinePlayer target, final InventoryPath inventoryPath) {
         if (inventoryPath == null) { pl.sendMsg(player, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
         if (target.isOnline()) ((Player) target).saveData();
 
-        EditorInventory.Builder.createInventory(target, inventoryPath).openInventory(player);
+        new EditorInventory.Builder(pl).createInventory(target, inventoryPath).openInventory(player);
         pl.sendMsg(player, "§7Opening " + String.format(PluginMsgs.INV_FORMAT.getMsg(), target.getName(), inventoryPath.getSectionName()));
     }
 
@@ -55,69 +62,65 @@ public final class InvCmds extends BaseCommand {
     @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + CmdCompletions.INVENTORY_PATHS)
     @Description("Lists the contents of the players inv")
     @CommandPermission("pdm.inv.list")
-    private void listInventory(final CommandSender sender, final @NotNull OfflinePlayer target, final PathWrapper inventoryPath) {
+    private void listInventory(final CommandSender sender, final @NotNull OfflinePlayer target, final InventoryPath inventoryPath) {
         if (inventoryPath == null) { pl.sendMsg(sender, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
         if (target.isOnline()) ((Player) target).saveData();
 
-        NBTInventoryUtils.getItemNBTsFromPathAsync(
-                NBTData.getOfflinePlayerData(target.getUniqueId()).getCompound(),
-                new NBTPathBuilder(pl.MOJANGSON).parseString(inventoryPath.getPath()).create()
-        ).whenComplete((itemNBTsFromPath, e) -> MsgFormatter.sendFormattedListMsg(sender, itemNBTsFromPath));
+        pl.INV_UTILS.getItemNBTsFromPathAsync(NBTData.getOfflinePlayerData(target.getUniqueId()).getCompound(), inventoryPath.getPath())
+                .whenComplete((itemNBTsFromPath, e) -> {
+                    if (e != null) return;
+                    pl.sendCmdHeader(sender, "List");
+                    MsgFormatter.sendFormattedListMsg(pl, sender, itemNBTsFromPath);
+                });
     }
 
     @Subcommand("info")
     @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + CmdCompletions.INVENTORY_PATHS)
     @Description("Provides the nbt of the item")
     @CommandPermission("pdm.inv.info")
-    private void printInfo(final CommandSender sender, final OfflinePlayer target, final PathWrapper inventoryPath, final int slot) {
+    private void printInfo(final CommandSender sender, final OfflinePlayer target, final InventoryPath inventoryPath, final int slot) {
         if (inventoryPath == null) { pl.sendMsg(sender, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
 
-        NBTInventoryUtils.getItemNBTsMapFromPathAsync(
-                NBTData.getOfflinePlayerData(target.getUniqueId()).getCompound(),
-                new NBTPathBuilder(pl.MOJANGSON).parseString(inventoryPath.getPath()).create()
-        ).whenComplete((map, e) -> {
-            final NBTCompound compound = map.get(slot);
-            if (compound == null) {
-                pl.sendMsg(sender, String.format(PluginMsgs.ITEM_NOT_FOUND.getMsg(), slot));
-                return;
-            }
+        pl.INV_UTILS.getItemNBTsMapFromPathAsync(NBTData.getOfflinePlayerData(target.getUniqueId()).getCompound(), inventoryPath.getPath())
+                .whenComplete((map, e) -> {
+                    final NBTCompound compound = map.get(slot);
+                    if (compound == null) {
+                        pl.sendMsg(sender, String.format(PluginMsgs.ITEM_NOT_FOUND.getMsg(), slot));
+                        return;
+                    }
 
-            PlayerDataManipulator.sendHeader(sender, "Info");
-            pl.sendMsg(
-                    sender,
-                    "§7Basic info:",
-                    String.format(
-                            "  §7>> id: §9%s §7data: §6%d §7count: §b%d",
-                            compound.getString(NBTItemTags.ID.getTagName()),
-                            compound.getInteger(NBTItemTags.DAMAGE.getTagName()),
-                            compound.getInteger(NBTItemTags.COUNT.getTagName())
-                    ),
-                    "§7Item NBT:"
-            );
-            sendColoredNBT(sender, compound);
-        });
+                    pl.sendCmdHeader(sender, "Info");
+                    pl.sendMsg(
+                            sender,
+                            "§7Basic info:",
+                            String.format(
+                                    "  §7>> id: §9%s §7data: §6%d §7count: §b%d",
+                                    compound.getString(NBTItemTags.ID.getTagName()),
+                                    compound.getInteger(NBTItemTags.DAMAGE.getTagName()),
+                                    compound.getInteger(NBTItemTags.COUNT.getTagName())
+                            ),
+                            "§7Item NBT:"
+                    );
+
+                    sendColoredNBT(sender, compound);
+                });
     }
 
     @Subcommand("clear")
     @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + CmdCompletions.INVENTORY_PATHS)
     @Description("Clears the players inventory")
     @CommandPermission("pdm.inv.clear")
-    private void clearInventory(final CommandSender sender, final @NotNull OfflinePlayer target, final PathWrapper inventoryPath) {
+    private void clearInventory(final CommandSender sender, final @NotNull OfflinePlayer target, final InventoryPath inventoryPath) {
         if (inventoryPath == null) { pl.sendMsg(sender, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
 
         final PlayerData playerData = NBTData.getOfflinePlayerData(target.getUniqueId());
-        final MojangsonUtils.NBTResult result = pl.MOJANGSON.getCompoundFromPath(playerData.getCompound(), new NBTPathBuilder(pl.MOJANGSON).parseString(inventoryPath.getPath()).create());
-        final NBTCompound compound = result.getCompound();
-        final String finalKey = result.getFinalKey().getKeyValue();
 
-        switch (compound.getType(finalKey)) {
-            case NBTTagCompound:
-                compound.getCompound(finalKey).clearNBT();
-                break;
+        final NBTQueryResult result = pl.MOJANGSON.getDataFromPath(new NBTCompoundData(playerData.getCompound()), inventoryPath.getPath());
+        final ICompoundData<?> invData = (ICompoundData<?>) result.getData();
 
-            case NBTTagList:
-                compound.getCompoundList(finalKey).clear();
-                break;
+        switch (invData.getType()) {
+            case COMPOUND: ((NBTCompoundData) invData).getData().clearNBT(); break;
+            case COMPOUND_LIST: ((NBTCompoundListData) invData).getData().clear(); break;
         }
 
         reloadPlayerData(target, playerData);
@@ -128,13 +131,11 @@ public final class InvCmds extends BaseCommand {
     @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + CmdCompletions.INVENTORY_PATHS)
     @Description("Removes the content of the players inventory at that slots")
     @CommandPermission("pdm.inv.remove")
-    private void removeFromInventory(final CommandSender sender, final OfflinePlayer target, final PathWrapper inventoryPath, final int slot) {
+    private void removeFromInventory(final CommandSender sender, final OfflinePlayer target, final InventoryPath inventoryPath, final int slot) {
         if (inventoryPath == null) { pl.sendMsg(sender, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
 
         final PlayerData playerData = NBTData.getOfflinePlayerData(target.getUniqueId());
-        NBTInventoryUtils.removeNBTAsync(
-                playerData.getCompound(),
-                new NBTPathBuilder(pl.MOJANGSON).parseString(inventoryPath.getPath()).create(),
+        pl.INV_UTILS.removeNBTAsync(playerData.getCompound(), inventoryPath.getPath(),
                 (nbt) -> (nbt.getInteger(NBTItemTags.SLOT.getTagName()) == slot)
         ).whenComplete((nbt, e) -> {
             if (nbt == null) {
@@ -159,68 +160,63 @@ public final class InvCmds extends BaseCommand {
     @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + CmdCompletions.INVENTORY_PATHS + CmdCompletions.ITEM_IDS + "@range:255 @range:64")
     @Description("Adds the item to the players inventory")
     @CommandPermission("pdm.inv.add")
-    private void addToInventory(final CommandSender sender, final OfflinePlayer target, final PathWrapper inventoryPath,
+    private void addToInventory(final CommandSender sender, final OfflinePlayer target, final InventoryPath inventoryPath,
                                 final String itemId, @Default("0") final short data, @Default("1") final int count) {
         if (inventoryPath == null) { pl.sendMsg(sender, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
-        if (itemId == null) { pl.sendMsg(sender, PluginMsgs.MISSING_ITEM_ID.getMsg()); return; }
+        if (StringUtils.isNothingString(itemId)) { pl.sendMsg(sender, PluginMsgs.MISSING_ITEM_ID.getMsg()); return; }
         if (target.isOnline()) ((Player) target).saveData();
 
-        final PlayerData playerData = NBTData.getOfflinePlayerData(target.getUniqueId());
-        final MojangsonUtils.NBTResult result = pl.MOJANGSON.getCompoundFromPath(playerData.getCompound(), new NBTPathBuilder(pl.MOJANGSON).parseString(inventoryPath.getPath()).create());
-        final NBTCompound invNBT = result.getCompound();
-        final String finalKey = result.getFinalKey().getKeyValue();
-
-        switch (invNBT.getType(finalKey)) {
-            case NBTTagCompound:
-                throw new UnsupportedOperationException("Cannot add an item to a single inventory!");
-
-            case NBTTagList:
-                final NBTCompoundList invList = invNBT.getCompoundList(finalKey);
-                final int freeInvSlot = getFreeInvSlot(invList, inventoryPath);
-                if (freeInvSlot == -Integer.MAX_VALUE) { pl.sendMsg(sender, "§cCould not find a free inv slot."); return; }
-
-                final NBTListCompound nbtItem = invList.addCompound();
-                nbtItem.setString(NBTItemTags.ID.getTagName(), itemId);
-                nbtItem.setShort(NBTItemTags.DAMAGE.getTagName(), data);
-                nbtItem.setInteger(NBTItemTags.COUNT.getTagName(), count);
-                nbtItem.setInteger(NBTItemTags.SLOT.getTagName(), freeInvSlot);
-                break;
-        }
-
-        reloadPlayerData(target, playerData);
-        pl.sendMsg(sender, String.format("§7Added §9%s §7to §6%s§7's §b%s§7.", itemId, target.getName(), inventoryPath.getSectionName()));
+        addNBTToInventory(sender, target, inventoryPath,
+                String.format("{\"%s\": %s, \"%s\": %d, \"%s\": %d}",
+                        NBTItemTags.ID.getTagName(), itemId,
+                        NBTItemTags.DAMAGE.getTagName(), data,
+                        NBTItemTags.COUNT.getTagName(), count
+                )
+        );
     }
 
     @Subcommand("addnbt")
     @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + CmdCompletions.INVENTORY_PATHS)
     @Description("Adds the item nbt to the players inventory")
     @CommandPermission("pdm.inv.addnbt")
-    private void addNBTToInventory(final CommandSender sender, final OfflinePlayer target, final PathWrapper inventoryPath, final String nbt) {
+    private void addNBTToInventory(final CommandSender sender, final OfflinePlayer target, final InventoryPath inventoryPath, final String nbt) {
         if (inventoryPath == null) { pl.sendMsg(sender, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
-        if (nbt == null || StringUtils.isEmpty(nbt)) { pl.sendMsg(sender, "§cItem NBT cannot be null!"); return; }
+        if (StringUtils.isNothingString(nbt)) { pl.sendMsg(sender, "§cItem NBT cannot be null!"); return; }
 
         try {
             final NBTContainer nbtItem = new NBTContainer(nbt);
             if (!isItem(sender, nbtItem)) return;
 
             final PlayerData playerData = NBTData.getOfflinePlayerData(target.getUniqueId());
-            final MojangsonUtils.NBTResult result = pl.MOJANGSON.getCompoundFromPath(playerData.getCompound(), new NBTPathBuilder(pl.MOJANGSON).parseString(inventoryPath.getPath()).create());
-            final NBTCompound invNBT = result.getCompound();
-            final String finalKey = result.getFinalKey().getKeyValue();
+            final NBTQueryResult result = pl.MOJANGSON.getDataFromPath(new NBTCompoundData(playerData.getCompound()), inventoryPath.getPath());
+            final ICompoundData<?> invNBT = ((ICompoundData<?>) result.getData());
+            if (invNBT == null) { pl.sendMsg(sender, "§7There was an error getting the players inventory!"); return; }
 
-            switch (invNBT.getType(finalKey)) {
-                case NBTTagCompound:
-                    throw new UnsupportedOperationException("Cannot add an item to a single inventory!");
+            NBTCompound itemComp = null;
+            int slot = 0;
+            switch (invNBT.getType()) {
+                case COMPOUND:
+                    itemComp = ((NBTCompoundData) invNBT).getData();
+                    itemComp.clearNBT();
+                    break;
 
-                case NBTTagList:
-                    final NBTCompoundList invList = invNBT.getCompoundList(finalKey);
+                case COMPOUND_LIST:
+                    final NBTCompoundList invList = ((NBTCompoundListData) invNBT).getData();
                     final int freeInvSlot = getFreeInvSlot(invList, inventoryPath);
                     if (freeInvSlot == -Integer.MAX_VALUE) { pl.sendMsg(sender, "§cCould not find a free inv slot."); return; }
 
-                    final NBTCompound nbtItemCompound = invList.addCompound(nbtItem);
-                    nbtItemCompound.setInteger(NBTItemTags.SLOT.getTagName(), freeInvSlot);
+                    itemComp = invList.addCompound();
+                    slot = freeInvSlot;
                     break;
             }
+
+            if (itemComp == null) { pl.sendMsg(sender, "§7There was an error creating a new item!"); return; }
+
+            //
+            itemComp.setString(NBTItemTags.ID.getTagName(), nbtItem.getString(NBTItemTags.ID.getTagName()));
+            itemComp.setShort(NBTItemTags.DAMAGE.getTagName(), nbtItem.getShort(NBTItemTags.DAMAGE.getTagName()));
+            itemComp.setInteger(NBTItemTags.COUNT.getTagName(), nbtItem.getInteger(NBTItemTags.COUNT.getTagName()));
+            itemComp.setInteger(NBTItemTags.SLOT.getTagName(), slot);
 
             reloadPlayerData(target, playerData);
             pl.sendMsg(sender, String.format("§7Added to §6%s§7's §b%s§7:", target.getName(), inventoryPath.getSectionName()));
@@ -233,7 +229,7 @@ public final class InvCmds extends BaseCommand {
     @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + CmdCompletions.INVENTORY_PATHS + CmdCompletions.ITEM_STORES)
     @Description("Adds the item from a stored to the players inventory")
     @CommandPermission("pdm.inv.addstore")
-    private void addItemFromStore(final CommandSender sender, final OfflinePlayer target, final PathWrapper inventoryPath, final ItemStore itemStore) {
+    private void addItemFromStore(final CommandSender sender, final OfflinePlayer target, final InventoryPath inventoryPath, final ItemStore itemStore) {
         if (itemStore == null) { pl.sendMsg(sender, "§7Couldn't find store with that name."); return; }
         addNBTToInventory(sender, target, inventoryPath, itemStore.getStoredNBT());
     }
@@ -249,8 +245,8 @@ public final class InvCmds extends BaseCommand {
             return;
         }
 
+        pl.sendCmdHeader(sender, "Search");
         pl.sendMsg(sender, "§7This might take a while...");
-
         final Queue<OfflinePlayer> offlinePlayers = new ConcurrentLinkedQueue<>(Arrays.asList(pl.getServer().getOfflinePlayers()));
 
         foundPlayers.clear();
@@ -271,23 +267,24 @@ public final class InvCmds extends BaseCommand {
     @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + CmdCompletions.INVENTORY_PATHS)
     @Description("Stores the items NBT in a file for later use")
     @CommandPermission("pdm.inv.store")
-    private void storeItem(final CommandSender sender, final OfflinePlayer target, final PathWrapper inventoryPath, final int slot) {
+    private void storeItem(final CommandSender sender, final OfflinePlayer target, final InventoryPath inventoryPath, final int slot) {
         if (inventoryPath == null) { pl.sendMsg(sender, PluginMsgs.MISSING_PATH_WRAPPER.getMsg()); return; }
 
-        NBTInventoryUtils.getItemNBTsMapFromPathAsync(
-                NBTData.getOfflinePlayerData(target.getUniqueId()).getCompound(),
-                new NBTPathBuilder(pl.MOJANGSON).parseString(inventoryPath.getPath()).create()
-        ).whenComplete((map, e) -> {
-            final NBTCompound compound = map.get(slot);
-            if (compound == null) { pl.sendMsg(sender, String.format(PluginMsgs.ITEM_NOT_FOUND.getMsg(), slot)); return; }
+        pl.INV_UTILS.getItemNBTsMapFromPathAsync(NBTData.getOfflinePlayerData(target.getUniqueId()).getCompound(), inventoryPath.getPath())
+                .whenComplete((map, e) -> {
+                    if (map.isEmpty()) return;
+                    pl.sendCmdHeader(sender, "Store");
 
-            final String fileName = NBTStoreFile.storeNBT(sender, target, compound);
-            if (fileName == null) { pl.sendMsg(sender, "§cCouldn't save players item nbt to file."); }
-            else {
-                sendColoredNBT(sender, compound);
-                pl.sendMsg(sender, String.format("§7Saved players item nbt to file §6%s§7.", fileName));
-            }
-        });
+                    final NBTCompound compound = map.get(slot);
+                    if (compound == null) { pl.sendMsg(sender, String.format(PluginMsgs.ITEM_NOT_FOUND.getMsg(), slot)); return; }
+
+                    final String fileName = pl.ITEM_STORES.storeNBT(sender, target, compound);
+                    if (fileName == null) { pl.sendMsg(sender, "§cCouldn't save players item nbt to file."); }
+                    else {
+                        sendColoredNBT(sender, compound);
+                        pl.sendMsg(sender, String.format("§7Saved players item nbt to file §6%s§7.", fileName));
+                    }
+                });
     }
 
 
@@ -299,9 +296,8 @@ public final class InvCmds extends BaseCommand {
     }
 
     private void sendColoredNBT(final CommandSender sender, final NBTCompound nbt) {
-        pl.sendMsg(
-                sender,
-                TextComponent.toLegacyText(pl.MOJANGSON.getInteractiveMojangson(nbt, new NBTPathBuilder(pl.MOJANGSON).create()))
+        pl.sendMsg(sender,
+                TextComponent.toLegacyText(pl.MOJANGSON.getInteractiveMojangson(nbt, null))
         );
     }
 
@@ -314,7 +310,7 @@ public final class InvCmds extends BaseCommand {
         return isItem;
     }
 
-    private int getFreeInvSlot(final NBTCompoundList inv, final PathWrapper inventory) {
+    private int getFreeInvSlot(final NBTCompoundList inv, final InventoryPath inventory) {
         for (int i = 0; i < inventory.getSize(); i++) {
             int finalI = i;
             if (inv.stream().anyMatch((nbt) -> nbt.getInteger(NBTItemTags.SLOT.getTagName()) == finalI)) {
@@ -335,7 +331,7 @@ public final class InvCmds extends BaseCommand {
     }
 
     private void recursiveSearchQuery(final CompletableFuture<Void> future, final Queue<OfflinePlayer> queue, final String itemID, final short itemData) {
-        if (queue.size() == 0) { currentExecutions.set(0); future.complete(null); return; }
+        if (queue.isEmpty()) { currentExecutions.set(0); future.complete(null); return; }
         if (queue.size() <= EXECUTIONS_MAX && currentExecutions.get() > 0) return;
         if (currentExecutions.get() >= EXECUTIONS_MAX) return;
         currentExecutions.incrementAndGet();
@@ -348,10 +344,10 @@ public final class InvCmds extends BaseCommand {
 
             final PlayerData playerData = NBTData.getOfflinePlayerData(player.getUniqueId());
 
-            for (PathWrapper path : PathWrapper.inventoryPaths.values()) {
-                final List<NBTCompound> inventoryNBT = NBTInventoryUtils.getItemNBTsFromPath(
+            for (InventoryPath path : pl.CONF.getInventoryPaths()) {
+                final List<NBTCompound> inventoryNBT = pl.INV_UTILS.getItemNBTsFromPath(
                         playerData.getCompound(),
-                        new NBTPathBuilder(pl.MOJANGSON).parseString(path.getPath()).create()
+                        path.getPath()
                 );
 
                 for (NBTCompound nbtItem : inventoryNBT) {
@@ -375,9 +371,9 @@ public final class InvCmds extends BaseCommand {
     private static class SearchResult implements Comparator<String> {
 
         private final OfflinePlayer player;
-        private final PathWrapper inventoryPath;
+        private final InventoryPath inventoryPath;
 
-        public SearchResult(OfflinePlayer player, PathWrapper inventoryPath) {
+        public SearchResult(OfflinePlayer player, InventoryPath inventoryPath) {
             this.player = player;
             this.inventoryPath = inventoryPath;
         }
@@ -386,7 +382,7 @@ public final class InvCmds extends BaseCommand {
             return player;
         }
 
-        public PathWrapper getInventoryPath() {
+        public InventoryPath getInventoryPath() {
             return inventoryPath;
         }
 

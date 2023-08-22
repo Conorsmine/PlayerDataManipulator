@@ -12,7 +12,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,14 +19,19 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @CommandAlias("pdm")
 public final class PlayerCmds extends BaseCommand {
 
-    @Dependency("plugin")
-    private PlayerDataManipulator pl;
+    private final PlayerDataManipulator pl;
+
+    public PlayerCmds(PlayerDataManipulator pl) {
+        this.pl = pl;
+    }
 
     @Subcommand("where")
     @Description("Provides information about the location of the player.")
@@ -88,12 +92,15 @@ public final class PlayerCmds extends BaseCommand {
         if (target.isOnline()) { ((Player) target).teleport(player); }
 
         pl.sendCmdHeader(player, "Teleport-Here");
-        PlayerLocationUtils.teleportPlayer(target, PlayerLocationUtils.getPlayerPos(player));
+        final Location targetLoc = PlayerLocationUtils.getPlayerPos(player);
+        if (targetLoc == null || targetLoc.getWorld() == null) { pl.sendMsg(player, "§7Couldn't retrieve the location of the player!"); return; }
+
+        PlayerLocationUtils.teleportPlayer(target, targetLoc);
         pl.sendMsg(player, String.format("§7Teleported \"§6%s§7\" to you!", target.getName()));
     }
 
     @Subcommand("tp")
-    @Description("Teleports a player to a sepcified position.")
+    @Description("Teleports a player to a specified position.")
     @CommandCompletion(CmdCompletions.OFFLINE_PLAYERS + CmdCompletions.WORLDS + "x y z")
     @CommandPermission("pdm.teleport.position")
     private void teleportPlayerCmd(final CommandSender sender, final OfflinePlayer target, final Location loc) {
@@ -101,7 +108,7 @@ public final class PlayerCmds extends BaseCommand {
         if (loc.getWorld() == null) { pl.sendMsg(sender, "§7Couldn't teleport you, because \"§6world§7\" is §cnull§7!"); return; }
 
         pl.sendMsg(sender,
-                "§7Teleporting you too...",
+                String.format("§7Teleporting \"§6%s§7\" too...", target.getName()),
                 String.format("§9Dimension §7>> §a%s", loc.getWorld().getName()),
                 String.format("§9Position  §7>> §9x§7: §a%.2f  §9y§7: §a%.2f  §9z§7: §a%.2f", loc.getX(), loc.getY(), loc.getZ())
         );
@@ -177,6 +184,7 @@ public final class PlayerCmds extends BaseCommand {
             MARKER_QUEUE.forEach((m) -> m.marker.remove());
         }
 
+        @SuppressWarnings("UnusedReturnValue")
         public static ArmorStand spawnMarker(@NotNull JavaPlugin pl, @NotNull final Location loc, final String targetName) {
             final ArmorStand marker = (ArmorStand) loc.getWorld().spawn(loc, EntityType.ARMOR_STAND.getEntityClass(), (e) -> {
                 final ArmorStand entity = ((ArmorStand) e);

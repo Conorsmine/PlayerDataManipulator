@@ -46,10 +46,12 @@ function dataChangesToJson() {
     let key = mapIterator.next().value;
 
     while (key != undefined) {
+        // Todo:
+        //  Add a way to pass the datatype
         const val = dataChanges.get(key).value;
         if (val == undefined) continue;
 
-        arr.push({path: `${key}`, value: `${val}`});
+        arr.push({path: `${key}`, value: `${val}`, type: `${type}`});
         key = mapIterator.next().value;
     }
 
