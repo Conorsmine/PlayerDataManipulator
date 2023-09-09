@@ -1,0 +1,7 @@
+name: '${name}'
+version: '${version}'
+main: '${groupId}.PlayerDataManipulator'
+authors: [ Conorsmine ]
+api-version: 1.16
+
+depend: [ NBTAPI ]
