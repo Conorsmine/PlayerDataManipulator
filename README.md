@@ -8,12 +8,12 @@ Furthermore, *PDM* tries to provide other useful features, such as an almost uni
 Please view the Wiki for more information.  
 
 ## Todo before release
-- [ ] Add reload command
+- [x] Add reload command
 - [ ] Add `changes` logging
-- [ ] Add version support
-- [ ] Refactor code!
-- [ ] Add spigot page
-- [ ] Add update checker
+- [x] Add version support
+- [x] Refactor code!
+- [x] Add spigot page
+- [x] Add update checker
 - [ ] Update Wiki
 
 ## Links
