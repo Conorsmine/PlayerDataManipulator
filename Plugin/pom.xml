@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress VulnerableLibrariesLocal -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.conorsmine.net</groupId>
+        <artifactId>PlayerDataManipulator</artifactId>
+        <version>PARENT</version>
+    </parent>
+
+    <artifactId>Plugin</artifactId>
+    <name>PlayerDataManipulator</name>
+    <version>1.1</version>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <build>
+        <directory>../target</directory>
+        <plugins>
+            <!-- Used to define global variables -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>${basedir}\src\main\resources\replacements.properties</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Normal build steps -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <finalName>${project.name}-v${project.version}</finalName>
+                            <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
+                            <relocations>
+                                <relocation>
+                                    <pattern>co.aikar.commands</pattern>
+                                    <shadedPattern>com.conorsmine.net.acf</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>co.aikar.locales</pattern>
+                                    <shadedPattern>com.conorsmine.net.locales</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>          <!-- Might remove this, since it cause issues with "Minecraft.otf" -->
+            </resource>
+        </resources>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>sonatype</id>
+            <url>https://oss.sonatype.org/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>codemc-repo</id>
+            <url>https://repo.codemc.org/repository/maven-public/</url>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <id>aikar</id>
+            <url>https://repo.aikar.co/content/groups/aikar/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>LATEST</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>co.aikar</groupId>
+            <artifactId>acf-bukkit</artifactId>
+            <version>0.5.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+
+        <!-- Shading in different versions -->
+        <dependency>
+            <groupId>com.conorsmine.net</groupId>
+            <artifactId>Version_1_12_2</artifactId>
+            <version>PARENT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.conorsmine.net</groupId>
+            <artifactId>Version_1_15</artifactId>
+            <version>PARENT</version>
+        </dependency>
+    </dependencies>
+
+</project>

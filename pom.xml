@@ -6,86 +6,21 @@
 
     <groupId>com.conorsmine.net</groupId>
     <artifactId>PlayerDataManipulator</artifactId>
-    <version>Snapshot-1.3</version>
-    <packaging>jar</packaging>
+    <version>PARENT</version>
+    <packaging>pom</packaging>
 
-    <name>PlayerDataManipulator</name>
+    <name>PlayerDataManipulator Parent</name>
+    <modules>
+        <module>API</module>
+        <module>Version_1_12_2</module>
+        <module>Version_1_15</module>
+        <module>Plugin</module>
+    </modules>
 
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <build>
-        <plugins>
-            <!-- Used to define global variables -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>properties-maven-plugin</artifactId>
-                <version>1.0.0</version>
-                <executions>
-                    <execution>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>read-project-properties</goal>
-                        </goals>
-                        <configuration>
-                            <files> <file> ${project.basedir}\src\main\resources\replacements.properties </file> </files>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- Normal build steps -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <compilerArgs>
-                        <arg>-parameters</arg>
-                    </compilerArgs>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <finalName>${project.name}-v${project.version}</finalName>
-                            <outputDirectory>C:\Users\Conor\Desktop\Desktop\Minecraft_Stuff\1.12.2_mc_server\plugins\</outputDirectory>
-                            <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
-                            <relocations>
-                                <relocation>
-                                    <pattern>co.aikar.commands</pattern>
-                                    <shadedPattern>com.conorsmine.net.acf</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>co.aikar.locales</pattern>
-                                    <shadedPattern>com.conorsmine.net.locales</shadedPattern>
-                                </relocation>
-                            </relocations>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-    </build>
 
     <repositories>
         <repository>
@@ -93,27 +28,13 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
-            <id>sonatype</id>
-            <url>https://oss.sonatype.org/content/groups/public/</url>
-        </repository>
-        <repository>
             <id>codemc-repo</id>
             <url>https://repo.codemc.org/repository/maven-public/</url>
             <layout>default</layout>
         </repository>
-        <repository>
-            <id>aikar</id>
-            <url>https://repo.aikar.co/content/groups/aikar/</url>
-        </repository>
     </repositories>
 
     <dependencies>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.12.2-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
@@ -121,15 +42,17 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>co.aikar</groupId>
+            <artifactId>acf-bukkit</artifactId>
+            <version>0.5.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>de.tr7zw</groupId>
             <artifactId>item-nbt-api-plugin</artifactId>
             <version>2.10.0</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>co.aikar</groupId>
-            <artifactId>acf-bukkit</artifactId>
-            <version>0.5.1-SNAPSHOT</version>
-        </dependency>
     </dependencies>
+
 </project>
