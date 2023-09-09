@@ -1,9 +1,10 @@
 # Player Data Manipulator (*PDM*)
 
 ## Info
-*PDM* is still in early development and testing; Bugs, errors, code and commands are subject to change.
+*PDM* is still in early development and testing; Bugs, errors, code and commands are subject to change.  
+Check the [wiki](https://github.com/Conorsmine/PlayerDataManipulator/wiki) for an overview of the plugin.  
   
-*PDM* ist a spigot plugin intended to help server administrators deal with corrupted players.  
+*PDM* is a spigot plugin intended to help server administrators deal with corrupted players.  
 Furthermore, *PDM* tries to provide other useful features, such as an almost universal solution for viewing a players inventory.  
 Please view the Wiki for more information.  
 
