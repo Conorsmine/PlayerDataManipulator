@@ -17,7 +17,7 @@ public class NBTArrayKey extends NBTKey {
     public static NBTArrayKey parseToArrayKey(final int index) {
         if (index < 0) throw new NBTArrayKeyParseError();
 
-        return new NBTArrayKey(String.valueOf(index));
+        return new NBTArrayKey(String.format("[%d]", index));
     }
 
     public static class NBTArrayKeyParseError extends NBTKeyParseError { }
