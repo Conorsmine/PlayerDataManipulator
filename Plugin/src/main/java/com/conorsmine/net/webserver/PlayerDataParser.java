@@ -12,15 +12,14 @@ import com.google.gson.GsonBuilder;
 import de.tr7zw.nbtapi.*;
 import de.tr7zw.nbtapi.data.NBTData;
 import org.bukkit.OfflinePlayer;
+import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 import static de.tr7zw.nbtapi.NBTType.*;
@@ -130,7 +129,10 @@ public class PlayerDataParser {
 
         final NBTType listType = compound.getListType(key.getKeyValue());
         final ParserDataTypes type = ParserDataTypes.getType(listType);
-        final NBTList<?> list = NBTReflectionUtil.getList(compound, key.getKeyValue(), listType, ParserDataTypes.getType(listType).getClassFromDataType());
+
+        final NBTList<?> list;
+        if (listType == NBTTagEnd) list = NBTEmptyList.EMPTY_LIST;
+        else list = NBTReflectionUtil.getList(compound, key.getKeyValue(), listType, ParserDataTypes.getType(listType).getClassFromDataType());
 
         for (int i = 0; i < list.size(); i++) {
             final JSONObject valJson = new JSONObject();
@@ -212,4 +214,81 @@ public class PlayerDataParser {
         }
     }
 
+
+
+    private static final class NBTEmptyList extends NBTList<Object> {
+
+        public static final NBTEmptyList EMPTY_LIST = new NBTEmptyList();
+
+        private NBTEmptyList() {
+            super(null, null, null, null);
+        }
+
+        @Override
+        protected Object asTag(Object o) {
+            return o;
+        }
+
+        @Override
+        @Nullable
+        public Object get(int index) {
+            return null;
+        }
+
+        @Override
+        public boolean add(Object element) {
+            return false;
+        }
+
+        @Override
+        public void add(int index, Object element) {
+        }
+
+        @Override
+        @Nullable
+        public Object set(int index, Object element) {
+            return null;
+        }
+
+        @Override
+        @Nullable
+        public Object remove(int i) {
+            return null;
+        }
+
+        @Override
+        public boolean addAll(Collection<?> c) {
+            return false;
+        }
+
+        @Override
+        public boolean addAll(int index, Collection<?> c) {
+            return false;
+        }
+
+        @Override
+        public boolean removeAll(Collection<?> c) {
+            return false;
+        }
+
+        @Override
+        public boolean retainAll(Collection<?> c) {
+            return false;
+        }
+
+        @Override
+        public Object[] toArray() {
+            return new Object[0];
+        }
+
+        @Override
+        public <E> E[] toArray(E[] a) {
+            return (E[]) new Object[0];
+        }
+
+        @Override
+        public int size() {
+            return 0;
+        }
+    }
 }

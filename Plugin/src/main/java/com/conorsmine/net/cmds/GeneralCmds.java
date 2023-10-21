@@ -56,6 +56,7 @@ public class GeneralCmds extends BaseCommand {
 
     @Subcommand("reload")
     @Description("Reloads the plugin")
+    @CommandPermission("pdm.reload")
     private void reload(final CommandSender sender) {
         pl.sendCmdHeader(sender, "Reload");
         pl.reloadPlugin(sender);
