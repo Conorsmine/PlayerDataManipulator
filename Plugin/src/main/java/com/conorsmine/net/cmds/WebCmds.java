@@ -157,6 +157,8 @@ public final class WebCmds extends BaseCommand {
             final Object prevValue = ((NBTPrimitiveData) result.getData()).getData();
             final Class classFromDataType = dataType.getClassFromDataType();
 
+            if (prevValue.toString().equals(value.toString())) continue;  // No need to change a value too itself.
+
             try {
                 applyMojangson.setDataToPath(new NBTCompoundData(compound), changesPath, dataType.getValue(value), classFromDataType);
             } catch (Exception e) {

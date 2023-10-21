@@ -3,12 +3,14 @@ function reloadSaveInputs() {
 
     for (let i = 0; i < inputs.length; i++) {
     
-        inputs[i].addEventListener('keypress', function (event) {
-            if (!(event.key === "Enter")) return;
-
+        inputs[i].addEventListener('keyup', function (event) {
             const input = event.target;
             submitChange(input);
-            input.blur();
+        });
+
+        inputs[i].addEventListener('keypress', function (event) {
+            if (!(event.key === "Enter")) return;
+            event.target.blur();
         });
     }
 }
