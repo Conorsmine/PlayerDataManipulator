@@ -1,9 +1,0 @@
-#sidebar {
-    grid-area: sidebar;
-
-    background-color: var(--editor_accent_color);
-    align-items: end;
-
-    width: 50px;
-    outline: 1px solid var(--border_color);
-}
